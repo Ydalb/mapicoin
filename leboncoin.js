@@ -1,11 +1,23 @@
 $(document).ready(function() {
 
+    $('body').on('click', '#new-search', function(event) {
+        event.preventDefault();
+        $('html, body').animate({
+            scrollTop:0
+            },
+            400,
+            function () {
+                $('#new-search').hide();
+            }
+        );
+    })
+
     // Form submit
     $('#form-search').on('submit', function(event) {
         event.preventDefault();
         var $form = $(this);
         var url = $('#input-url').val();
-        if (!url) {
+        if (!url) {
             alert("Veuillez renseigner une URL de recherche leboncoin.fr");
             $('#input-url').focus();
             return false;
@@ -14,7 +26,7 @@ $(document).ready(function() {
         lock_search(true);
 
         $.ajax({
-            url:      'leboncoin-ajax.php',
+            url:      '/leboncoin-ajax.php',
             type:     'post',
             data:     $form.serialize(),
             dataType: 'json',
@@ -34,7 +46,12 @@ $(document).ready(function() {
                 // ScrollTo
                 $('html, body').animate({
                     scrollTop:$('#map').offset().top
-                });
+                    },
+                    400,
+                    function () {
+                        $('#new-search').show();
+                    }
+                );
 
                 lock_search(false);
             },
@@ -50,7 +67,7 @@ $(document).ready(function() {
 
 function lock_search(lock) {
     if (lock) {
-        $('#input-submit').val('chargement des annonces...');
+        $('#input-submit').val('Chargement des annonces...');
         $("body").css("cursor", "progress");
     } else {
         $('#input-submit').val($('#input-submit').data('value'));
@@ -119,7 +136,7 @@ function initialize_map() {
   // Create a map object and specify the DOM element for display.
   var map = new google.maps.Map(element, {
     center: myLatLng,
-    scrollwheel: false,
+    scrollwheel: true,
     zoom: 6
   });
 

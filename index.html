@@ -1,25 +1,33 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <title>Lebonocoin2Map</title>
+        <title>Mapicoin, votre recherche leboncoin.fr sur une carte</title>
+        <meta name="description" content="Visualiser les annonces d'une recherche leboncoin sur une carte ? C'est possible ! Grâce à Mapicoin, entrez votre lien de recherche et on s'occupe du reste !">
+
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
         <link href="leboncoin.css" rel="stylesheet">
+
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyA797A1ZQxzPqs2oaWLeaFvvGEySX9EVCw"></script>
         <script src="leboncoin.js"></script>
+
+        <link rel="icon" type="image/png" href="favicon.png" />
+
     </head>
     <body>
 
-        <!-- Header -->
         <header>
             <div class="text-vertical-center">
                 <h1><span>mapi</span>coin</h1>
-                <h3>Prévisualisez les annonces de votre recherche leboncoin.fr sur une carte</h3>
+                <h3>Prévisualisez les annonces de votre recherche <a href="https://www.leboncoin.fr/" rel-"external" target="_blank">leboncoin.fr</a> sur une carte.</h3>
                 <br />
                 <form id="form-search" action="#">
                     <input
                         id="input-url"
                         class="big-input"
                         name="u"
-                        value="https://www.leboncoin.fr/voitures/offres/bretagne/bonnes_affaires/?o=1&amp;pe=9"
+                        value=""
                         placeholder="Copiez/collez votre lien de recherche..." />
                     <br />
                     <input
@@ -30,8 +38,15 @@
                         value="Et hop !" />
                 </form>
             </div>
+            <div class="footer">
+                © 2016 Mapicoin - Mapicoin est un site indépendant du site Leboncoin.fr
+            </div>
         </header>
         
+        <a
+            id="new-search"
+            class="submit"
+            style="display:none;">Nouvelle recherche</a>
         <section id="map" style="display:none;">
 
         </section>

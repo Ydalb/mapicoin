@@ -129,7 +129,7 @@ function fetch_annonce_info($xpath, $element) {
 
     // price
     $tmp = $xpath->query('.//h3[@class="item_price"]/text()', $element);
-    $return['price'] = trim($tmp->item(0)->nodeValue);
+    $return['price'] = trim(@$tmp->item(0)->nodeValue ?? '');
 
     // date
     $tmp = $xpath->query('.//aside[@class="item_absolute"]/p[@class="item_supp"]/text()', $element);
@@ -221,7 +221,7 @@ function fetch_url_content($url) {
 function replace_get_parameter($url, $parameter, $value) {
     // parse the url
     $pathInfo        = parse_url($url);
-    $queryString     = $pathInfo['query'];
+    $queryString     = $pathInfo['query'] ?? '';
     // convert the query parameters to an array
     parse_str($queryString, $queryArray);
     // add the new query parameter into the array

@@ -1,35 +1,97 @@
+/* RESET */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
 body {
-    font-family: "Myriad Set Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+/* APP */
+body {
+    font-family: Verdana,Arial,sans-serif;
     margin:0;
     padding:0;
     color:#333;
     font-size:14px;
-    background:#e6e6e6;
+    background:#ffffe9;
 }
 header {
-    display: table;
-    position: relative;
-    width: 100%;
-    height: 100%;
+    display:block;
+    width:100%;
+    height:100vh;
+    text-align: center;
+    position:relative;
+}
+.text-vertical-center {
+    position:absolute;
+    width:560px;
+    height:230px;
+    top:50%;
+    left:50%;
+    margin:-115px 0 0 -280px;
+}
+.footer {
+    color:#b9afa4;
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    right: 0;
 }
 h1 {
     font-size:40px;
-    margin:0 0 10px;
+    margin:0 0 20px;
     color:#f56b2a;
+    font-weight:700;
 }
 h1 > span {
     color:#787776;
 }
 h3 {
-    font-size:16px;
+    font-size:15px;
     margin:0 0 10px;
-    color:#333;
+    color:#444;
 }
-.text-vertical-center {
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
-}
+
+/* FORM */
 .big-input {
     padding: 15px;
     border: none;
@@ -38,7 +100,7 @@ h3 {
     width:555px;
     font-size:20px;
     color:#888;
-    height:50px;
+    height:20px;
     margin:0 0 20px 0;
     text-align: center;
 }
@@ -72,12 +134,21 @@ h3 {
 .submit:hover {
     background-color: rgba(0,0,0,0.7);
 }
+#new-search {
+    position: fixed;
+    bottom: 30px;
+    z-index: 1000;
+    background: rgba(0,0,0,0.7);
+    cursor:pointer;
+}
+/* MAP */
 #map {
     display:block;
     width:100%;
     height:100vh;
 }
 
+/* INFOWINDOW */
 .list_item {
     position: relative;
     display: block;
@@ -104,7 +175,6 @@ h3 {
     height: 100%;
     min-height: 120px;
     text-align: center;
-    line-height: 120px;
 }
 .item_infos {
     position: relative;
