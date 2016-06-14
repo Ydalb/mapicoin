@@ -10,7 +10,8 @@ header('Content-Type: application/json; charset=utf-8');
 // ===
 // Some vars
 // ===
-$_MAX_PAGES    = 1;
+$_MAX_PAGES    = 2;
+$_SLEEP        = 1;
 
 
 // ===
@@ -34,8 +35,10 @@ if (!$_URL || !preg_match('#https://www\.leboncoin\.fr/.+#i', $_URL)) {
 // ===
 // Let's browse pages !
 // ===
-$datas = $places = [];
+$datas = [];
 for ($i = 1; $i <= $_MAX_PAGES; ++$i) {
+
+    $places = [];
 
     // Change pagination
     $url      = replace_get_parameter($_URL, 'o', $i);
@@ -51,28 +54,30 @@ for ($i = 1; $i <= $_MAX_PAGES; ++$i) {
     if ($annonces->length == 0) {
         break;
     }
-    foreach ($annonces as $i => $e) {
-        $annonce    = fetch_annonce_info($xpath, $e);
-        $datas[$i]  = $annonce;
+    foreach ($annonces as $j => $e) {
+        $key = ($j + 1) * $i;
+        $annonce     = fetch_annonce_info($xpath, $e);
+        $datas[$key] = $annonce;
         if ($annonce['location']) {
-            $places[$i] = $annonce['location'];
-        } else {
-            var_dump($annonce);
-            die('no location');
+            $places[$key] = $annonce['location'];
         }
     }
-}
 
-// ===
-// Fetch lat & lng
-// ===
-$latlng = convert_places_to_latlng($places);
-if (!$latlng) {
-    $return['message'] = "Impossible de récupérer les coordonnées GPS des annonces.";
-    exit(json_encode($return));
-}
-foreach ($latlng as $i => $ll) {
-    $datas[$i]['latlng'] = $ll;
+    // ===
+    // Fetch lat & lng
+    // ===
+    $latlng = convert_places_to_latlng($places);
+    if (!$latlng) {
+        $return['message'] = "Impossible de récupérer les coordonnées GPS des annonces.";
+        exit(json_encode($return));
+    }
+    foreach ($latlng as $k => $ll) {
+        $key                   = ($k + 1) * $i;
+        $datas[$key]['latlng'] = $ll;
+    }
+
+    sleep($_SLEEP);
+
 }
 
 

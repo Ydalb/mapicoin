@@ -82,7 +82,9 @@ function add_annonces_markers(map, annonces) {
         content: ""
     });
 
-    for (index = 0; index < annonces.length; ++index) {
+    console.log(annonces.length);
+
+    for (var index in annonces) {
 
         var annonce = annonces[index];
 
