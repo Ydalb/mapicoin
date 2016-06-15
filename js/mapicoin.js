@@ -1,7 +1,13 @@
 $(document).ready(function() {
 
+    // ===
+    // Focus main input on load
+    // ===
     $('#input-url').focus();
 
+    // ===
+    // "Back to search" button
+    // ===
     $('body').on('click', '#new-search', function(event) {
         event.preventDefault();
         $('html, body').animate({
@@ -9,12 +15,15 @@ $(document).ready(function() {
             },
             400,
             function () {
+                lock_search(false);
                 $('#new-search').hide();
             }
         );
     })
 
+    // ===
     // Form submit
+    // ===
     $('#form-search').on('submit', function(event) {
         event.preventDefault();
         var $form = $(this);
@@ -28,7 +37,7 @@ $(document).ready(function() {
         lock_search(true);
 
         $.ajax({
-            url:      '/leboncoin-ajax.php',
+            url:      '/get-ads.php',
             type:     'post',
             data:     $form.serialize(),
             dataType: 'json',
@@ -39,18 +48,16 @@ $(document).ready(function() {
                     return false;
                 }
                 if (!data.datas || data.datas.length == 0) {
-                    alert("Aucune annonce trouvée. Veuillez essayer un autre lien de recherche.");
+                    alert("Aucune ad trouvée. Veuillez essayer un autre lien de recherche.");
                     lock_search(false);
                     return false;
                 }
-
-                // On regroupe les annondes
-                console.log(data.datas);
-                var datas = regroup_annonce(data.datas);
-                console.log(datas);
+                // Group ads by lat/lng
+                var datas = regroup_ads(data.datas);
                 var map   = initialize_map();
-                add_annonces_markers(map, datas);
-                // ScrollTo
+                // Create and add markers to the map
+                add_ads_markers(map, datas);
+                // ScrollTo the map
                 $('html, body').animate({
                     scrollTop:$('#map').offset().top
                     },
@@ -59,8 +66,6 @@ $(document).ready(function() {
                         $('#new-search').show();
                     }
                 );
-
-                lock_search(false);
             },
             error: function() {
                 alert("Une erreur est survenue. Veuillez ré-essayer.");
@@ -72,6 +77,10 @@ $(document).ready(function() {
 
 });
 
+
+/**
+ * (un)lock the search form
+ */
 function lock_search(lock) {
     if (lock) {
         $('#input-submit').val('Chargement des annonces...');
@@ -84,69 +93,79 @@ function lock_search(lock) {
     }
 }
 
-function regroup_annonce(datas) {
+/**
+ * Used to browse all ads and group them by location (lat/lng) in
+ * order to have 1 marker for multiple ads
+ */
+function regroup_ads(datas) {
 
     var result = [];
 
     for (var i in datas) {
 
-        var annonce      = datas[i];
-        annonce['count'] = 1;
-        annonce['text']  = '' +
-            '<a href="'+annonce.url+'" title="'+annonce.title+'" target="_blank" class="list_item">' +
+        var ad      = datas[i];
+        ad['count'] = 1;
+        ad['text']  = '' +
+            '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank" class="list_item">' +
                 '<div class="item_image">' +
                     '<span class="item_imagePic">' +
-                        '<img src="'+annonce.picture+'">' +
+                        '<img src="'+ad.picture+'">' +
                     '</span>' +
                 '</div>' +
                 '<section class="item_infos">' +
-                    '<h2 class="item_title">'+annonce.title+'</h2>' +
-                    '<p class="item_supp">'+annonce.pro+'</p>' +
-                    '<p class="item_supp">'+annonce.location+'</p>' +
-                    '<h3 class="item_price">'+annonce.price+'</h3>' +
+                    '<h2 class="item_title">'+ad.title+'</h2>' +
+                    '<p class="item_supp">'+ad.pro+'</p>' +
+                    '<p class="item_supp">'+ad.location+'</p>' +
+                    '<h3 class="item_price">'+ad.price+'</h3>' +
                     '<aside class="item_absolute">' +
-                        '<p class="item_supp">'+annonce.date+'</p>' +
+                        '<p class="item_supp">'+ad.date+'</p>' +
                     '</aside>' +
                 '</section>' +
             '</a>';
 
+        // Test if current ad has the same lat/lng of another ad
         var found = false;
         for (var j in result) {
             var tmp = result[j];
-            if (tmp.latlng.lat == annonce.latlng.lat && tmp.latlng.lng == annonce.latlng.lng) {
+            // ad matching another one
+            if (tmp.latlng.lat == ad.latlng.lat && tmp.latlng.lng == ad.latlng.lng) {
                 found = true;
             }
         }
+        // If found, we add the pop-up content next to the current one('s)
         if (found) {
-            result[j].text  += annonce.text;
+            result[j].text  += ad.text;
             result[j].count += 1;
         } else {
-            result.push(annonce);
+            result.push(ad);
         }
     }
 
     return result;
 }
 
-function add_annonces_markers(map, annonces) {
+/**
+ * Add markers to the map
+ */
+function add_ads_markers(map, ads) {
     //create empty LatLngBounds object
     var bounds     = new google.maps.LatLngBounds();
     var infowindow = new google.maps.InfoWindow({
         content: ""
     });
 
-    for (var index in annonces) {
+    for (var index in ads) {
 
-        var annonce = annonces[index];
+        var ad = ads[index];
 
         var marker  = new google.maps.Marker({
             map:      map,
-            position: annonce.latlng,
-            title:    annonce.title,
-            label:    annonce.count > 1 ? '+' : null
+            position: ad.latlng,
+            title:    ad.title,
+            label:    ad.count > 1 ? '+' : null
         });
 
-        bind_info_window(marker, map, infowindow, annonce.text);
+        bind_info_window(marker, map, infowindow, ad.text);
         //extend the bounds to include each marker's position
         bounds.extend(marker.position);
 
@@ -156,6 +175,9 @@ function add_annonces_markers(map, annonces) {
     map.fitBounds(bounds);
 }
 
+/**
+ * Bind ad pop-up to marker
+ */
 function bind_info_window(marker, map, infowindow, description) {
     marker.addListener('click', function() {
         infowindow.setContent(description);
@@ -163,16 +185,17 @@ function bind_info_window(marker, map, infowindow, description) {
     });
 }
 
+/**
+ * Init google map
+ */
 function initialize_map() {
   var myLatLng = {lat: 47.351, lng: 3.392};
-  var element = document.getElementById('map');
+  var element  = document.getElementById('map');
   element.style.display = 'block';
-  // Create a map object and specify the DOM element for display.
   var map = new google.maps.Map(element, {
     center: myLatLng,
     scrollwheel: true,
     zoom: 6
   });
-
   return map;
 }

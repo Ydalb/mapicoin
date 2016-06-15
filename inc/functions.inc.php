@@ -1,97 +1,5 @@
 <?php
 
-// ini_set('display_errors', 0);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-libxml_use_internal_errors(true);
-
-header('Content-Type: application/json; charset=utf-8');
-
-// ===
-// Some vars
-// ===
-$_MAX_PAGES    = 3;
-$_SLEEP        = 1;
-
-
-// ===
-// Default return
-// ===
-$return = [
-    'status'  => false,
-    'message' => 'ko',
-    'datas'   => null,
-];
-
-// ===
-// Check URL
-// ===
-$_URL = $_POST['u'] ?? $_GET['u'] ?? null;
-if (!$_URL || !preg_match('#https://www\.leboncoin\.fr/.+#i', $_URL)) {
-    $return['message'] = "Veuillez renseigner une URL de recherche leboncoin";
-    exit(json_encode($return));
-}
-
-// ===
-// Let's browse pages !
-// ===
-$datas = [];
-for ($i = 1; $i <= $_MAX_PAGES; ++$i) {
-
-    $places = [];
-
-    // Change pagination
-    $url      = replace_get_parameter($_URL, 'o', $i);
-    $html     = fetch_url_content($url);
-
-    // Load DOM
-    $dom   = new DOMDocument();
-    $dom->loadHTML($html);
-    $xpath = new DomXPath($dom);
-
-    $annonces = fetch_annonces($xpath);
-
-    if ($annonces->length == 0) {
-        break;
-    }
-    foreach ($annonces as $j => $e) {
-        $key = ($j + 1) * $i;
-        $annonce     = fetch_annonce_info($xpath, $e);
-        $datas[$key] = $annonce;
-        if ($annonce['location']) {
-            $places[$key] = $annonce['location'];
-        }
-    }
-
-    // ===
-    // Fetch lat & lng
-    // ===
-    $latlng = convert_places_to_latlng($places);
-    if (!$latlng) {
-        $return['message'] = "Impossible de récupérer les coordonnées GPS des annonces.";
-        exit(json_encode($return));
-    }
-    foreach ($latlng as $k => $ll) {
-        $key                   = ($k + 1) * $i;
-        $datas[$key]['latlng'] = $ll;
-    }
-
-    sleep($_SLEEP);
-
-}
-
-
-// ===
-// /END of script
-// ===
-$return['status']  = true;
-$return['message'] = 'ok';
-$return['datas']   = $datas;
-exit(json_encode($return));
-
-
-
-
 // ===
 // Functions
 // ===
@@ -100,7 +8,7 @@ exit(json_encode($return));
 /**
  * Return annonce info from DOMElement (using xpath)
  */
-function fetch_annonce_info($xpath, $element) {
+function fetch_annonce_info($domXpath, $domElement) {
     $return = [
         'url'      => null,
         'title'    => null,
@@ -111,33 +19,54 @@ function fetch_annonce_info($xpath, $element) {
         'pro'      => null,
     ];
     // url
-    $tmp = $xpath->query('.//a[@class="list_item clearfix trackable"]/@href', $element);
+    $tmp = $domXpath->query(
+        './/a[@class="list_item clearfix trackable"]/@href',
+        $domElement
+    );
     $return['url'] = 'https:'.$tmp->item(0)->nodeValue;
 
     // title
-    $tmp = $xpath->query('.//h2[@class="item_title"]/text()', $element);
+    $tmp = $domXpath->query(
+        './/h2[@class="item_title"]/text()',
+        $domElement
+    );
     $return['title'] = trim($tmp->item(0)->nodeValue);
 
     // picture
-    $tmp = $xpath->query('.//span[@class="lazyload"]/@data-imgsrc', $element);
+    $tmp = $domXpath->query(
+        './/span[@class="lazyload"]/@data-imgsrc',
+        $domElement
+    );
     $return['picture'] = 'https:'.trim(@$tmp->item(0)->nodeValue ?? '//static.leboncoin.fr/img/no-picture.png');
 
     // pro
-    $tmp = $xpath->query('.//span[@class="ispro"]/text()', $element);
+    $tmp = $domXpath->query(
+        './/span[@class="ispro"]/text()',
+        $domElement
+    );
     $tmp = trim(@$tmp->item(0)->nodeValue ?? null);
     $return['pro'] = preg_replace('#\s+#i', ' ', $tmp);
 
     // location
-    $tmp = $xpath->query('(.//p[@class="item_supp"])[2]/text()', $element);
+    $tmp = $domXpath->query(
+        '(.//p[@class="item_supp"])[2]/text()',
+        $domElement
+    );
     $tmp = trim($tmp->item(0)->nodeValue);
     $return['location'] = preg_replace('#\s+#i', ' ', $tmp);
 
     // price
-    $tmp = $xpath->query('.//h3[@class="item_price"]/text()', $element);
+    $tmp = $domXpath->query(
+        './/h3[@class="item_price"]/text()',
+        $domElement
+    );
     $return['price'] = trim(@$tmp->item(0)->nodeValue ?? '');
 
     // date
-    $tmp = $xpath->query('.//aside[@class="item_absolute"]/p[@class="item_supp"]/text()', $element);
+    $tmp = $domXpath->query(
+        './/aside[@class="item_absolute"]/p[@class="item_supp"]/text()',
+        $domElement
+    );
     $return['date'] = trim($tmp->item(0)->nodeValue);
 
     return $return;
@@ -146,9 +75,10 @@ function fetch_annonce_info($xpath, $element) {
 /**
  * Return DOMElements of annonces
  */
-function fetch_annonces($xpath) {
-    $xpathMain = '//section[@class="tabsContent block-white dontSwitch"]/ul/li';
-    return $xpath->query($xpathMain);
+function fetch_annonces($domXpath) {
+    return $domXpath->query(
+        '//section[@class="tabsContent block-white dontSwitch"]/ul/li'
+    );
 }
 
 
