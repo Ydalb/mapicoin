@@ -154,11 +154,13 @@ h3 {
     display: block;
     /*padding: 15px;*/
     padding: .5rem;
-    /*border-bottom: 1px solid #ccc;*/
     -webkit-transition: background,0.3s;
     -moz-transition: background,0.3s;
     transition: background,0.3s;
     overflow: hidden;
+}
+.list_item:not(:last-child) {
+    border-bottom: 1px solid #ccc;
 }
 .item_image {
     position: relative;

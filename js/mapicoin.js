@@ -75,9 +75,11 @@ $(document).ready(function() {
 function lock_search(lock) {
     if (lock) {
         $('#input-submit').val('Chargement des annonces...');
+        $('#input-submit').attr('disabled', 'disabled');
         $("body").css("cursor", "progress");
     } else {
         $('#input-submit').val($('#input-submit').data('value'));
+        $('#input-submit').removeAttr('disabled');
         $("body").css("cursor", "default");
     }
 }
