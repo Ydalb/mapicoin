@@ -10,12 +10,18 @@ $(document).ready(function() {
     // ===
     $('body').on('click', '#new-search', function(event) {
         event.preventDefault();
+        // Update URL
+        window.history.pushState("", "", "/");
+        // Clean input
+        $('#loader').hide();
+        $('#input-url').val('');
         $('html, body').animate({
             scrollTop:0
             },
             400,
             function () {
                 $('#new-search').hide();
+                $('#map').html('').hide();
             }
         );
     })
@@ -51,6 +57,10 @@ $(document).ready(function() {
                     lock_search(false);
                     return false;
                 }
+                // Update URL
+                var tmp = url.replace(/\?/g, '%3F').replace(/&/g, '%26');
+                window.history.pushState("", "", "/?u="+tmp);
+
                 // Group ads by lat/lng
                 var datas = regroup_ads(data.datas);
                 var map   = initialize_map();
@@ -75,6 +85,18 @@ $(document).ready(function() {
 
     });
 
+
+    // ===
+    // Detect GET parameter and submit if needed
+    // ===
+    var u = parse_query_strings('u');
+    console.log(u);
+    if (u) {
+        var tmp = u.replace(/%3F/g, '?').replace(/%26/g, '&');
+        $('#input-url').val(tmp);
+        $('#form-search').submit();
+    }
+
 });
 
 
@@ -86,10 +108,12 @@ function lock_search(lock) {
         $('#input-submit').val('Chargement des annonces...');
         $('#input-submit').attr('disabled', 'disabled');
         $("body").css("cursor", "progress");
+        $('#loader').show();
     } else {
         $('#input-submit').val($('#input-submit').data('value'));
         $('#input-submit').removeAttr('disabled');
         $("body").css("cursor", "default");
+        $('#loader').hide();
     }
 }
 
@@ -188,12 +212,32 @@ function bind_info_window(marker, map, infowindow, description) {
 }
 
 /**
+ * Parse query strings (foo=bar&foo1=bar1) and return given parameter value
+ */
+function parse_query_strings(val) {
+    var result = null,
+        tmp    = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+            tmp = item.split("=");
+            if (tmp[0] === val) {
+                tmp.shift();
+                result = tmp.join('=');
+            }
+        }
+    );
+    return result;
+}
+
+/**
  * Init google map
  */
 function initialize_map() {
     var myLatLng          = {lat: 47.351, lng: 3.392};
     var element           = document.getElementById('map');
-    element.style.display = 'block';
+    $('#map').show();
     var map = new google.maps.Map(element, {
         center:      myLatLng,
         scrollwheel: true,

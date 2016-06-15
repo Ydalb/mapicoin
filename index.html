@@ -23,7 +23,6 @@
             <div class="text-vertical-center">
                 <h1><span>mapi</span>coin</h1>
                 <h3>Prévisualisez les annonces de votre recherche <a href="https://www.leboncoin.fr/" rel-"external" target="_blank">leboncoin.fr</a> sur une carte.</h3>
-                <br />
                 <form id="form-search" action="#">
                     <input
                         id="input-url"
@@ -32,12 +31,17 @@
                         value=""
                         placeholder="Copiez/collez votre lien de recherche..." />
                     <br />
-                    <input
-                        id="input-submit"
-                        class="submit"
-                        type="submit"
-                        data-value="Et hop !"
-                        value="Et hop !" />
+                    <div class="form-footer">
+                        <input
+                            id="input-submit"
+                            class="submit"
+                            type="submit"
+                            data-value="Et hop !"
+                            value="Et hop !" />
+                        <div id="loader" class="cssload-loader-walk" style="display:none;">
+                            <div></div><div></div><div></div><div></div><div></div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="footer">
