@@ -19,7 +19,7 @@ $return = [
 // ===
 // Check URL
 // ===
-$_URL = $_POST['u'] ?? null;
+$_URL = $_POST['u'] ?? $_GET['u'] ?? null;
 if (!$_URL || !preg_match('#https://www\.leboncoin\.fr/.+#i', $_URL)) {
     $return['message'] = "Veuillez renseigner une URL de recherche leboncoin";
     exit(json_encode($return));

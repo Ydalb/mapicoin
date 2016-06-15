@@ -111,6 +111,7 @@ function regroup_ads(datas) {
                     '<span class="item_imagePic">' +
                         '<img src="'+ad.picture+'">' +
                     '</span>' +
+                    '<span class="item_imageNumber">'+ad.picture_count+'</span>' +
                 '</div>' +
                 '<section class="item_infos">' +
                     '<h2 class="item_title">'+ad.title+'</h2>' +
@@ -162,7 +163,7 @@ function add_ads_markers(map, ads) {
             map:      map,
             position: ad.latlng,
             title:    ad.title,
-            label:    ad.count > 1 ? '+' : null
+            icon:     'http://maps.google.com/mapfiles/ms/icons/'+(ad.count > 1 ? 'green' : 'red')+'-dot.png'
         });
 
         bind_info_window(marker, map, infowindow, ad.text);
@@ -182,6 +183,7 @@ function bind_info_window(marker, map, infowindow, description) {
     marker.addListener('click', function() {
         infowindow.setContent(description);
         infowindow.open(map, this);
+        this.setIcon('http://maps.google.com/mapfiles/ms/icons/purple-dot.png');
     });
 }
 

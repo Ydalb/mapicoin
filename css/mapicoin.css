@@ -178,6 +178,19 @@ h3 {
     min-height: 120px;
     text-align: center;
 }
+.item_imageNumber {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    height: 25px;
+    width: 25px;
+    text-align: center;
+    background: #fff;
+    opacity: 0.8;
+    line-height: 25px;
+    color: #f56b2a;
+    font-weight: bold;
+}
 .item_infos {
     position: relative;
     float: left;

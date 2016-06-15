@@ -10,13 +10,14 @@
  */
 function fetch_annonce_info($domXpath, $domElement) {
     $return = [
-        'url'      => null,
-        'title'    => null,
-        'picture'  => null,
-        'location' => null,
-        'price'    => null,
-        'date'     => null,
-        'pro'      => null,
+        'url'           => null,
+        'title'         => null,
+        'picture'       => null,
+        'picture_count' => null,
+        'location'      => null,
+        'price'         => null,
+        'date'          => null,
+        'pro'           => null,
     ];
     // url
     $tmp = $domXpath->query(
@@ -38,6 +39,13 @@ function fetch_annonce_info($domXpath, $domElement) {
         $domElement
     );
     $return['picture'] = 'https:'.trim(@$tmp->item(0)->nodeValue ?? '//static.leboncoin.fr/img/no-picture.png');
+
+    // picture_count
+    $tmp = $domXpath->query(
+        './/span[@class="item_imageNumber"]/span/text()',
+        $domElement
+    );
+    $return['picture_count'] = trim(@$tmp->item(0)->nodeValue ?? 0);
 
     // pro
     $tmp = $domXpath->query(
