@@ -6,7 +6,7 @@
 
 define('DEBUG',               false);
 
-define('MAX_PAGES_RETRIEVE',  1);
+define('MAX_PAGES_RETRIEVE',  3);
 define('SLEEP_BETWEEN_PAGES', 1);
 
 
