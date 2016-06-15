@@ -15,7 +15,6 @@ $(document).ready(function() {
             },
             400,
             function () {
-                lock_search(false);
                 $('#new-search').hide();
             }
         );
@@ -64,6 +63,7 @@ $(document).ready(function() {
                     400,
                     function () {
                         $('#new-search').show();
+                        lock_search(false);
                     }
                 );
             },
@@ -163,7 +163,7 @@ function add_ads_markers(map, ads) {
             map:      map,
             position: ad.latlng,
             title:    ad.title,
-            icon:     'http://maps.google.com/mapfiles/ms/icons/'+(ad.count > 1 ? 'green' : 'red')+'-dot.png'
+            icon:     'https://maps.google.com/mapfiles/ms/icons/'+(ad.count > 1 ? 'green' : 'red')+'-dot.png'
         });
 
         bind_info_window(marker, map, infowindow, ad.text);
@@ -183,7 +183,7 @@ function bind_info_window(marker, map, infowindow, description) {
     marker.addListener('click', function() {
         infowindow.setContent(description);
         infowindow.open(map, this);
-        this.setIcon('http://maps.google.com/mapfiles/ms/icons/purple-dot.png');
+        this.setIcon('https://maps.google.com/mapfiles/ms/icons/purple-dot.png');
     });
 }
 
@@ -191,13 +191,25 @@ function bind_info_window(marker, map, infowindow, description) {
  * Init google map
  */
 function initialize_map() {
-  var myLatLng = {lat: 47.351, lng: 3.392};
-  var element  = document.getElementById('map');
-  element.style.display = 'block';
-  var map = new google.maps.Map(element, {
-    center: myLatLng,
-    scrollwheel: true,
-    zoom: 6
-  });
-  return map;
+    var myLatLng          = {lat: 47.351, lng: 3.392};
+    var element           = document.getElementById('map');
+    element.style.display = 'block';
+    var map = new google.maps.Map(element, {
+        center:      myLatLng,
+        scrollwheel: true,
+        zoom:        6
+    });
+    // Create the legend and display on the map
+    var legend  = document.createElement('div');
+    legend.id   = 'legend';
+    var content = [];
+    content.push('<h3>Légende</h3>');
+    content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/red-dot.png" /> : annonce non visitée</p>');
+    content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/green-dot.png" /> : annonces multiples non visitées</p>');
+    content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/purple-dot.png" /> : annonce visitée</p>');
+    legend.innerHTML = content.join('');
+    legend.index     = 1;
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
+
+    return map;
 }

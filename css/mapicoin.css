@@ -182,12 +182,12 @@ h3 {
     position: absolute;
     left: 0px;
     bottom: 0px;
-    height: 25px;
-    width: 25px;
+    height: 20px;
+    width: 20px;
     text-align: center;
     background: #fff;
     opacity: 0.8;
-    line-height: 25px;
+    line-height: 20px;
     color: #f56b2a;
     font-weight: bold;
 }
@@ -225,4 +225,34 @@ h3 {
     position: absolute;
     bottom: 0;
     right: 0;
+}
+#legend {
+    left: 10px !important;
+    direction: ltr;
+    overflow: hidden;
+    position: relative;
+    color: rgb(0, 0, 0);
+    font-family: Roboto, Arial, sans-serif;
+    -webkit-user-select: none;
+    font-size: 11px;
+    padding: 8px;
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+    -webkit-background-clip: padding-box;
+    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px;
+    min-width: 22px;
+    font-weight: 500;
+    background-color: rgb(255, 255, 255);
+    background-clip: padding-box;
+}
+#legend h3 {
+    font-weight:bold;
+    font-size:11px;
+}
+#legend p {
+    line-height:30px;
+}
+#legend img {
+    display: inline-block;
+    margin: 0px -6px -10px 0;
 }
