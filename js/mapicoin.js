@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+    $('#input-url').focus();
+
     $('body').on('click', '#new-search', function(event) {
         event.preventDefault();
         $('html, body').animate({
@@ -41,8 +43,13 @@ $(document).ready(function() {
                     lock_search(false);
                     return false;
                 }
-                var map = initialize_map();
-                add_annonces_markers(map, data.datas);
+
+                // On regroupe les annondes
+                console.log(data.datas);
+                var datas = regroup_annonce(data.datas);
+                console.log(datas);
+                var map   = initialize_map();
+                add_annonces_markers(map, datas);
                 // ScrollTo
                 $('html, body').animate({
                     scrollTop:$('#map').offset().top
@@ -75,28 +82,15 @@ function lock_search(lock) {
     }
 }
 
-function add_annonces_markers(map, annonces) {
-    //create empty LatLngBounds object
-    var bounds     = new google.maps.LatLngBounds();
-    var infowindow = new google.maps.InfoWindow({
-        content: ""
-    });
+function regroup_annonce(datas) {
 
-    console.log(annonces.length);
+    var result = [];
 
-    for (var index in annonces) {
+    for (var i in datas) {
 
-        var annonce = annonces[index];
-
-        var marker  = new google.maps.Marker({
-            map:      map,
-            position: annonce.latlng,
-            title:    annonce.title
-        });
-        console.log(annonce);
-        //console.log(annonce.latlng);
-
-        var contentString = '' +
+        var annonce      = datas[i];
+        annonce['count'] = 1;
+        annonce['text']  = '' +
             '<a href="'+annonce.url+'" title="'+annonce.title+'" target="_blank" class="list_item">' +
                 '<div class="item_image">' +
                     '<span class="item_imagePic">' +
@@ -114,7 +108,43 @@ function add_annonces_markers(map, annonces) {
                 '</section>' +
             '</a>';
 
-        bind_info_window(marker, map, infowindow, contentString);
+        var found = false;
+        for (var j in result) {
+            var tmp = result[j];
+            if (tmp.latlng.lat == annonce.latlng.lat && tmp.latlng.lng == annonce.latlng.lng) {
+                found = true;
+            }
+        }
+        if (found) {
+            result[j].text  += annonce.text;
+            result[j].count += 1;
+        } else {
+            result.push(annonce);
+        }
+    }
+
+    return result;
+}
+
+function add_annonces_markers(map, annonces) {
+    //create empty LatLngBounds object
+    var bounds     = new google.maps.LatLngBounds();
+    var infowindow = new google.maps.InfoWindow({
+        content: ""
+    });
+
+    for (var index in annonces) {
+
+        var annonce = annonces[index];
+
+        var marker  = new google.maps.Marker({
+            map:      map,
+            position: annonce.latlng,
+            title:    annonce.title,
+            label:    annonce.count > 1 ? '+' : null
+        });
+
+        bind_info_window(marker, map, infowindow, annonce.text);
         //extend the bounds to include each marker's position
         bounds.extend(marker.position);
 
@@ -144,4 +174,3 @@ function initialize_map() {
 
   return map;
 }
-

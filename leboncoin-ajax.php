@@ -10,7 +10,7 @@ header('Content-Type: application/json; charset=utf-8');
 // ===
 // Some vars
 // ===
-$_MAX_PAGES    = 2;
+$_MAX_PAGES    = 3;
 $_SLEEP        = 1;
 
 
