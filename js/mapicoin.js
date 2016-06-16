@@ -15,6 +15,7 @@ $(document).ready(function() {
         // Clean input
         $('#loader').hide();
         $('#input-url').val('');
+        $('#header').show();
         $('html, body').animate({
             scrollTop:0
             },
@@ -66,12 +67,14 @@ $(document).ready(function() {
                 var map   = initialize_map();
                 // Create and add markers to the map
                 add_ads_markers(map, datas);
+
                 // ScrollTo the map
                 $('html, body').animate({
                     scrollTop:$('#map').offset().top
                     },
                     400,
                     function () {
+                        $('#header').hide();
                         $('#new-search').show();
                         lock_search(false);
                     }
