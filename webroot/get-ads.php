@@ -1,7 +1,8 @@
 <?php
 
-require_once 'inc/config.inc.php';
+require_once '../inc/config.inc.php';
 
+set_time_limit(60);
 libxml_use_internal_errors(true);
 
 ob_start();
@@ -48,6 +49,7 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
         break;
     }
     foreach ($annonces as $j => $e) {
+        // Key is very important as we are mixing result pages ($i, $j)
         $key = ($j + 1) * $i;
         $annonce     = fetch_annonce_info($domXpath, $e);
         $datas[$key] = $annonce;
@@ -65,8 +67,7 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
         exit(json_encode($return));
     }
     foreach ($latlng as $k => $ll) {
-        $key                   = ($k + 1) * $i;
-        $datas[$key]['latlng'] = $ll;
+        $datas[$k]['latlng'] = $ll;
     }
 
     sleep(SLEEP_BETWEEN_PAGES);

@@ -16,15 +16,8 @@ $(document).ready(function() {
         $('#loader').hide();
         $('#input-url').val('');
         $('#header').show();
-        $('html, body').animate({
-            scrollTop:0
-            },
-            400,
-            function () {
-                $('#new-search').hide();
-                $('#map').html('').hide();
-            }
-        );
+        $('#new-search').hide();
+        $('#map').html('').hide();
     })
 
     // ===
@@ -47,15 +40,16 @@ $(document).ready(function() {
             type:     'post',
             data:     $form.serialize(),
             dataType: 'json',
+            timeout:  60000,
             success: function(data) {
                 if (!data.status) {
-                    alert(data.message);
                     lock_search(false);
+                    alert(data.message);
                     return false;
                 }
                 if (!data.datas || data.datas.length == 0) {
-                    alert("Aucune ad trouvée. Veuillez essayer un autre lien de recherche.");
                     lock_search(false);
+                    alert("Aucune ad trouvée. Veuillez essayer un autre lien de recherche.");
                     return false;
                 }
                 // Update URL
@@ -81,8 +75,8 @@ $(document).ready(function() {
                 );
             },
             error: function() {
-                alert("Une erreur est survenue. Veuillez ré-essayer.");
                 lock_search(false);
+                alert("Une erreur est survenue. Veuillez ré-essayer.");
             }
         })
 
@@ -93,7 +87,6 @@ $(document).ready(function() {
     // Detect GET parameter and submit if needed
     // ===
     var u = parse_query_strings('u');
-    console.log(u);
     if (u) {
         var tmp = u.replace(/%3F/g, '?').replace(/%26/g, '&');
         $('#input-url').val(tmp);
@@ -184,11 +177,11 @@ function add_ads_markers(map, ads) {
 
     for (var index in ads) {
 
-        var ad = ads[index];
-
-        var marker  = new google.maps.Marker({
+        var ad       = ads[index];
+        var myLatlng = new google.maps.LatLng(ad.latlng.lat, ad.latlng.lng);
+        var marker   = new google.maps.Marker({
             map:      map,
-            position: ad.latlng,
+            position: myLatlng,
             title:    ad.title,
             icon:     'https://maps.google.com/mapfiles/ms/icons/'+(ad.count > 1 ? 'green' : 'red')+'-dot.png'
         });
@@ -257,6 +250,21 @@ function initialize_map() {
     legend.innerHTML = content.join('');
     legend.index     = 1;
     map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
+
+    // This is needed to set the zoom after fitbounds,
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+        zoomChangeBoundsListener =
+            google.maps.event.addListener(map, 'bounds_changed', function(event) {
+                if (this.getZoom() > 11 && this.initialZoom == true) {
+                    // Change max/min zoom here
+                    this.setZoom(11);
+                    this.initialZoom = false;
+                }
+            google.maps.event.removeListener(zoomChangeBoundsListener);
+        });
+    });
+    map.initialZoom = true;
+
 
     return map;
 }

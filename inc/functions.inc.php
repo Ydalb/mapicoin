@@ -4,6 +4,59 @@
 // Functions
 // ===
 
+function set_location_in_cache($location = '', $coords = array()) {
+    global $_MYSQLI;
+    /* Crée une requête préparée */
+    if (!($stmt = $_MYSQLI->prepare("
+        INSERT INTO geocode (id,location,lat,lng)
+            VALUES (?,?,?,?)
+        ON DUPLICATE KEY
+            UPDATE lat=?, lng=?"
+        ))) {
+        return false;
+    }
+    /* Lecture des marqueurs */
+    $id = md5($location);
+    $stmt->bind_param(
+        "ssssdd",
+        $id,
+        $location,
+        $coords[0],
+        $coords[1],
+        $coords[0],
+        $coords[1]
+    );
+    /* Exécution de la requête */
+    $stmt->execute();
+    /* Fermeture du traitement */
+    $stmt->close();
+
+    return true;
+}
+
+function get_location_from_cache($location = '') {
+    global $_MYSQLI;
+    /* Crée une requête préparée */
+    if (!($stmt = $_MYSQLI->prepare("SELECT lat,lng FROM geocode WHERE id=? LIMIT 1"))) {
+        return false;
+    }
+    /* Lecture des marqueurs */
+    $id = md5($location);
+    $stmt->bind_param("s", $id);
+    /* Exécution de la requête */
+    $stmt->execute();
+    /* Lecture des variables résultantes */
+    $stmt->bind_result($lat,$lng);
+    /* Récupération des valeurs */
+    if (!$stmt->fetch()) {
+        return null;
+    }
+    /* Fermeture du traitement */
+    $stmt->close();
+
+    return [$lat,$lng];
+}
+
 
 /**
  * Return annonce info from DOMElement (using xpath)
@@ -94,32 +147,42 @@ function fetch_annonces($domXpath) {
  * Get lat & lng from places (bulk /!\) using mapquest
  */
 function convert_places_to_latlng($places = array()) {
-    $mapquest_key = 'uHGLveStgjQ2A1mstajUJGYUlEpkJ6B2';
-    $base_url     = sprintf(
-        'http://www.mapquestapi.com/geocoding/v1/batch?key=%s&thumbMaps=false&maxResults=40',
-        $mapquest_key
+    global $_CONFIG;
+    $geocoder = sprintf(
+        'https://maps.googleapis.com/maps/api/geocode/json?key=%s&address=%%s',
+        $_CONFIG->api->google_geocode
     );
 
-    // Add location
-    foreach ($places as $place) {
-        $base_url .= '&location='.urlencode($place.' (FR)');
-    }
-
-    $tmp = fetch_url_content($base_url);
-    if (!($json = json_decode($tmp, true))) {
-        return false;
-    }
-    if (!isset($json['info']['statuscode']) || $json['info']['statuscode'] != 0) {
-        return false;
-    }
-    if (!isset($json['results']) || count($json['results']) == 0) {
-        return false;
-    }
-
     $return = [];
-    foreach ($json['results'] as $i => $r) {
-        $return[$i] = $r['locations'][0]['latLng'];
+    foreach ($places as $i => $place) {
+
+        $cache = get_location_from_cache($place);
+        if (!$cache) {
+            $tmp    = preg_replace("/[^\s\p{L}0-9]+/u", "", $place);
+            $tmp    = str_replace(' / ', ', ', $tmp);
+            $tmp    = preg_replace('/\s+/', '+', $tmp);
+            $tmp    .= ',+France';
+            $query  = sprintf($geocoder, $tmp);
+            $result = json_decode(file_get_contents($query));
+            $json   = $result->results[0];
+            $lat    = $json->geometry->location->lat;
+            $lng    = $json->geometry->location->lng;
+            set_location_in_cache(
+                $place,
+                [$lat, $lng]
+            );
+        } else {
+            $lat = $cache[0];
+            $lng = $cache[1];
+        }
+        $return[$i] = [
+            'lat' => $lat,
+            'lng' => $lng
+        ];
+        // Don't overload google !
+        usleep(400000);
     }
+
     return $return;
 }
 
