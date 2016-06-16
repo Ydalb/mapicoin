@@ -4,10 +4,13 @@
 // Configuration
 // ===
 
-define('DEBUG',               false);
+define('DEBUG', false);
 
-define('MAX_PAGES_RETRIEVE',  3);
-define('SLEEP_BETWEEN_PAGES', 1);
+define('MAX_PAGES_RETRIEVE',  2);
+define('SLEEP_BETWEEN_PAGES', 0);
+define('USLEEP_BETWEEN_API_CALL', 500000); // 400ms
+
+define('VERSION',             file_get_contents(__DIR__.'/../VERSION'));
 
 // Dislay debug ?
 if (DEBUG || in_array($_SERVER['SERVER_ADDR'], array('127.0.0.1', '192.168.99.100'))) {
@@ -24,23 +27,17 @@ $parameters = __DIR__.'/parameters.json';
 if (!file_exists($parameters)) {
     die("Couldn't find parameters.json");
 }
-if (!($json = json_decode(file_get_contents($parameters)))) {
+if (!($_CONFIG = json_decode(file_get_contents($parameters)))) {
     die("Couldn't read/decode parameters.json");
 }
-define('MYSQL_HOST',     $json->mysql->host);
-define('MYSQL_PORT',     $json->mysql->port);
-define('MYSQL_LOGIN',    $json->mysql->login);
-define('MYSQL_PASSWORD', $json->mysql->password);
-define('MYSQL_DATABASE', $json->mysql->database);
+define('MYSQL_HOST',     $_CONFIG->mysql->host);
+define('MYSQL_PORT',     $_CONFIG->mysql->port);
+define('MYSQL_LOGIN',    $_CONFIG->mysql->login);
+define('MYSQL_PASSWORD', $_CONFIG->mysql->password);
+define('MYSQL_DATABASE', $_CONFIG->mysql->database);
 
-// $_MYSQLI = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASSWORD, MYSQL_DATABASE);
-$_CACHE  = true;
-// Si on n'a pas de connexion mysql, tant pis, pas de cache
-if (!$_MYSQLI) {
-    $_CACHE = false;
-}
-
-
+$_MYSQLI = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASSWORD, MYSQL_DATABASE);
+$_MYSQLI->set_charset("utf8");
 // ===
 // Requires
 // ===

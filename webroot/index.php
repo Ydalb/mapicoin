@@ -1,3 +1,6 @@
+<?php
+    require_once '../inc/config.inc.php';
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,13 +10,13 @@
 
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
-        <link href="/css/mapicoin.css" rel="stylesheet" />
-        <link href="/css/ribbon.min.css" rel="stylesheet" />
+        <link href="/css/mapicoin.css?<?= VERSION ?>" rel="stylesheet" />
+        <link href="/css/ribbon.min.css?<?= VERSION ?>" rel="stylesheet" />
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyA797A1ZQxzPqs2oaWLeaFvvGEySX9EVCw"></script>
 
-        <script src="/js/mapicoin.js"></script>
+        <script src="/js/mapicoin.js?<?= VERSION ?>"></script>
 
         <link rel="icon" type="image/png" href="favicon.png" />
 
