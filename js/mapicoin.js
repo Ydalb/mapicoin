@@ -16,15 +16,22 @@ $(document).ready(function() {
         $('#loader').hide();
         $('#input-url').val('');
         $('#header').show();
-        $('html, body').animate({
-            scrollTop:0
-            },
-            400,
-            function () {
-                $('#new-search').hide();
-                $('#map').html('').hide();
-            }
-        );
+        $('#new-search').hide();
+        $('#map').html('').hide();
+        // setTimeout(
+        //     function() {
+        //         $('html, body').animate({
+        //                 scrollTop:0
+        //             },
+        //             400,
+        //             function () {
+        //                 $('#new-search').hide();
+        //                 $('#map').html('').hide();
+        //             }
+        //         );
+        //     },
+        //     1
+        // );
     })
 
     // ===
@@ -49,13 +56,13 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(data) {
                 if (!data.status) {
-                    alert(data.message);
                     lock_search(false);
+                    alert(data.message);
                     return false;
                 }
                 if (!data.datas || data.datas.length == 0) {
-                    alert("Aucune ad trouvée. Veuillez essayer un autre lien de recherche.");
                     lock_search(false);
+                    alert("Aucune ad trouvée. Veuillez essayer un autre lien de recherche.");
                     return false;
                 }
                 // Update URL
@@ -81,8 +88,8 @@ $(document).ready(function() {
                 );
             },
             error: function() {
-                alert("Une erreur est survenue. Veuillez ré-essayer.");
                 lock_search(false);
+                alert("Une erreur est survenue. Veuillez ré-essayer.");
             }
         })
 
