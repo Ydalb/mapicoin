@@ -171,16 +171,18 @@ function convert_places_to_latlng($places = array()) {
                 $place,
                 [$lat, $lng]
             );
+            // error_log("NEW LOCATION: ".$place);
+            // Don't overload google !
+            usleep(USLEEP_BETWEEN_API_CALL);
         } else {
             $lat = $cache[0];
             $lng = $cache[1];
+            // error_log("LOCATION FROM CACHE: ".$place);
         }
         $return[$i] = [
             'lat' => $lat,
             'lng' => $lng
         ];
-        // Don't overload google !
-        usleep(400000);
     }
 
     return $return;

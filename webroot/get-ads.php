@@ -70,7 +70,7 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
         $datas[$k]['latlng'] = $ll;
     }
 
-    sleep(SLEEP_BETWEEN_PAGES);
+    // sleep(SLEEP_BETWEEN_PAGES);
 
 }
 

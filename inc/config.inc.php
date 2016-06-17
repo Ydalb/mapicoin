@@ -8,9 +8,9 @@ define('DEBUG', false);
 
 define('MAX_PAGES_RETRIEVE',  2);
 define('SLEEP_BETWEEN_PAGES', 0);
-define('USLEEP_BETWEEN_API_CALL', 500000); // 400ms
+define('USLEEP_BETWEEN_API_CALL', 200000); // 200ms
 
-define('VERSION',             file_get_contents(__DIR__.'/../VERSION'));
+define('VERSION', file_get_contents(__DIR__.'/../VERSION'));
 
 // Dislay debug ?
 if (DEBUG || in_array($_SERVER['SERVER_ADDR'], array('127.0.0.1', '192.168.99.100'))) {
