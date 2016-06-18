@@ -179,12 +179,17 @@ function add_ads_markers(map, ads) {
 
         var ad       = ads[index];
         var myLatlng = new google.maps.LatLng(ad.latlng.lat, ad.latlng.lng);
+
         var marker   = new google.maps.Marker({
             map:      map,
             position: myLatlng,
             title:    ad.title,
-            icon:     'https://maps.google.com/mapfiles/ms/icons/'+(ad.count > 1 ? 'green' : 'red')+'-dot.png'
+            label: {
+                text : ad.count.toString(),
+            }
         });
+
+        //http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=10|FE7569
 
         bind_info_window(marker, map, infowindow, ad.text);
         //extend the bounds to include each marker's position
@@ -203,7 +208,8 @@ function bind_info_window(marker, map, infowindow, description) {
     marker.addListener('click', function() {
         infowindow.setContent(description);
         infowindow.open(map, this);
-        this.setIcon('https://maps.google.com/mapfiles/ms/icons/purple-dot.png');
+        this.setLabel('');
+        this.setIcon('http://mt.google.com/vt/icon?color=ff004C13&name=icons/spotlight/spotlight-waypoint-blue.png');
     });
 }
 
@@ -240,16 +246,16 @@ function initialize_map() {
         zoom:        6
     });
     // Create the legend and display on the map
-    var legend  = document.createElement('div');
-    legend.id   = 'legend';
-    var content = [];
-    content.push('<h3>Légende</h3>');
-    content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/red-dot.png" /> : annonce non visitée</p>');
-    content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/green-dot.png" /> : annonces multiples non visitées</p>');
-    content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/purple-dot.png" /> : annonce visitée</p>');
-    legend.innerHTML = content.join('');
-    legend.index     = 1;
-    map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
+    // var legend  = document.createElement('div');
+    // legend.id   = 'legend';
+    // var content = [];
+    // content.push('<h3>Légende</h3>');
+    // content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/red-dot.png" /> : annonce non visitée</p>');
+    // content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/green-dot.png" /> : annonces multiples non visitées</p>');
+    // content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/purple-dot.png" /> : annonce visitée</p>');
+    // legend.innerHTML = content.join('');
+    // legend.index     = 1;
+    // map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
 
     // This is needed to set the zoom after fitbounds,
     google.maps.event.addListener(map, 'zoom_changed', function() {

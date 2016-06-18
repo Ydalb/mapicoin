@@ -15,6 +15,7 @@
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyA797A1ZQxzPqs2oaWLeaFvvGEySX9EVCw"></script>
+        <script src="/js/map-icons.min.js?<?= VERSION ?>"></script>
 
         <script src="/js/mapicoin.js?<?= VERSION ?>"></script>
 

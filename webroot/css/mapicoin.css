@@ -183,7 +183,11 @@ h3 {
     display: block;
     height: 100%;
     min-height: 120px;
+    line-height: 120px;
     text-align: center;
+}
+.item_imagePic img {
+    vertical-align: middle;
 }
 .item_imageNumber {
     position: absolute;
@@ -319,6 +323,19 @@ h3 {
         -ms-animation-delay: -2.08s;
         -webkit-animation-delay: -2.08s;
         -moz-animation-delay: -2.08s;
+}
+
+.map-icon-label {
+    position: absolute;
+}
+
+.map-icon-label .map-icon {
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFFFFF;
+    line-height: 56px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 
