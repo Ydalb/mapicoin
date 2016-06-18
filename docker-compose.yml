@@ -10,12 +10,13 @@ services:
     ports:
       - "1987:80"
     links:
-      - db
+      - db:database
   web:
-    image: php:7-apache
-    links:
+    build: .
+    depends_on:
       - db
     ports:
       - "8080:80"
     volumes:
+        - ./docker/vhost.conf:/etc/apache2/sites-enabled/mapicoin.conf
         - .:/var/www/html
