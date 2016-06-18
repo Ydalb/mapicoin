@@ -151,13 +151,13 @@ function regroup_ads(datas) {
             // ad matching another one
             if (tmp.latlng.lat == ad.latlng.lat && tmp.latlng.lng == ad.latlng.lng) {
                 found = true;
+                result[j].text  += ad.text;
+                result[j].count += 1;
+                break;
             }
         }
         // If found, we add the pop-up content next to the current one('s)
-        if (found) {
-            result[j].text  += ad.text;
-            result[j].count += 1;
-        } else {
+        if (!found) {
             result.push(ad);
         }
     }
