@@ -71,6 +71,8 @@ $(document).ready(function() {
                         $('#header').hide();
                         $('#new-search').show();
                         lock_search(false);
+                        // Localize client
+                        var GeoMarker = new GeolocationMarker(map);
                     }
                 );
             },
@@ -274,3 +276,11 @@ function initialize_map() {
 
     return map;
 }
+
+function set_client_position(position) {
+    console.log(position.coords);
+}
+function get_client_position() {
+
+}
+
