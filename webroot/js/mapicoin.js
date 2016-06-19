@@ -136,6 +136,7 @@ function regroup_ads(datas) {
         ad['count'] = 1;
         ad['text']  = '' +
             '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank" class="list_item">' +
+                '<span class="item_distance"></span>' +
                 '<div class="item_image">' +
                     '<span class="item_imagePic">' +
                         '<img src="'+ad.picture+'">' +

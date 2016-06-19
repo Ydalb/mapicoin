@@ -1,6 +1,9 @@
 var map;
 var markers = [];
 var GeoMarker;
+var is_geolocated=false;
+var directionsDisplay;
+var directionsService = new google.maps.DirectionsService();
 
 
 
@@ -8,8 +11,14 @@ var GeoMarker;
  * Init google map
  */
 function initialize_map() {
-    var myLatLng          = {lat: 47.351, lng: 3.392};
-    var element           = document.getElementById('map');
+    // Center of France
+    var myLatLng      = {lat: 47.351, lng: 3.392};
+    var element       = document.getElementById('map');
+    // For direction calculation
+    opts = {
+        preserveViewport:true
+    }
+    directionsDisplay = new google.maps.DirectionsRenderer(opts);
     $('#map').show();
     var map = new google.maps.Map(element, {
         center:      myLatLng,
@@ -44,6 +53,13 @@ function initialize_map() {
 
     // Localize client
     GeoMarker = new GeolocationMarker(map);
+    console.log(GeoMarker);
+    google.maps.event.addListenerOnce(GeoMarker, 'position_changed',     function() {
+        is_geolocated = true;
+    });
+
+    // For distance
+    directionsDisplay.setMap(map);
 
     return map;
 }
@@ -87,6 +103,11 @@ function add_ads_markers(map, ads) {
             }
         });
 
+        // On click event (calculate distance)
+        marker.addListener('click', function() {
+            calc_distance_to_marker(this);
+        });
+
         markers.push(marker);
 
         //http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=10|FE7569
@@ -110,4 +131,22 @@ function remove_markers() {
         markers[i].setMap(null);
     }
     markers = [];
+}
+
+
+function calc_distance_to_marker(marker) {
+
+    var request = {
+        origin:      GeoMarker.getPosition(),
+        destination: marker.getPosition(),
+        travelMode:  google.maps.TravelMode.DRIVING
+    };
+    directionsService.route(request, function(result, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(result);
+            var distance = result.routes[0].legs[0].distance.text;
+            var time     = result.routes[0].legs[0].duration.text;
+            $('.list_item .item_distance').html('Trajet : '+distance+' ('+time+')');
+        }
+    });
 }
