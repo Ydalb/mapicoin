@@ -16,7 +16,8 @@ function initialize_map() {
     var element       = document.getElementById('map');
     // For direction calculation
     opts = {
-        preserveViewport:true
+        preserveViewport:true,
+        suppressMarkers:true
     }
     directionsDisplay = new google.maps.DirectionsRenderer(opts);
     $('#map').show();

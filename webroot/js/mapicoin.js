@@ -77,6 +77,7 @@ $(document).ready(function() {
                     function () {
                         $('#header').hide();
                         $('#new-search').show();
+                        $('#map').show();
                         lock_search(false);
                     }
                 );
@@ -110,12 +111,10 @@ $(document).ready(function() {
  */
 function lock_search(lock) {
     if (lock) {
-        $('#input-submit').val('Chargement des annonces...');
         $('#input-submit').attr('disabled', 'disabled');
         $("body").css("cursor", "progress");
         $('#loader').show();
     } else {
-        $('#input-submit').val($('#input-submit').data('value'));
         $('#input-submit').removeAttr('disabled');
         $("body").css("cursor", "default");
         $('#loader').hide();

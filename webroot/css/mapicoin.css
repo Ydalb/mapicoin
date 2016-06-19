@@ -112,10 +112,11 @@ h3 {
     border-bottom: solid 2px #969696;
 }
 .submit {
-    border-radius: 0;
+    cursor:pointer;
+    border-radius: 5px;
     color: #fff;
-    background-color: rgba(0,0,0,0.5);
-    padding: 10px 16px;
+    background-color: rgb(242, 113, 28);
+    padding: 8px 25px;
     font-size: 18px;
     line-height: 1.3333333;
     display: inline-block;
@@ -135,8 +136,11 @@ h3 {
     background-image: none;
     border: 1px solid transparent;
 }
-.submit:hover {
-    background-color: rgba(0,0,0,0.7);
+.submit[disabled] {
+    background:rgba(242, 113, 28, 0.5);
+}
+#input-submit > i {
+    margin-right:5px;
 }
 .form-footer {
     position: relative;
@@ -144,9 +148,8 @@ h3 {
 #new-search {
     position: fixed;
     bottom: 30px;
+    left:10px;
     z-index: 1000;
-    background: rgba(0,0,0,0.7);
-    cursor:pointer;
 }
 /* MAP */
 #map {

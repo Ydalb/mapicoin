@@ -12,6 +12,7 @@
 
         <link href="/css/mapicoin.css?<?= VERSION ?>" rel="stylesheet" />
         <link href="/css/ribbon.min.css" rel="stylesheet" />
+        <link href="/css/font-awesome.min.css" rel="stylesheet" />
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyA797A1ZQxzPqs2oaWLeaFvvGEySX9EVCw"></script>
@@ -43,12 +44,14 @@
                         placeholder="Copiez/collez votre lien de recherche..." />
                     <br />
                     <div class="form-footer">
-                        <input
+                        <button
                             id="input-submit"
                             class="submit"
                             type="submit"
-                            data-value="Et hop !"
-                            value="Et hop !" />
+                            data-text="Afficher">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            Afficher
+                        </button>
                         <div id="loader" class="cssload-loader-walk" style="display:none;">
                             <div></div><div></div><div></div><div></div><div></div>
                         </div>
