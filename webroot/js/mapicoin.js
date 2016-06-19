@@ -22,7 +22,7 @@ $(document).ready(function() {
         $('#input-url').val('');
         $('#header').show();
         $('#new-search').hide();
-        // $('#map').html('').hide();
+        $('#map').hide();
     })
 
     // ===
