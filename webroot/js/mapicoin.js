@@ -1,4 +1,12 @@
+var map;
+var markers = [];
+
 $(document).ready(function() {
+
+    // ===
+    // Init. google map
+    // ===
+    map   = initialize_map();
 
     // ===
     // Focus main input on load
@@ -17,7 +25,7 @@ $(document).ready(function() {
         $('#input-url').val('');
         $('#header').show();
         $('#new-search').hide();
-        $('#map').html('').hide();
+        // $('#map').html('').hide();
     })
 
     // ===
@@ -52,13 +60,15 @@ $(document).ready(function() {
                     alert("Aucune ad trouvée. Veuillez essayer un autre lien de recherche.");
                     return false;
                 }
+                // Remove previous markers
+                remove_markers();
+
                 // Update URL
                 var tmp = url.replace(/\?/g, '%3F').replace(/&/g, '%26');
                 window.history.pushState("", "", "/?u="+tmp);
 
                 // Group ads by lat/lng
                 var datas = regroup_ads(data.datas);
-                var map   = initialize_map();
                 // Create and add markers to the map
                 add_ads_markers(map, datas);
 
@@ -71,8 +81,6 @@ $(document).ready(function() {
                         $('#header').hide();
                         $('#new-search').show();
                         lock_search(false);
-                        // Localize client
-                        var GeoMarker = new GeolocationMarker(map);
                     }
                 );
             },
@@ -167,6 +175,13 @@ function regroup_ads(datas) {
     return result;
 }
 
+function remove_markers() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    markers = [];
+}
+
 /**
  * Add markers to the map
  */
@@ -190,6 +205,8 @@ function add_ads_markers(map, ads) {
                 text : ad.count.toString(),
             }
         });
+
+        markers.push(marker);
 
         //http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=10|FE7569
 
@@ -273,14 +290,9 @@ function initialize_map() {
     });
     map.initialZoom = true;
 
+    // Localize client
+    var GeoMarker = new GeolocationMarker(map);
 
     return map;
-}
-
-function set_client_position(position) {
-    console.log(position.coords);
-}
-function get_client_position() {
-
 }
 
