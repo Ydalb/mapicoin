@@ -4,6 +4,12 @@
         "port"     : 3306,
         "login"    : "mapicoin",
         "password" : "pleasechangeme",
-        "database" : "mapicoin"
+        "database" : "mapicoin",
+        "charset"  : "utf-8"
+    },
+
+    "api" : {
+        "google_server_key":  "",
+        "google_browser_key": ""
     }
 }

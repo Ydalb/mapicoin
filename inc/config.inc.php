@@ -30,14 +30,14 @@ if (!file_exists($parameters)) {
 if (!($_CONFIG = json_decode(file_get_contents($parameters)))) {
     die("Couldn't read/decode parameters.json");
 }
-define('MYSQL_HOST',     $_CONFIG->mysql->host);
-define('MYSQL_PORT',     $_CONFIG->mysql->port);
-define('MYSQL_LOGIN',    $_CONFIG->mysql->login);
-define('MYSQL_PASSWORD', $_CONFIG->mysql->password);
-define('MYSQL_DATABASE', $_CONFIG->mysql->database);
-
-$_MYSQLI = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASSWORD, MYSQL_DATABASE);
-$_MYSQLI->set_charset("utf8");
+$_MYSQLI = mysqli_connect(
+	$_CONFIG->mysql->host,
+	$_CONFIG->mysql->login,
+	$_CONFIG->mysql->password,
+	$_CONFIG->mysql->database,
+	$_CONFIG->mysql->port
+);
+$_MYSQLI->set_charset($_CONFIG->mysql->charset);
 // ===
 // Requires
 // ===
