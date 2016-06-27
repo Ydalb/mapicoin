@@ -142,6 +142,15 @@ function fetch_annonces($domXpath) {
     );
 }
 
+/**
+ * Return DOMElements of title
+ */
+function fetch_page_title($domXpath) {
+    return $domXpath->query(
+        '//head/title/text()'
+    )->item(0)->nodeValue;
+}
+
 
 /**
  * Get lat & lng from places (bulk /!\) using mapquest

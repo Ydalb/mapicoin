@@ -64,6 +64,7 @@ $(document).ready(function() {
                     alert("Aucune ad trouvée. Veuillez essayer un autre lien de recherche.");
                     return false;
                 }
+
                 // Remove previous markers
                 remove_markers();
 
@@ -73,8 +74,21 @@ $(document).ready(function() {
 
                 // Group ads by lat/lng
                 var datas = regroup_ads(data.datas);
+
+                // Toggle panel
+                toggle_panel(true);
+
                 // Create and add markers to the map
                 add_ads_markers(map, datas);
+
+                // Fit bounds
+                map_fit_bounds();
+
+                // Update panel
+                update_panel(data.title, datas);
+
+                // Bind click event
+                bind_panel();
 
                 // ScrollTo the map
                 $('html, body').animate({
@@ -128,6 +142,47 @@ function lock_search(lock) {
     }
 }
 
+function toggle_panel(toggle) {
+    if (toggle) {
+        $('#sidebar-wrapper').addClass('toggled');
+        $('#map').addClass('toggled');
+    } else {
+        $('#sidebar-wrapper').removeClass('toggled');
+        $('#map').removeClass('toggled');
+    }
+}
+
+function update_panel(title, ads) {
+    // Title
+    $('#sidebar-wrapper h2').text(title);
+
+    $('#sidebar-ads').html('');
+
+    // Update content
+    for (var index in ads) {
+
+        var ad = ads[index];
+        $('#sidebar-ads').append(ad.text);
+
+    }
+
+}
+
+function bind_panel() {
+    // Bind panel list
+    $('#sidebar-ads').on('click', '.list_item', function(event) {
+        $('#sidebar-ads .list_item').removeClass('active');
+        $(this).addClass('active');
+        var i = $(this).index();
+        google.maps.event.trigger(markers[i], "click");
+    });
+}
+
+function panel_goto(i) {
+    $('#sidebar-ads .list_item').removeClass('active');
+    $('#sidebar-ads .list_item:nth-child('+(i + 1)+')').addClass('active');
+}
+
 /**
  * Used to browse all ads and group them by location (lat/lng) in
  * order to have 1 marker for multiple ads
@@ -138,29 +193,30 @@ function regroup_ads(datas) {
 
     for (var i in datas) {
 
-        var ad      = datas[i];
-        ad['count'] = 1;
-        ad['text']  = '' +
-            '<div class="list_item">' +
-                '<span class="item_distance"></span>' +
-                '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank">' +
-                    '<div class="item_image">' +
-                        '<span class="item_imagePic">' +
-                            '<img src="'+ad.picture+'">' +
-                        '</span>' +
-                        '<span class="item_imageNumber">'+ad.picture_count+'</span>' +
-                    '</div>' +
-                    '<section class="item_infos">' +
-                        '<h2 class="item_title">'+ad.title+'</h2>' +
-                        '<p class="item_supp">'+ad.pro+'</p>' +
-                        '<p class="item_supp">'+ad.location+'</p>' +
-                        '<h3 class="item_price">'+ad.price+'</h3>' +
-                        '<aside class="item_absolute">' +
-                            '<p class="item_supp">'+ad.date+'</p>' +
-                        '</aside>' +
-                    '</section>' +
-                '</a>'+
-            '</div>';
+        var ad       = datas[i];
+        ad['count']  = 1;
+        ad['text'] = '' +
+            '<li class="list_item item-'+i+'">' +
+                '<div class="item_image">' +
+                    '<span class="item_imagePic">' +
+                        '<img src="'+ad.picture+'">' +
+                    '</span>' +
+                    '<span class="item_imageNumber">'+ad.picture_count+'</span>' +
+                '</div>' +
+                '<section class="item_infos">' +
+                    '<h2 class="item_title">'+
+                        '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank">' +
+                            ad.title+
+                        '</a>'+
+                    '</h2>' +
+                    '<p class="item_supp">'+ad.pro+'</p>' +
+                    '<p class="item_supp">'+ad.location+'</p>' +
+                    '<h3 class="item_price">'+ad.price+'</h3>' +
+                    '<aside class="item_absolute">' +
+                        '<p class="item_supp">'+ad.date+'</p>' +
+                    '</aside>' +
+                '</section>' +
+            '</li>';
 
         // Test if current ad has the same lat/lng of another ad
         var found = false;
