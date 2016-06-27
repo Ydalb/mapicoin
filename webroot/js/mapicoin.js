@@ -1,6 +1,13 @@
 $(document).ready(function() {
 
     // ===
+    // Reset slider when modal pop-up
+    // ===
+    $('#modal-help').on('show.bs.modal', function (e) {
+        $('#carousel-mapicoin-howto').carousel(0);
+    });
+
+    // ===
     // Init. google map
     // ===
     map   = initialize_map();
@@ -111,11 +118,11 @@ $(document).ready(function() {
  */
 function lock_search(lock) {
     if (lock) {
-        $('#input-submit').attr('disabled', 'disabled');
+        $('#input-submit').button('loading');
         $("body").css("cursor", "progress");
         $('#loader').show();
     } else {
-        $('#input-submit').removeAttr('disabled');
+        $('#input-submit').button('reset');
         $("body").css("cursor", "default");
         $('#loader').hide();
     }
@@ -134,24 +141,26 @@ function regroup_ads(datas) {
         var ad      = datas[i];
         ad['count'] = 1;
         ad['text']  = '' +
-            '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank" class="list_item">' +
+            '<div class="list_item">' +
                 '<span class="item_distance"></span>' +
-                '<div class="item_image">' +
-                    '<span class="item_imagePic">' +
-                        '<img src="'+ad.picture+'">' +
-                    '</span>' +
-                    '<span class="item_imageNumber">'+ad.picture_count+'</span>' +
-                '</div>' +
-                '<section class="item_infos">' +
-                    '<h2 class="item_title">'+ad.title+'</h2>' +
-                    '<p class="item_supp">'+ad.pro+'</p>' +
-                    '<p class="item_supp">'+ad.location+'</p>' +
-                    '<h3 class="item_price">'+ad.price+'</h3>' +
-                    '<aside class="item_absolute">' +
-                        '<p class="item_supp">'+ad.date+'</p>' +
-                    '</aside>' +
-                '</section>' +
-            '</a>';
+                '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank">' +
+                    '<div class="item_image">' +
+                        '<span class="item_imagePic">' +
+                            '<img src="'+ad.picture+'">' +
+                        '</span>' +
+                        '<span class="item_imageNumber">'+ad.picture_count+'</span>' +
+                    '</div>' +
+                    '<section class="item_infos">' +
+                        '<h2 class="item_title">'+ad.title+'</h2>' +
+                        '<p class="item_supp">'+ad.pro+'</p>' +
+                        '<p class="item_supp">'+ad.location+'</p>' +
+                        '<h3 class="item_price">'+ad.price+'</h3>' +
+                        '<aside class="item_absolute">' +
+                            '<p class="item_supp">'+ad.date+'</p>' +
+                        '</aside>' +
+                    '</section>' +
+                '</a>'+
+            '</div>';
 
         // Test if current ad has the same lat/lng of another ad
         var found = false;
