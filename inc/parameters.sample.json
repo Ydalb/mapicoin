@@ -5,7 +5,7 @@
         "login"    : "mapicoin",
         "password" : "pleasechangeme",
         "database" : "mapicoin",
-        "charset"  : "utf-8"
+        "charset"  : "utf8"
     },
 
     "api" : {
