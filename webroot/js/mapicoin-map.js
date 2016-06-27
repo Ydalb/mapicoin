@@ -54,8 +54,7 @@ function initialize_map() {
 
     // Localize client
     GeoMarker = new GeolocationMarker(map);
-    console.log(GeoMarker);
-    google.maps.event.addListenerOnce(GeoMarker, 'position_changed',     function() {
+    google.maps.event.addListenerOnce(GeoMarker, 'position_changed', function() {
         is_geolocated = true;
     });
 
@@ -84,6 +83,7 @@ function bind_info_window(marker, map, infowindow, description) {
  * Add markers to the map
  */
 function add_ads_markers(map, ads) {
+
     //create empty LatLngBounds object
     var bounds     = new google.maps.LatLngBounds();
     var infowindow = new google.maps.InfoWindow({
@@ -128,6 +128,7 @@ function add_ads_markers(map, ads) {
  * Remove all markers from the map
  */
 function remove_markers() {
+    directionsDisplay.setMap(null);
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
@@ -142,6 +143,7 @@ function calc_distance_to_marker(marker) {
         destination: marker.getPosition(),
         travelMode:  google.maps.TravelMode.DRIVING
     };
+    directionsDisplay.setMap(map);
     directionsService.route(request, function(result, status) {
         if (status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(result);

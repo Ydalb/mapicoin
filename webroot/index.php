@@ -76,6 +76,8 @@
           </div><!-- /.container-fluid -->
         </nav>
 
+
+        <!-- Modal -->
         <div id="modal-help" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -85,6 +87,7 @@
               </div>
               <div class="modal-body">
 
+              <!-- Carousel -->
                 <div id="carousel-mapicoin-howto" class="carousel slide" data-ride="carousel">
                   <!-- Indicators -->
                   <ol class="carousel-indicators">
