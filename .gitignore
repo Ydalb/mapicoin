@@ -1,3 +1,4 @@
 ._*
 inc/parameters.json
 .env
+.DS_Store
