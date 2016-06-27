@@ -116,11 +116,11 @@ $(document).ready(function() {
  */
 function lock_search(lock) {
     if (lock) {
-        $('#input-submit').attr('disabled', 'disabled');
+        $('#input-submit').button('loading');
         $("body").css("cursor", "progress");
         $('#loader').show();
     } else {
-        $('#input-submit').removeAttr('disabled');
+        $('#input-submit').button('reset');
         $("body").css("cursor", "default");
         $('#loader').hide();
     }
