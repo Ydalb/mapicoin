@@ -54,36 +54,33 @@ body {
     font-size:14px;
     background:#ffffe9;
 }
+#navbar {
+    margin:0;
+    border-radius:0;
+}
 header {
     display:block;
-    width:100%;
-    height:100vh;
-    text-align: center;
-    position:relative;
-}
-.text-vertical-center {
     position:absolute;
-    width:560px;
-    height:270px;
-    top:50%;
-    left:50%;
-    margin:-130px 0 0 -280px;
+    z-index:1000;
+    top:20px;
+    left:20px;
+    margin-right: 0;
+    margin-left: 0;
+    background-color: #fff;
+    padding:15px 15px;
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-width: 1px 0;
 }
-.footer {
-    color:#b9afa4;
-    position: absolute;
-    bottom: 15px;
-    left: 0;
-    right: 0;
+h1 .navbar-brand {
+    font-height:1.8em
 }
-h1 {
-    font-size:40px;
-    margin:0 0 20px;
-    color:#f56b2a;
+h1 a span {
     font-weight:700;
+    color:#eee;
 }
-h1 > span {
-    color:#787776;
+h1 a span + span {
+    color:#f56b2a;
 }
 h3 {
     font-size:15px;
@@ -92,70 +89,18 @@ h3 {
 }
 
 /* FORM */
-#form-search {
-    height:180px;
-    position:relative;
-}
-.big-input {
-    padding: 15px;
-    border: none;
-    border-bottom: solid 2px #c9c9c9;
-    transition: border 0.3s;
-    width:520px;
-    font-size:20px;
-    color:#888;
-    height:20px;
-    margin:0 0 20px 0;
-    text-align: center;
-}
-.big-input:focus {
-    border-bottom: solid 2px #969696;
-}
-.submit {
+#input-submit {
+    font-weight: 300;
     cursor:pointer;
-    border-radius: 5px;
-    color: #fff;
-    background-color: rgb(242, 113, 28);
-    padding: 8px 25px;
-    font-size: 18px;
-    line-height: 1.3333333;
-    display: inline-block;
-    margin-bottom: 0;
-    font-weight: 400;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
 }
-.submit[disabled] {
-    background:rgba(242, 113, 28, 0.5);
-}
-#input-submit > i {
-    margin-right:5px;
-}
-.form-footer {
-    position: relative;
-}
-#new-search {
-    position: fixed;
-    bottom: 30px;
-    left:10px;
-    z-index: 1000;
-}
+
 /* MAP */
 #map {
     display:block;
+    position:relative;
     width:100%;
-    height:100vh;
+    height:calc(100vh - 46px);
+    background-color:lightblue;
 }
 
 /* INFOWINDOW */

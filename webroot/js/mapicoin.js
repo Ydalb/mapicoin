@@ -1,6 +1,11 @@
 $(document).ready(function() {
 
     // ===
+    // POPOPOPOPOPOPOPover
+    // ===
+    $('[data-toggle="popover"]').popover();
+
+    // ===
     // Init. google map
     // ===
     map   = initialize_map();
