@@ -122,8 +122,6 @@ $(document).ready(function() {
 });
 
 
-
-
 /**
  * (un)lock the search form
  */
@@ -190,6 +188,12 @@ function panel_update(title, datas) {
 function panel_highlight(index) {
     $('#sidebar-ads .list_item').removeClass('active');
     $('#sidebar-ads .list_item[data-index="'+index+'"]').addClass('active');
+    var container = $('#sidebar-wrapper'),
+         scrollTo = $('#sidebar-ads .list_item[data-index="'+index+'"]').first();
+    // Or you can animate the scrolling:
+    container.animate({
+        scrollTop: -20 + scrollTo.offset().top - container.offset().top + container.scrollTop()
+    });
 }
 
 /**
