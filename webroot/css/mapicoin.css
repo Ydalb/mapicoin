@@ -81,7 +81,8 @@ h1 a span {
     font-weight:700;
     color:#fff;
 }
-h1 a span + span {
+h1 a span + span,
+h1 a i {
     color:#f56b2a;
 }
 h3 {
@@ -113,7 +114,18 @@ h3 {
     line-height:20px;
 }
 /* MAP */
+#overlay {
+    display:block;
+    position:absolute;
+    top:46px;
+    bottom:0;
+    left:0;
+    right:0;
+    background:rgba(0, 0, 0, 0.3);
+    z-index:10;
+}
 #map {
+    z-index:1;
     display:block;
     position:relative;
     height:calc(100vh - 46px);
@@ -203,62 +215,35 @@ h3 {
     padding:15px;
     border-bottom: 1px solid #ccc;
 }
-#sidebar-ads {
-
+.ad:hover,
+.ad.active {
+    background-color:#e6e6e6;
 }
-#sidebar-ads li {
-
+.ad:not(:last-child) {
+    border-bottom: 1px solid #ccc;
 }
-.list_item {
+.media {
     position: relative;
     display: block;
     padding:15px;
     -webkit-transition: background,0.3s;
     -moz-transition: background,0.3s;
     transition: background,0.3s;
-    overflow: hidden;
     text-decoration:none;
+    min-height:129px;
 }
-.list_item:hover,
-.list_item.active {
-    background-color:#e6e6e6;
-}
-.list_item:not(:last-child) {
-    border-bottom: 1px solid #ccc;
-}
-.list_item a {
+.media-heading a {
     text-decoration: underline;
 }
-.item_distance {
-    background-color:#ffffe9;
-    padding:5px;
-    color:#f56b2a;
-    text-decoration: none;
-    display:block;
-    text-align: center;
-    margin:0 0 10px 0;
+.media-left {
+    position:relative;
+    text-align:center;
+    min-width: 170px;
 }
-.item_image {
-    position: relative;
-    overflow: hidden;
-    float: left;
-    width: 25%;
-    min-width: 130px;
-    min-height: 120px;
-    max-height: 100%;
-    background: #f2f2f2;
+.media-left .media-object {
+    display:inline-block;
 }
-.item_imagePic {
-    display: block;
-    height: 100%;
-    min-height: 120px;
-    line-height: 120px;
-    text-align: center;
-}
-.item_imagePic img {
-    vertical-align: middle;
-}
-.item_imageNumber {
+.media-number {
     position: absolute;
     left: 0px;
     bottom: 0px;
@@ -271,26 +256,21 @@ h3 {
     color: #f56b2a;
     font-weight: bold;
 }
-.item_infos {
+.media-body {
     position: relative;
-    display: block;
-    margin-left: 140px;
-    height:120px;
+    height:99px;
 }
-.item_title {
+.media-heading {
     margin: 0 0 5px;
     font-size: 1rem;
     line-height: 1.2rem;
 }
-.item_supp {
+.media-supp {
     color: #1a1a1a;
     margin:0;
     line-height: 1.2rem;
 }
-.list .item_price {
-    margin-bottom: 0;
-}
-.item_price {
+.media-price {
     margin:0;
     font-size: 1rem;
     color: #f56b2a;
@@ -298,9 +278,9 @@ h3 {
     position:absolute;
     bottom:0;
 }
-.item_absolute {
+.media-date {
     position: absolute;
-    bottom: -2px;
+    bottom: 0px;
     right: 0;
     font-size:.65rem;
 }

@@ -8,7 +8,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <h1><a class="navbar-brand" href="#"><span>mapi</span><span>coin</span></a></h1>
+      <h1>
+        <a class="navbar-brand" href="/">
+          <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>
+          <span>mapi</span><span>coin</span>
+        </a>
+      </h1>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -21,6 +26,7 @@
                 name="u"
                 value=""
                 size="35"
+                type="url"
                 placeholder="Copiez/collez votre lien de recherche..."
                 />
         </div>
@@ -35,6 +41,9 @@
         </button>
       </form>
       <button type="button" class="btn btn-default navbar-btn hand pull-right" data-toggle="modal" data-target="#modal-help">Besoin d'aide ?</button>
+
+      <p id="ads-count" class="navbar-text"></p>
+
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>

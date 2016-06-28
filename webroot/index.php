@@ -46,6 +46,8 @@
             </div>
         </header> -->
 
+        <!-- Overlay -->
+        <section id="overlay"></section>
         <!-- Map -->
         <section id="map"></section>
 

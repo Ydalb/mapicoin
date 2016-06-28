@@ -72,6 +72,9 @@ $(document).ready(function() {
                 var tmp = url.replace(/\?/g, '%3F').replace(/&/g, '%26');
                 window.history.pushState("", "", "/?u="+tmp);
 
+                // count
+                var count = Object.keys(data.datas).length;
+
                 // Group ads by lat/lng
                 var datas = regroup_ads(data.datas);
 
@@ -85,7 +88,7 @@ $(document).ready(function() {
                 map_fit_bounds();
 
                 // Update panel + Bind
-                panel_update(data.title, datas);
+                panel_update(data.title, datas, count);
 
                 // ScrollTo the map
                 $('html, body').animate({
@@ -128,10 +131,12 @@ $(document).ready(function() {
 function lock_search(lock) {
     if (lock) {
         $('#input-submit').button('loading');
+        $('#input-url').prop('readonly', true);
         $("body").css("cursor", "progress");
         $('#loader').show();
     } else {
         $('#input-submit').button('reset');
+        $('#input-url').prop('readonly', false);
         $("body").css("cursor", "default");
         $('#loader').hide();
     }
@@ -141,17 +146,20 @@ function panel_toggle(toggle) {
     if (toggle) {
         $('#sidebar-wrapper').addClass('toggled');
         $('#map').addClass('toggled');
+        $('#overlay').fadeOut();
     } else {
         $('#sidebar-wrapper').removeClass('toggled');
         $('#map').removeClass('toggled');
+        $('#overlay').fadeIn();
     }
     google.maps.event.trigger(map, "resize");
 }
 
-function panel_update(title, datas) {
+function panel_update(title, datas, count) {
     // Title + Content
     $('#sidebar-wrapper h2').text(title);
     $('#sidebar-ads').html('');
+    $('#ads-count').html('');
 
     // Update content
     for (var i in datas) {
@@ -162,8 +170,15 @@ function panel_update(title, datas) {
         }
     }
 
+    if (count !== undefined) {
+        var plural = (count > 1 ? 's' : '');
+        $('#ads-count').text(
+            'Affichage de '+count+' annonce'+plural
+        );
+    }
+
     // Bind click
-    $('#sidebar-ads').on('click', '.list_item', function(event) {
+    $('#sidebar-ads').on('click', '.ad', function(event) {
         var i = $(this).data('index');
         google.maps.event.trigger(markers[i], "click");
     });
@@ -181,18 +196,21 @@ function panel_update(title, datas) {
             markers[i].setIcon(iconDefault);
             markers[i].setAnimation(null);
         }
-    }, '.list_item');
+    }, '.ad');
 
+
+    // HL first
+    panel_highlight(0);
 }
 
 function panel_highlight(index) {
-    $('#sidebar-ads .list_item').removeClass('active');
-    $('#sidebar-ads .list_item[data-index="'+index+'"]').addClass('active');
+    $('#sidebar-ads .ad').removeClass('active');
+    $('#sidebar-ads .ad[data-index="'+index+'"]').addClass('active');
     var container = $('#sidebar-wrapper'),
-         scrollTo = $('#sidebar-ads .list_item[data-index="'+index+'"]').first();
+         scrollTo = $('#sidebar-ads .ad[data-index="'+index+'"]').first();
     // Or you can animate the scrolling:
     container.animate({
-        scrollTop: -20 + scrollTo.offset().top - container.offset().top + container.scrollTop()
+        scrollTop: (index > 0 ? -20 : -100) + scrollTo.offset().top - container.offset().top + container.scrollTop()
     });
 }
 
@@ -209,25 +227,23 @@ function regroup_ads(datas) {
         var ad       = datas[i];
         ad['count']  = 1;
         ad['text'] = '' +
-            '<div class="item_image">' +
-                '<span class="item_imagePic">' +
-                    '<img src="'+ad.picture+'">' +
-                '</span>' +
-                '<span class="item_imageNumber">'+ad.picture_count+'</span>' +
-            '</div>' +
-            '<section class="item_infos">' +
-                '<h2 class="item_title">'+
-                    '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank">' +
-                        ad.title+
-                    '</a>'+
-                '</h2>' +
-                '<p class="item_supp">'+ad.pro+'</p>' +
-                '<p class="item_supp">'+ad.location+'</p>' +
-                '<h3 class="item_price">'+ad.price+'</h3>' +
-                '<aside class="item_absolute">' +
-                    '<p class="item_supp">'+ad.date+'</p>' +
-                '</aside>' +
-            '</section>';
+            '<div class="media">' +
+                '<div class="media-left media-middle">' +
+                    '<img class="media-object" src="'+ad.picture+'" alt="'+ad.title+'">' +
+                    '<span class="media-number">'+ad.picture_count+'</span>' +
+                '</div>' +
+                '<div class="media-body">' +
+                    '<h3 class="media-heading">'+
+                        '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank">' +
+                            ad.title+
+                        '</a>'+
+                    '</h3>' +
+                    '<p class="media-supp">'+ad.pro+'</p>' +
+                    '<p class="media-supp">'+ad.location+'</p>' +
+                    '<p class="media-price">'+ad.price+'</p>' +
+                    '<p class="media-date">'+ad.date+'</p>' +
+                '</div>' +
+            '</div>';
 
         // Test if current ad has the same lat/lng of another ad
         var found = false;
@@ -254,7 +270,7 @@ function regroup_ads(datas) {
         var ads = result[i].ads;
         for (var j in ads) {
             ads[j].text = ''+
-                '<li class="list_item" data-index="'+i+'">'+ads[j].text+'</li>';
+                '<li class="ad" data-index="'+i+'">'+ads[j].text+'</li>';
         }
     }
 
