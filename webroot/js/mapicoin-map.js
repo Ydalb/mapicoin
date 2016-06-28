@@ -8,6 +8,8 @@ var infowindow = new google.maps.InfoWindow({
     content: ""
 });
 
+var iconDefault = '//maps.google.com/mapfiles/ms/icons/red-dot.png';
+var iconHover   = '//maps.google.com/mapfiles/ms/icons/green-dot.png';
 
 
 /**
@@ -71,39 +73,34 @@ function initialize_map() {
 /**
  * Add markers to the map
  */
-function add_ads_markers(map, ads) {
+function add_ads_markers(map, datas) {
 
-    google.maps.event.trigger(map, "resize");
 
-    for (var index in ads) {
+    for (var i in datas) {
 
-        var ad       = ads[index];
-        var myLatlng = new google.maps.LatLng(ad.latlng.lat, ad.latlng.lng);
+        var data      = datas[i];
+        var ads       = data.ads;
+        var myLatlng  = new google.maps.LatLng(data.latlng.lat, data.latlng.lng);
 
         var marker   = new google.maps.Marker({
+            id: i,
             map:      map,
             position: myLatlng,
-            title:    ad.title,
-            label: {
-                text : ad.count.toString(),
-            }
+            icon: iconDefault
+            // label: {
+            //     text : ads.length.toString(),
+            // }
         });
 
         // On click event (calculate distance)
         marker.addListener('click', function() {
             var trajet = calc_distance_to_marker(this);
-
-            this.setLabel('');
-            this.setIcon('//mt.google.com/vt/icon?color=ff004C13&name=icons/spotlight/spotlight-waypoint-blue.png');
-            // re-center map
             var tmpMarkers = [GeoMarker, this];
             map_fit_bounds(tmpMarkers);
-
+            panel_highlight(this.id);
         });
 
         markers.push(marker);
-
-        // bind_info_window(marker, map, infowindow, ad.title);
 
     }
 }

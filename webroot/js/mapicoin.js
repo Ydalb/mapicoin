@@ -75,20 +75,19 @@ $(document).ready(function() {
                 // Group ads by lat/lng
                 var datas = regroup_ads(data.datas);
 
-                // Toggle panel
-                toggle_panel(true);
+                console.log(datas);
 
-                // Create and add markers to the map
+                // Toggle panel
+                panel_toggle(true);
+
+                // Create and add markers to the map + bind
                 add_ads_markers(map, datas);
 
                 // Fit bounds
                 map_fit_bounds();
 
-                // Update panel
-                update_panel(data.title, datas);
-
-                // Bind click event
-                bind_panel();
+                // Update panel + Bind
+                panel_update(data.title, datas);
 
                 // ScrollTo the map
                 $('html, body').animate({
@@ -142,7 +141,7 @@ function lock_search(lock) {
     }
 }
 
-function toggle_panel(toggle) {
+function panel_toggle(toggle) {
     if (toggle) {
         $('#sidebar-wrapper').addClass('toggled');
         $('#map').addClass('toggled');
@@ -150,37 +149,49 @@ function toggle_panel(toggle) {
         $('#sidebar-wrapper').removeClass('toggled');
         $('#map').removeClass('toggled');
     }
+    google.maps.event.trigger(map, "resize");
 }
 
-function update_panel(title, ads) {
-    // Title
+function panel_update(title, datas) {
+    // Title + Content
     $('#sidebar-wrapper h2').text(title);
-
     $('#sidebar-ads').html('');
 
     // Update content
-    for (var index in ads) {
+    for (var i in datas) {
 
-        var ad = ads[index];
-        $('#sidebar-ads').append(ad.text);
-
+        var ads = datas[i].ads;
+        for (var j in ads) {
+            $('#sidebar-ads').append(ads[j].text);
+        }
     }
 
-}
-
-function bind_panel() {
-    // Bind panel list
+    // Bind click
     $('#sidebar-ads').on('click', '.list_item', function(event) {
-        $('#sidebar-ads .list_item').removeClass('active');
-        $(this).addClass('active');
-        var i = $(this).index();
+        var i = $(this).data('index');
         google.maps.event.trigger(markers[i], "click");
     });
+
+    // Bind hover
+    $('#sidebar-ads').on({
+        mouseenter: function() {
+            var i = $(this).data('index');
+            markers[i].setIcon(iconHover);
+            markers[i].setAnimation(google.maps.Animation.BOUNCE);
+        },
+        // mouse out
+        mouseleave: function () {
+            var i = $(this).data('index');
+            markers[i].setIcon(iconDefault);
+            markers[i].setAnimation(null);
+        }
+    }, '.list_item');
+
 }
 
-function panel_goto(i) {
+function panel_highlight(index) {
     $('#sidebar-ads .list_item').removeClass('active');
-    $('#sidebar-ads .list_item:nth-child('+(i + 1)+')').addClass('active');
+    $('#sidebar-ads .list_item[data-index="'+index+'"]').addClass('active');
 }
 
 /**
@@ -196,27 +207,25 @@ function regroup_ads(datas) {
         var ad       = datas[i];
         ad['count']  = 1;
         ad['text'] = '' +
-            '<li class="list_item item-'+i+'">' +
-                '<div class="item_image">' +
-                    '<span class="item_imagePic">' +
-                        '<img src="'+ad.picture+'">' +
-                    '</span>' +
-                    '<span class="item_imageNumber">'+ad.picture_count+'</span>' +
-                '</div>' +
-                '<section class="item_infos">' +
-                    '<h2 class="item_title">'+
-                        '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank">' +
-                            ad.title+
-                        '</a>'+
-                    '</h2>' +
-                    '<p class="item_supp">'+ad.pro+'</p>' +
-                    '<p class="item_supp">'+ad.location+'</p>' +
-                    '<h3 class="item_price">'+ad.price+'</h3>' +
-                    '<aside class="item_absolute">' +
-                        '<p class="item_supp">'+ad.date+'</p>' +
-                    '</aside>' +
-                '</section>' +
-            '</li>';
+            '<div class="item_image">' +
+                '<span class="item_imagePic">' +
+                    '<img src="'+ad.picture+'">' +
+                '</span>' +
+                '<span class="item_imageNumber">'+ad.picture_count+'</span>' +
+            '</div>' +
+            '<section class="item_infos">' +
+                '<h2 class="item_title">'+
+                    '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank">' +
+                        ad.title+
+                    '</a>'+
+                '</h2>' +
+                '<p class="item_supp">'+ad.pro+'</p>' +
+                '<p class="item_supp">'+ad.location+'</p>' +
+                '<h3 class="item_price">'+ad.price+'</h3>' +
+                '<aside class="item_absolute">' +
+                    '<p class="item_supp">'+ad.date+'</p>' +
+                '</aside>' +
+            '</section>';
 
         // Test if current ad has the same lat/lng of another ad
         var found = false;
@@ -225,14 +234,25 @@ function regroup_ads(datas) {
             // ad matching another one
             if (tmp.latlng.lat == ad.latlng.lat && tmp.latlng.lng == ad.latlng.lng) {
                 found = true;
-                result[j].text  += ad.text;
-                result[j].count += 1;
+                result[j].ads.push(ad)
                 break;
             }
         }
         // If found, we add the pop-up content next to the current one('s)
         if (!found) {
-            result.push(ad);
+            result.push({
+                'ads'   : [ad],
+                'latlng': ad.latlng
+            });
+        }
+    }
+
+    // We set class index for each ads now, based of lat/lng
+    for (var i in result) {
+        var ads = result[i].ads;
+        for (var j in ads) {
+            ads[j].text = ''+
+                '<li class="list_item" data-index="'+i+'">'+ads[j].text+'</li>';
         }
     }
 

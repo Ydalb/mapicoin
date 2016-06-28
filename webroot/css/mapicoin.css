@@ -197,6 +197,7 @@ h3 {
     display:block;
 }
 .sidebar-title {
+    font-weight: bold;
     font-size:15px;
     line-height: 20px;
     padding:15px;
