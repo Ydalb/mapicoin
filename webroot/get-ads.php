@@ -49,7 +49,8 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
     if (!$title) {
         $title           = fetch_page_title($domXpath);
         $title           = explode('-', $title);
-        $return['title'] = trim($title[0]);
+        $title           = trim($title[0]);
+        $return['title'] = $title;
     }
 
     $annonces = fetch_annonces($domXpath);
@@ -90,9 +91,16 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
 $return['status']  = true;
 $return['message'] = 'ok';
 $return['datas']   = $datas;
+
 ob_clean();
-
-
 header('Content-Type: application/json; charset=utf-8');
-exit(json_encode($return));
+
+if (!($encode = json_encode($return))) {
+    exit(json_encode([
+        'status' => false,
+        'message' => json_last_error_msg(),
+    ]));
+}
+
+exit($encode);
 
