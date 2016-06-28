@@ -142,6 +142,15 @@ function fetch_annonces($domXpath) {
     );
 }
 
+/**
+ * Return DOMElements of title
+ */
+function fetch_page_title($domXpath) {
+    return $domXpath->query(
+        '//head/title/text()'
+    )->item(0)->nodeValue;
+}
+
 
 /**
  * Get lat & lng from places (bulk /!\) using mapquest
@@ -150,7 +159,7 @@ function convert_places_to_latlng($places = array()) {
     global $_CONFIG;
     $geocoder = sprintf(
         'https://maps.googleapis.com/maps/api/geocode/json?key=%s&address=%%s',
-        $_CONFIG->api->google_geocode
+        $_CONFIG->api->google_server_key
     );
 
     $return = [];
@@ -204,7 +213,7 @@ function fetch_url_content($url) {
     );
 
     $ch  = curl_init();
-    curl_setopt($ch, CURLOPT_VERBOSE,        true);
+    curl_setopt($ch, CURLOPT_VERBOSE,        false);
     curl_setopt($ch, CURLOPT_URL,            $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
@@ -212,6 +221,12 @@ function fetch_url_content($url) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
     $data = curl_exec($ch);
+
+    // Conversion
+    $data = iconv('UTF-8', 'UTF-8//IGNORE', utf8_encode($data));
+
+
+
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 

@@ -4,7 +4,12 @@ var GeoMarker;
 var is_geolocated=false;
 var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
+var infowindow = new google.maps.InfoWindow({
+    content: ""
+});
 
+var iconDefault = '//maps.google.com/mapfiles/ms/icons/red-dot.png';
+var iconHover   = '//maps.google.com/mapfiles/ms/icons/green-dot.png';
 
 
 /**
@@ -65,61 +70,56 @@ function initialize_map() {
 }
 
 
-
-/**
- * Bind ad pop-up to marker
- */
-function bind_info_window(marker, map, infowindow, description) {
-    marker.addListener('click', function() {
-        infowindow.setContent(description);
-        infowindow.open(map, this);
-        this.setLabel('');
-        this.setIcon('//mt.google.com/vt/icon?color=ff004C13&name=icons/spotlight/spotlight-waypoint-blue.png');
-    });
-}
-
-
 /**
  * Add markers to the map
  */
-function add_ads_markers(map, ads) {
+function add_ads_markers(map, datas) {
 
-    //create empty LatLngBounds object
-    var bounds     = new google.maps.LatLngBounds();
-    var infowindow = new google.maps.InfoWindow({
-        content: ""
-    });
 
-    for (var index in ads) {
+    for (var i in datas) {
 
-        var ad       = ads[index];
-        var myLatlng = new google.maps.LatLng(ad.latlng.lat, ad.latlng.lng);
+        var data      = datas[i];
+        var ads       = data.ads;
+        var myLatlng  = new google.maps.LatLng(data.latlng.lat, data.latlng.lng);
 
         var marker   = new google.maps.Marker({
+            id: i,
             map:      map,
             position: myLatlng,
-            title:    ad.title,
-            label: {
-                text : ad.count.toString(),
-            }
+            icon: iconDefault
+            // label: {
+            //     text : ads.length.toString(),
+            // }
         });
 
         // On click event (calculate distance)
         marker.addListener('click', function() {
-            calc_distance_to_marker(this);
+            var trajet = calc_distance_to_marker(this);
+            var tmpMarkers = [GeoMarker, this];
+            map_fit_bounds(tmpMarkers);
+            panel_highlight(this.id);
         });
 
         markers.push(marker);
 
-        //http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=10|FE7569
-
-        bind_info_window(marker, map, infowindow, ad.text);
-        //extend the bounds to include each marker's position
-        bounds.extend(marker.position);
-
     }
+}
 
-    //now fit the map to the newly inclusive bounds
+
+function bind_info_window(marker, text) {
+    infowindow.setContent(text);
+    infowindow.open(map, marker);
+}
+
+
+function map_fit_bounds(m) {
+    if (!m) {
+        var m = markers;
+    }
+    var bounds = new google.maps.LatLngBounds();
+    for (var i in m) {
+        bounds.extend(m[i].position);
+    }
     map.fitBounds(bounds);
 }
 
@@ -149,7 +149,11 @@ function calc_distance_to_marker(marker) {
             directionsDisplay.setDirections(result);
             var distance = result.routes[0].legs[0].distance.text;
             var time     = result.routes[0].legs[0].duration.text;
-            $('.list_item .item_distance').html('Trajet : '+distance+' ('+time+')');
+            var trajet   = '<div class="trajet">'+
+                '<p>Distance : <span class="distance">'+distance+'</span></p>'+
+                '<p>Temps : <span class="temps">'+time+'</span></p>'+
+            '</div>';
+            bind_info_window(marker, trajet);
         }
     });
 }

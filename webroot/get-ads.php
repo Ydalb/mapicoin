@@ -14,6 +14,7 @@ ob_start();
 $return = [
     'status'  => false,
     'message' => 'ko',
+    'title'   => "Liste des résultats",
     'datas'   => null,
 ];
 
@@ -30,6 +31,7 @@ if (!$_URL || !preg_match('#https://www\.leboncoin\.fr/.+#i', $_URL)) {
 // Let's browse pages !
 // ===
 $datas = [];
+$title = null;
 for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
 
     $places = [];
@@ -42,6 +44,14 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
     $dom      = new DOMDocument();
     $dom->loadHTML($html);
     $domXpath = new DomXPath($dom);
+
+    // Fetch main title once
+    if (!$title) {
+        $title           = fetch_page_title($domXpath);
+        $title           = explode('-', $title);
+        $title           = trim($title[0]);
+        $return['title'] = $title;
+    }
 
     $annonces = fetch_annonces($domXpath);
 
@@ -81,9 +91,16 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
 $return['status']  = true;
 $return['message'] = 'ok';
 $return['datas']   = $datas;
+
 ob_clean();
-
-
 header('Content-Type: application/json; charset=utf-8');
-exit(json_encode($return));
+
+if (!($encode = json_encode($return))) {
+    exit(json_encode([
+        'status' => false,
+        'message' => json_last_error_msg(),
+    ]));
+}
+
+exit($encode);
 
