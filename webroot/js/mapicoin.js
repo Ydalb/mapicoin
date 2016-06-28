@@ -75,8 +75,6 @@ $(document).ready(function() {
                 // Group ads by lat/lng
                 var datas = regroup_ads(data.datas);
 
-                console.log(datas);
-
                 // Toggle panel
                 panel_toggle(true);
 
