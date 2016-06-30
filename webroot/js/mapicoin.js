@@ -158,7 +158,7 @@ function panel_toggle(toggle) {
 function panel_update(title, datas, count) {
     // Title + Content
     $('#sidebar-wrapper h2').text(title);
-    $('#sidebar-ads').html('');
+    $('#sidebar').html('');
     $('#ads-count').html('');
 
     // Update content
@@ -166,7 +166,7 @@ function panel_update(title, datas, count) {
 
         var ads = datas[i].ads;
         for (var j in ads) {
-            $('#sidebar-ads').append(ads[j].text);
+            $('#sidebar').append(ads[j].text);
         }
     }
 
@@ -178,13 +178,13 @@ function panel_update(title, datas, count) {
     }
 
     // Bind click
-    $('#sidebar-ads').on('click', '.pwet', function(event) {
+    $('#sidebar').on('click', '.pwet', function(event) {
         var i = $(this).data('index');
         google.maps.event.trigger(markers[i], "click");
     });
 
     // Bind hover
-    $('#sidebar-ads').on({
+    $('#sidebar').on({
         mouseenter: function() {
             var i = $(this).data('index');
             markers[i].setIcon(iconHover);
@@ -204,10 +204,10 @@ function panel_update(title, datas, count) {
 }
 
 function panel_highlight(index) {
-    $('#sidebar-ads .pwet').removeClass('active');
-    $('#sidebar-ads .pwet[data-index="'+index+'"]').addClass('active');
+    $('#sidebar .pwet').removeClass('active');
+    $('#sidebar .pwet[data-index="'+index+'"]').addClass('active');
     var container = $('#sidebar-wrapper'),
-         scrollTo = $('#sidebar-ads .pwet[data-index="'+index+'"]').first();
+         scrollTo = $('#sidebar .pwet[data-index="'+index+'"]').first();
     // Or you can animate the scrolling:
     container.animate({
         scrollTop: (index > 0 ? -20 : -100) + scrollTo.offset().top - container.offset().top + container.scrollTop()
