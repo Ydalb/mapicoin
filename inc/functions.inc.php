@@ -57,6 +57,53 @@ function get_location_from_cache($location = '') {
     return [$lat,$lng];
 }
 
+function get_location_from_bdd($location = '') {
+    global $_MYSQLI;
+
+    $tmp = explode('/', $location);
+    if (!isset($tmp[1])) {
+        return false;
+    }
+
+    $ville       = trim($tmp[0]);
+    $departement = trim($tmp[1]);
+
+    /* Crée une requête préparée */
+    if (!($stmt = $_MYSQLI->prepare("
+        SELECT latitude, longitude
+        FROM city c
+        JOIN departement d ON c.departement_code = d.departement_code
+        WHERE
+            (c.name=? OR CONCAT(c.article, ' ', c.name) = ? OR CONCAT(c.article, c.name) = ?)
+            AND d.name = ?
+        LIMIT 1"))) {
+        error_log($_MYSQLI->error);
+        return false;
+    }
+    // error_log(sprintf("
+    //     SELECT latitude, longitude
+    //     FROM city c
+    //     JOIN departement d ON c.departement_code = d.departement_code
+    //     WHERE
+    //         (c.name=%s OR CONCAT(c.article, ' ', c.name) = %s)
+    //         AND d.name = %s
+    //     LIMIT 1", $ville, $ville, $departement));
+    /* Lecture des marqueurs */
+    $stmt->bind_param("ssss", $ville, $ville, $ville, $departement);
+    /* Exécution de la requête */
+    $stmt->execute();
+    /* Lecture des variables résultantes */
+    $stmt->bind_result($lat,$lng);
+    /* Récupération des valeurs */
+    if (!$stmt->fetch()) {
+        return null;
+    }
+    /* Fermeture du traitement */
+    $stmt->close();
+
+    return [$lat,$lng];
+}
+
 
 /**
  * Return annonce info from DOMElement (using xpath)
@@ -166,6 +213,11 @@ function convert_places_to_latlng($places = array()) {
     foreach ($places as $i => $place) {
 
         $cache = get_location_from_cache($place);
+
+        if (!$cache) {
+            $cache = get_location_from_bdd($place);
+        }
+
         if (!$cache) {
             $tmp    = preg_replace("/[^\s\p{L}0-9]+/u", "", $place);
             $tmp    = str_replace(' / ', ', ', $tmp);
@@ -173,14 +225,19 @@ function convert_places_to_latlng($places = array()) {
             $tmp    .= ',+France';
             $query  = sprintf($geocoder, $tmp);
             $result = json_decode(file_get_contents($query));
-            $json   = $result->results[0];
-            $lat    = $json->geometry->location->lat;
-            $lng    = $json->geometry->location->lng;
-            set_location_in_cache(
-                $place,
-                [$lat, $lng]
-            );
-            // error_log("NEW LOCATION: ".$place);
+            if (count($result->results) == 0) {
+                $lat = 46.5002839;
+                $lng = 2.7915620;
+            } else {
+                $json   = $result->results[0];
+                $lat    = $json->geometry->location->lat;
+                $lng    = $json->geometry->location->lng;
+                set_location_in_cache(
+                    $place,
+                    [$lat, $lng]
+                );
+                error_log("NEW LOCATION: ".$place);
+            }
             // Don't overload google !
             usleep(USLEEP_BETWEEN_API_CALL);
         } else {
