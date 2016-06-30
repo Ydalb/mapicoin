@@ -178,7 +178,7 @@ function panel_update(title, datas, count) {
     }
 
     // Bind click
-    $('#sidebar-ads').on('click', '.ad', function(event) {
+    $('#sidebar-ads').on('click', '.pwet', function(event) {
         var i = $(this).data('index');
         google.maps.event.trigger(markers[i], "click");
     });
@@ -196,7 +196,7 @@ function panel_update(title, datas, count) {
             markers[i].setIcon(iconDefault);
             markers[i].setAnimation(null);
         }
-    }, '.ad');
+    }, '.pwet');
 
 
     // HL first
@@ -204,10 +204,10 @@ function panel_update(title, datas, count) {
 }
 
 function panel_highlight(index) {
-    $('#sidebar-ads .ad').removeClass('active');
-    $('#sidebar-ads .ad[data-index="'+index+'"]').addClass('active');
+    $('#sidebar-ads .pwet').removeClass('active');
+    $('#sidebar-ads .pwet[data-index="'+index+'"]').addClass('active');
     var container = $('#sidebar-wrapper'),
-         scrollTo = $('#sidebar-ads .ad[data-index="'+index+'"]').first();
+         scrollTo = $('#sidebar-ads .pwet[data-index="'+index+'"]').first();
     // Or you can animate the scrolling:
     container.animate({
         scrollTop: (index > 0 ? -20 : -100) + scrollTo.offset().top - container.offset().top + container.scrollTop()
@@ -270,7 +270,7 @@ function regroup_ads(datas) {
         var ads = result[i].ads;
         for (var j in ads) {
             ads[j].text = ''+
-                '<li class="ad" data-index="'+i+'">'+ads[j].text+'</li>';
+                '<li class="pwet" data-index="'+i+'">'+ads[j].text+'</li>';
         }
     }
 

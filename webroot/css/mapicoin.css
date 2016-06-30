@@ -215,11 +215,11 @@ h3 {
     padding:15px;
     border-bottom: 1px solid #ccc;
 }
-.ad:hover,
-.ad.active {
+.pwet:hover,
+.pwet.active {
     background-color:#e6e6e6;
 }
-.ad:not(:last-child) {
+.pwet:not(:last-child) {
     border-bottom: 1px solid #ccc;
 }
 .media {
