@@ -157,7 +157,7 @@ function panel_toggle(toggle) {
 
 function panel_update(title, datas, count) {
     // Title + Content
-    $('#sidebar-wrapper h2').text(title);
+    $('#sidebar-wrapper h2').text(title).attr('title', title);
     $('#sidebar').html('');
     $('#ads-count').html('');
 

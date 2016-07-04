@@ -189,7 +189,6 @@ h3 {
     left:0;
     width:calc(100%  /3);
     height:calc(100vh - 46px);
-    overflow-y: auto;
     background: #FFF;
     display:none;
 }
@@ -202,6 +201,13 @@ h3 {
     line-height: 20px;
     padding:15px;
     border-bottom: 1px solid #ccc;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+}
+#sidebar {
+    overflow-y: scroll;
+    height: calc(100vh - 46px - 51px);
 }
 .pwet:hover,
 .pwet.active {
