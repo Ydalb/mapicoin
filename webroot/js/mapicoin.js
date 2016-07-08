@@ -157,13 +157,12 @@ function panel_toggle(toggle) {
 
 function panel_update(title, datas, count) {
     // Title + Content
-    $('#sidebar-wrapper h2').text(title).attr('title', title);
+    $('.sidebar-title').text(title).attr('title', title);
+    $('.sidebar-count').html('');
     $('#sidebar').html('');
-    $('#ads-count').html('');
 
     // Update content
     for (var i in datas) {
-
         var ads = datas[i].ads;
         for (var j in ads) {
             $('#sidebar').append(ads[j].text);
@@ -172,7 +171,7 @@ function panel_update(title, datas, count) {
 
     if (count !== undefined) {
         var plural = (count > 1 ? 's' : '');
-        $('#ads-count').text(
+        $('.sidebar-count').text(
             'Affichage de '+count+' annonce'+plural
         );
     }
@@ -224,9 +223,9 @@ function regroup_ads(datas) {
 
     for (var i in datas) {
 
-        var ad       = datas[i];
-        ad['count']  = 1;
-        ad['text'] = '' +
+        var ad      = datas[i];
+        ad['count'] = 1;
+        ad['text']  = '' +
             '<div class="media">' +
                 '<div class="media-left media-middle">' +
                     '<img class="media-object" src="'+ad.picture+'" alt="'+ad.title+'">' +

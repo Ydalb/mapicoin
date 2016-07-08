@@ -195,15 +195,27 @@ h3 {
 #sidebar-wrapper.toggled {
     display:block;
 }
-.sidebar-title {
+.sidebar-header {
     font-weight: bold;
-    font-size:15px;
-    line-height: 20px;
     padding:15px;
     border-bottom: 1px solid #ccc;
+    padding-bottom:10px;
+}
+.sidebar-title {
+    margin:0 0 5px 0;
+    font-size:15px;
+    line-height: 20px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow:hidden;
+}
+.sidebar-count {
+    display: block;
+    text-align: right;
+    font-size: 12px;
+    line-height:12px;
+    color: #b9afa4;
+    font-weight: normal;
 }
 #sidebar {
     overflow-y: scroll;

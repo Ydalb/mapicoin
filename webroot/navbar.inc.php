@@ -42,8 +42,6 @@
       </form>
       <button type="button" class="btn btn-default navbar-btn hand pull-right" data-toggle="modal" data-target="#modal-help">Besoin d'aide ?</button>
 
-      <p id="ads-count" class="navbar-text"></p>
-
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
