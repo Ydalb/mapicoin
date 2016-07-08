@@ -25,9 +25,9 @@
                 class="form-control"
                 name="u"
                 value=""
-                size="35"
+                size="45"
                 type="url"
-                placeholder="Copiez/collez votre lien de recherche..."
+                placeholder="Copiez/collez ici votre lien de recherche leboncoin ..."
                 />
         </div>
         <button
