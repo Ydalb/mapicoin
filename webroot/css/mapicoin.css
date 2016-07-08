@@ -196,12 +196,12 @@ h3 {
     display:block;
 }
 .sidebar-header {
-    font-weight: bold;
     padding:15px;
     border-bottom: 1px solid #ccc;
     padding-bottom:10px;
 }
 .sidebar-title {
+    font-weight: bold;
     margin:0 0 5px 0;
     font-size:15px;
     line-height: 20px;
@@ -209,13 +209,14 @@ h3 {
     white-space: nowrap;
     overflow:hidden;
 }
-.sidebar-count {
+.sidebar-details {
     display: block;
-    text-align: right;
     font-size: 12px;
     line-height:12px;
+}
+.sidebar-count {
+    float:right;
     color: #b9afa4;
-    font-weight: normal;
 }
 #sidebar {
     overflow-y: scroll;

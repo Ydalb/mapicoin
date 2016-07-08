@@ -156,9 +156,10 @@ function panel_toggle(toggle) {
 }
 
 function panel_update(title, datas, count) {
-    // Title + Content
+    // Title + Content + Edit
     $('.sidebar-title').text(title).attr('title', title);
     $('.sidebar-count').html('');
+    $('.sidebar-edit-search').attr('href', $('#input-url').val());
     $('#sidebar').html('');
 
     // Update content
