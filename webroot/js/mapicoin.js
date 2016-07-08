@@ -204,13 +204,14 @@ function panel_update(title, datas, count) {
 }
 
 function panel_highlight(index) {
+    console.log('#sidebar .pwet[data-index="'+index+'"]');
     $('#sidebar .pwet').removeClass('active');
     $('#sidebar .pwet[data-index="'+index+'"]').addClass('active');
-    var container = $('#sidebar-wrapper'),
+    var container = $('#sidebar'),
          scrollTo = $('#sidebar .pwet[data-index="'+index+'"]').first();
     // Or you can animate the scrolling:
     container.animate({
-        scrollTop: (index > 0 ? -20 : -100) + scrollTo.offset().top - container.offset().top + container.scrollTop()
+        scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
     });
 }
 
