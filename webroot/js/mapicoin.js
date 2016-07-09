@@ -204,7 +204,6 @@ function panel_update(title, datas, count) {
 }
 
 function panel_highlight(index) {
-    console.log('#sidebar .pwet[data-index="'+index+'"]');
     $('#sidebar .pwet').removeClass('active');
     $('#sidebar .pwet[data-index="'+index+'"]').addClass('active');
     var container = $('#sidebar'),

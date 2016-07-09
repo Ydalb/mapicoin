@@ -94,9 +94,11 @@ function add_ads_markers(map, datas) {
 
         // On click event (calculate distance)
         marker.addListener('click', function() {
-            var trajet = calc_distance_to_marker(this);
-            var tmpMarkers = [GeoMarker, this];
-            map_fit_bounds(tmpMarkers);
+            if (is_geolocated) {
+                var trajet = calc_distance_to_marker(this);
+                var tmpMarkers = [GeoMarker, this];
+                map_fit_bounds(tmpMarkers);
+            }
             panel_highlight(this.id);
         });
 
@@ -137,7 +139,9 @@ function remove_markers() {
 
 
 function calc_distance_to_marker(marker) {
-
+    if (!is_geolocated) {
+        return false;
+    }
     var request = {
         origin:      GeoMarker.getPosition(),
         destination: marker.getPosition(),
