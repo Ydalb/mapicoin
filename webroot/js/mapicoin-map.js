@@ -1,15 +1,25 @@
 var map;
 var markers = [];
 var GeoMarker;
-var is_geolocated=false;
+var is_geolocated = false;
 var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
 var infowindow = new google.maps.InfoWindow({
     content: ""
 });
-
-var iconDefault = '//maps.google.com/mapfiles/ms/icons/red-dot.png';
-var iconHover   = '//maps.google.com/mapfiles/ms/icons/green-dot.png';
+var iconDefault = {
+   url: '//maps.google.com/mapfiles/ms/icons/red-dot.png'
+};
+var iconActive   = {
+   url: '//maps.google.com/mapfiles/ms/icons/green-dot.png'
+};
+var iconGps = {
+    'url':        '/img/gpsloc.png',
+    'size':       new google.maps.Size(34, 34),
+    'scaledSize': new google.maps.Size(17, 17),
+    'origin':     new google.maps.Point(0, 0),
+    'anchor':     new google.maps.Point(8, 8)
+};
 
 
 /**
@@ -36,12 +46,12 @@ function initialize_map() {
     // legend.id   = 'legend';
     // var content = [];
     // content.push('<h3>Légende</h3>');
-    // content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/red-dot.png" /> : annonce non visitée</p>');
-    // content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/green-dot.png" /> : annonces multiples non visitées</p>');
-    // content.push('<p><img class="marker" src="https://maps.google.com/mapfiles/ms/icons/purple-dot.png" /> : annonce visitée</p>');
+    // content.push('<p><img class="marker" src="'+iconDefault+'" /> : annonce non visitée</p>');
+    // content.push('<p><img class="marker" src="//maps.google.com/mapfiles/ms/icons/green-dot.png" /> : annonces multiples non visitées</p>');
+    // content.push('<p><img class="marker" src="'+iconGps+'" /> : votre position (peut être changée)</p>');
     // legend.innerHTML = content.join('');
     // legend.index     = 1;
-    // map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
+    // map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
     // This is needed to set the zoom after fitbounds,
     google.maps.event.addListener(map, 'zoom_changed', function() {
@@ -58,10 +68,12 @@ function initialize_map() {
     map.initialZoom = true;
 
     // Localize client
-    GeoMarker = new GeolocationMarker(map);
-    google.maps.event.addListenerOnce(GeoMarker, 'position_changed', function() {
-        is_geolocated = true;
-    });
+    // GeoMarker = new GeolocationMarker(map);
+    // GeoMarker.setMarkerOptions({draggable: true});
+    // google.maps.event.addListenerOnce(GeoMarker, 'position_changed', function() {
+    //     is_geolocated = true;
+    // });
+    get_user_location();
 
     // For distance
     directionsDisplay.setMap(map);
@@ -75,30 +87,28 @@ function initialize_map() {
  */
 function add_ads_markers(map, datas) {
 
-
     for (var i in datas) {
 
         var data      = datas[i];
         var ads       = data.ads;
-        var myLatlng  = new google.maps.LatLng(data.latlng.lat, data.latlng.lng);
 
         var marker   = new google.maps.Marker({
-            id: i,
+            id:       i,
             map:      map,
-            position: myLatlng,
-            icon: iconDefault
-            // label: {
-            //     text : ads.length.toString(),
-            // }
+            position: new google.maps.LatLng(data.latlng.lat, data.latlng.lng),
+            icon:     iconDefault
         });
 
         // On click event (calculate distance)
         marker.addListener('click', function() {
+            set_icon_markers(iconDefault);
             if (is_geolocated) {
                 var trajet = calc_distance_to_marker(this);
                 var tmpMarkers = [GeoMarker, this];
                 map_fit_bounds(tmpMarkers);
             }
+            this.setIcon(iconActive);
+            currentActiveMarker = this;
             panel_highlight(this.id);
         });
 
@@ -107,13 +117,18 @@ function add_ads_markers(map, datas) {
     }
 }
 
-
+/**
+ * Bind une tooltip sur les markeurs
+ */
 function bind_info_window(marker, text) {
     infowindow.setContent(text);
     infowindow.open(map, marker);
 }
 
 
+/**
+ * Recalcul le zoom de la map pour que tous les markeurs soient visibles
+ */
 function map_fit_bounds(m) {
     if (!m) {
         var m = markers;
@@ -137,7 +152,31 @@ function remove_markers() {
     markers = [];
 }
 
+/**
+ * Défini une icône pour tous les markeurs
+ */
+function set_icon_markers(icon) {
+    if (!icon) {
+        icon = iconDefault;
+    }
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setIcon(icon)
+    }
+}
 
+/**
+ * Re-calcul la distance vers le dernier marker actif
+ */
+function calc_distance_to_last_active_marker() {
+    if (!currentActiveMarker) {
+        return false;
+    }
+    return calc_distance_to_marker(currentActiveMarker);
+}
+
+/**
+ * Calcul la distance de sa géoloc à un marker passé en paramètre
+ */
 function calc_distance_to_marker(marker) {
     if (!is_geolocated) {
         return false;
@@ -160,4 +199,46 @@ function calc_distance_to_marker(marker) {
             bind_info_window(marker, trajet);
         }
     });
+}
+
+
+/**
+ * Défini la position de l'utilisateur via un markeur
+ */
+function set_user_location(position) {
+    is_geolocated  = true;
+    GeoMarker      = null;
+    var markerOpts = {
+        'map':       map,
+        'cursor':    'pointer',
+        'draggable': true,
+        'flat':      true,
+        'icon': iconGps,
+        'position': new google.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+        ),
+        'title':  "Votre position actuelle. Déplacez-moi si besoin !",
+        'zIndex': 2
+    };
+    GeoMarker = new google.maps.Marker(markerOpts);
+
+    GeoMarker.addListener('drag',function(event) {});
+    GeoMarker.addListener('dragend',function(event) {
+        calc_distance_to_last_active_marker();
+    });
+}
+
+/**
+ * Récupération de la position via le navigateur
+ */
+function get_user_location() {
+    var lat = null,
+        lng = null;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(set_user_location);
+    } else {
+      // Pas de support, proposer une alternative ?
+      alert("Votre navigateur ne supporte pas la géolocalisation. À la place, veuillez utiliser le formulaire prévu à cet effet.");
+    }
 }
