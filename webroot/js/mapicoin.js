@@ -17,6 +17,7 @@ $(document).ready(function() {
     // ===
     $('#input-url').focus();
 
+
     // ===
     // "Back to search" button
     // ===
@@ -30,7 +31,8 @@ $(document).ready(function() {
         $('#header').show();
         $('#new-search').hide();
         $('#map').hide();
-    })
+    });
+
 
     // ===
     // Form submit
@@ -170,6 +172,12 @@ function panel_update(title, datas, count) {
         }
     }
 
+    // Lazyload
+    $(".lazyload").lazyload({
+        effect : "fadeIn",
+        container: $("#sidebar")
+    });
+
     if (count !== undefined) {
         var plural = (count > 1 ? 's' : '');
         $('.sidebar-count').text(
@@ -195,7 +203,6 @@ function panel_update(title, datas, count) {
             markers[i].setAnimation(null);
         }
     }, '.pwet');
-
 
     // HL first
     panel_highlight(0);
@@ -227,7 +234,7 @@ function regroup_ads(datas) {
         ad['text']  = '' +
             '<div class="media">' +
                 '<div class="media-left media-middle">' +
-                    '<img class="media-object" src="'+ad.picture+'" alt="'+ad.title+'">' +
+                    '<img class="media-object lazyload" data-original="'+ad.picture+'" alt="'+ad.title+'">' +
                     '<span class="media-number">'+ad.picture_count+'</span>' +
                 '</div>' +
                 '<div class="media-body">' +
