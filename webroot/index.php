@@ -22,7 +22,7 @@
         <script src="//maps.googleapis.com/maps/api/js?key=<?= $_CONFIG->api->google_browser_key ?>"></script>
 
         <script src="/js/bootstrap.min.js"></script>
-        <script src="/js/geolocation-marker.min.js"></script>
+        <!-- <script src="/js/geolocation-marker.min.js"></script> -->
         <script src="/js/mapicoin-map.js?<?= VERSION ?>"></script>
         <script src="/js/mapicoin.js?<?= VERSION ?>"></script>
 

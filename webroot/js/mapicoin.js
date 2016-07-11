@@ -187,13 +187,11 @@ function panel_update(title, datas, count) {
     $('#sidebar').on({
         mouseenter: function() {
             var i = $(this).data('index');
-            markers[i].setIcon(iconHover);
             markers[i].setAnimation(google.maps.Animation.BOUNCE);
         },
         // mouse out
         mouseleave: function () {
             var i = $(this).data('index');
-            markers[i].setIcon(iconDefault);
             markers[i].setAnimation(null);
         }
     }, '.pwet');
