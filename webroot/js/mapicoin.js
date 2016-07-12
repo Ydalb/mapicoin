@@ -272,6 +272,8 @@ function init_search_filters() {
             case 'filter-distance':
                 update_browser_url({'distance': value}, false);
                 set_user_distance(value);
+                // With lazyload, we need to force it (little bug)
+                $(".lazyload").trigger('appear');
                 break;
             default:
                 // Invalid choice
