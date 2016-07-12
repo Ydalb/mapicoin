@@ -47,6 +47,7 @@ $(document).ready(function() {
     // ===
     $('#input-url').focus();
 
+
     // ===
     // "Back to search" button
     // ===
@@ -60,7 +61,8 @@ $(document).ready(function() {
         $('#header').show();
         $('#new-search').hide();
         $('#map').hide();
-    })
+    });
+
 
     // ===
     // Form submit
@@ -111,14 +113,14 @@ $(document).ready(function() {
                 // Toggle panel
                 panel_toggle(true);
 
+                // Update panel + Bind
+                panel_update(data.title, datas, count);
+
                 // Create and add markers to the map + bind
                 add_ads_markers(map, datas);
 
                 // Fit bounds
                 map_fit_bounds();
-
-                // Update panel + Bind
-                panel_update(data.title, datas, count);
 
                 // ScrollTo the map
                 $('html, body').animate({
@@ -188,10 +190,9 @@ function panel_toggle(toggle) {
     google.maps.event.trigger(map, "resize");
 }
 
-function panel_update(title, datas, count) {
+function panel_update(title, datas) {
     // Title + Content + Edit
     $('.sidebar-title').text(title).attr('title', title);
-    $('.sidebar-count').html('');
     $('.sidebar-edit-search').attr('href', $('#input-url').val());
     $('#sidebar').html('');
 
@@ -203,12 +204,14 @@ function panel_update(title, datas, count) {
         }
     }
 
-    if (count !== undefined) {
-        var plural = (count > 1 ? 's' : '');
-        $('.sidebar-count').text(
-            'Affichage de '+count+' annonce'+plural
-        );
-    }
+    // Update count
+    panel_update_count();
+
+    // Lazyload
+    $(".lazyload").lazyload({
+        effect : "fadeIn",
+        container: $("#sidebar")
+    });
 
     // Bind click
     $('#sidebar').on('click', '.pwet', function(event) {
@@ -229,9 +232,15 @@ function panel_update(title, datas, count) {
         }
     }, '.pwet');
 
-
     // HL first
     panel_highlight(0);
+}
+function panel_update_count() {
+    var count = $('#sidebar').find('.pwet:visible').length;
+    var plural = (count > 1 ? 's' : '');
+    $('.sidebar-count').text(
+        'Affichage de '+count+' annonce'+plural
+    );
 }
 
 function panel_highlight(index) {
@@ -272,8 +281,6 @@ function init_search_filters() {
             case 'filter-distance':
                 update_browser_url({'distance': value}, false);
                 set_user_distance(value);
-                // With lazyload, we need to force it (little bug)
-                $(".lazyload").trigger('appear');
                 break;
             default:
                 // Invalid choice
@@ -301,7 +308,7 @@ function regroup_ads(datas) {
         ad['text']  = '' +
             '<div class="media">' +
                 '<div class="media-left media-middle">' +
-                    '<img class="media-object" src="'+ad.picture+'" alt="'+ad.title+'">' +
+                    '<img class="media-object lazyload" data-original="'+ad.picture+'" alt="'+ad.title+'">' +
                     '<span class="media-number">'+ad.picture_count+'</span>' +
                 '</div>' +
                 '<div class="media-body">' +
