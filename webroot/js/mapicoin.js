@@ -1,4 +1,34 @@
+var QueryString = function () {
+  // This function is anonymous, is executed immediately and
+  // the return value is assigned to QueryString!
+  var query_string = {};
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair  = vars[i].split("=");
+    var key   = pair.shift();
+    var value = pair.join('=');
+        // If first entry with this name
+    if (typeof query_string[key] === "undefined") {
+      query_string[key] = decodeURIComponent(value);
+        // If second entry with this name
+    } else if (typeof query_string[key] === "string") {
+      var arr = [ query_string[key],decodeURIComponent(value) ];
+      query_string[key] = arr;
+        // If third or later entry with this name
+    } else {
+      query_string[key].push(decodeURIComponent(value));
+    }
+  }
+  return query_string;
+}();
+
 $(document).ready(function() {
+
+    // ===
+    // Filters
+    // ===
+    init_search_filters();
 
     // ===
     // Reset slider when modal pop-up
@@ -40,8 +70,8 @@ $(document).ready(function() {
         var $form = $(this);
         var url = $('#input-url').val();
         if (!url) {
-            alert("Veuillez renseigner une URL de recherche leboncoin.fr");
             $('#input-url').focus();
+            alert("Veuillez renseigner une URL de recherche leboncoin.fr");
             return false;
         }
 
@@ -70,7 +100,7 @@ $(document).ready(function() {
 
                 // Update URL
                 var tmp = url.replace(/\?/g, '%3F').replace(/&/g, '%26');
-                window.history.pushState("", "", "/?u="+tmp);
+                update_browser_url({u: tmp}, false);
 
                 // count
                 var count = Object.keys(data.datas).length;
@@ -121,9 +151,12 @@ $(document).ready(function() {
         $('#input-url').val(tmp);
         $('#form-search').submit();
     }
+    var distance = parse_query_strings('distance');
+    if (distance) {
+        set_user_distance(distance);
+    }
 
 });
-
 
 /**
  * (un)lock the search form
@@ -211,6 +244,45 @@ function panel_highlight(index) {
         scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
     });
 }
+function panel_toggle_item(index, show = true) {
+    var $e = $('#sidebar .pwet[data-index="'+index+'"]');
+    if (show) {
+        $e.show();
+    } else {
+        $e.hide();
+    }
+}
+
+
+
+/**
+ * Bind les filtres de recherche
+ */
+function init_search_filters() {
+    $('#filter-distance,#filter-age').on('change', function() {
+        var value = $(this).val();
+        var id    = $(this).attr('id');
+        // Update URL
+        var age      = parse_query_strings('age');
+        var distance = parse_query_strings('distance');
+        switch (id) {
+            case 'filter-age':
+                update_browser_url({'age': value}, false);
+                break;
+            case 'filter-distance':
+                update_browser_url({'distance': value}, false);
+                set_user_distance(value);
+                break;
+            default:
+                // Invalid choice
+                break;
+        }
+    });
+}
+
+
+
+
 
 /**
  * Used to browse all ads and group them by location (lat/lng) in
@@ -275,6 +347,46 @@ function regroup_ads(datas) {
     return result;
 }
 
+
+/**
+ * Change l'URL du navigateur
+ * datas est un tableau clé => valeur (paramètres GET)
+ * si reset = true, on repart sur une nouvelle URL
+ * sinon, on prends les paramètres actuels et on surchage avec data
+ */
+function update_browser_url(data, reset = false) {
+    // Get current GET parameters if reset = false
+    var gets = [];
+    if (reset == false) {
+        location.search
+            .substr(1)
+            .split("&")
+            .forEach(function (item) {
+                tmp = item.split("=");
+                var k = tmp.shift();
+                var v = tmp.join('=');
+                gets[k] = v;
+            }
+        );
+    }
+    // On surchage les paramètres GET
+    for (var i in data) {
+        gets[i] = data[i];
+    }
+    // On reconstruit l'URL
+    var url       = '';
+    var ampersand = false;
+    for (var i in gets) {
+        if (gets[i] != '') {
+            url      += (ampersand ? '&' : '')+i+'='+gets[i];
+            ampersand = true;
+        }
+    }
+    // On met à jour le navigateur
+    window.history.pushState("", "", "/?"+url);
+}
+
+
 /**
  * Parse query strings (foo=bar&foo1=bar1) and return given parameter value
  */
@@ -286,7 +398,7 @@ function parse_query_strings(val) {
         .split("&")
         .forEach(function (item) {
             tmp = item.split("=");
-            if (tmp[0] === val) {
+            if (tmp[0] === val || typeof val == 'undefined') {
                 tmp.shift();
                 result = tmp.join('=');
             }

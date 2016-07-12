@@ -1,16 +1,16 @@
 var map;
-var markers = [];
-var GeoMarker;
-var is_geolocated = false;
+var GeoMarker, GeoCircle, GeoCircleDistance = 0, currentActiveMarker;
+var markers           = [];
+var is_geolocated     = false;
 var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
-var infowindow = new google.maps.InfoWindow({
+var infowindow        = new google.maps.InfoWindow({
     content: ""
 });
 var iconDefault = {
    url: '//maps.google.com/mapfiles/ms/icons/red-dot.png'
 };
-var iconActive   = {
+var iconActive  = {
    url: '//maps.google.com/mapfiles/ms/icons/green-dot.png'
 };
 var iconGps = {
@@ -112,9 +112,15 @@ function add_ads_markers(map, datas) {
             panel_highlight(this.id);
         });
 
+        marker.addListener('visible_changed', function() {
+            panel_toggle_item(this.id, this.getVisible());
+        })
+
         markers.push(marker);
 
     }
+
+    return update_marker_from_circle();
 }
 
 /**
@@ -201,7 +207,67 @@ function calc_distance_to_marker(marker) {
     });
 }
 
-
+/**
+ * Mets à jour les markeurs suivant le cercle de distance
+ */
+function update_marker_from_circle() {
+    if (!is_geolocated) {
+        return false;
+    }
+    if (!GeoCircle) {
+        return false;
+    }
+    for (var i = 0; i < markers.length; i++) {
+        var d = google.maps.geometry.spherical.computeDistanceBetween(
+            markers[i].getPosition(),
+            GeoMarker.getPosition()
+        );
+        if (GeoCircle.getRadius() > 0 && d > GeoCircle.getRadius()) {
+            markers[i].setVisible(false);
+        } else {
+            markers[i].setVisible(true);
+        }
+    }
+}
+/**
+ * Trace un cercle autour de la localisation GPS
+ */
+function draw_circle_around_user_location() {
+    if (!is_geolocated) {
+        return false;
+    }
+    if (!GeoCircle) {
+        GeoCircle = new google.maps.Circle({
+            // center: GeoMarker.getPosition(),
+            // radius: kilometer * 1000,
+            fillColor: "#0000FF",
+            fillOpacity: 0.15,
+            map: map,
+            strokeColor: "#FFFFFF",
+            strokeOpacity: 0.1,
+            strokeWeight: 2
+        });
+    }
+    GeoCircle.setRadius(GeoCircleDistance);
+    GeoCircle.setCenter(GeoMarker.getPosition());
+    if (GeoCircleDistance == 0) {
+        GeoCircle.setVisible(false);
+    } else {
+        GeoCircle.setVisible(true);
+    }
+    return update_marker_from_circle();
+}
+/**
+ * Défini la distance du cercle de recherche
+ */
+function set_user_distance(kilometer) {
+    if (kilometer > 0) {
+        GeoCircleDistance = kilometer * 1000;
+    } else {
+        GeoCircleDistance = 0;
+    }
+    return draw_circle_around_user_location();
+}
 /**
  * Défini la position de l'utilisateur via un markeur
  */
@@ -213,8 +279,8 @@ function set_user_location(position) {
         'cursor':    'pointer',
         'draggable': true,
         'flat':      true,
-        'icon': iconGps,
-        'position': new google.maps.LatLng(
+        'icon':      iconGps,
+        'position':  new google.maps.LatLng(
             position.coords.latitude,
             position.coords.longitude
         ),
@@ -222,11 +288,14 @@ function set_user_location(position) {
         'zIndex': 2
     };
     GeoMarker = new google.maps.Marker(markerOpts);
-
-    GeoMarker.addListener('drag',function(event) {});
+    GeoMarker.addListener('drag',function(event) {
+        draw_circle_around_user_location();
+    });
     GeoMarker.addListener('dragend',function(event) {
         calc_distance_to_last_active_marker();
     });
+    // Draw blue circle
+    draw_circle_around_user_location();
 }
 
 /**
