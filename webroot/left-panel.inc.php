@@ -36,7 +36,7 @@ $_select_age = [
                     <i class="glyphicon glyphicon-chevron-down" aria-hidden="true"></i>
                 </div>
             </div>
-            <!-- Ancienneté -->
+            <!--  Ancienneté
             <div class="filter-item filter-age">
                 <span class="filter-text">Plus récente de</span>
                 <div class="filter-select-wrapper">
@@ -49,6 +49,7 @@ $_select_age = [
                     <i class="glyphicon glyphicon-chevron-down" aria-hidden="true"></i>
                 </div>
             </div>
+            -->
         </div>
         <p class="sidebar-details">
         <!--
