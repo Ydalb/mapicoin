@@ -213,10 +213,62 @@ h3 {
     display: block;
     font-size: 12px;
     line-height:12px;
+    text-align: center;
+    margin:8px 0 0;
 }
 .sidebar-count {
-    float:right;
     color: #b9afa4;
+}
+/* FILTERS */
+.filter-item {
+    font-size:12px;
+    display:inline-block;
+    width:216px;
+}
+.filter-select-wrapper {
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+    width: 100px;
+    position:relative;
+}
+.filter-age .filter-select-wrapper {
+    width: 110px;
+}
+.filter-select-wrapper i {
+    position:absolute;
+    top:4px;
+    right:5px;
+}
+.filter-select {
+    position: relative;
+    width: 100%;
+    padding: 0 25px 0 15px;
+    height: 19px;
+    line-height: 19px;
+    color: #1a1a1a;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    z-index: 10;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    text-align: left;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 #sidebar {
     overflow-y: scroll;
@@ -291,6 +343,7 @@ h3 {
     right: 0;
     font-size:.65rem;
 }
+/* INFOBOX */
 .trajet {
     width:170px;
     line-height:15px;

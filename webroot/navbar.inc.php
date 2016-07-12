@@ -37,7 +37,6 @@
             data-text="Afficher les résultats"
             data-loading-text="Chargement... <i class='glyphicon glyphicon-refresh glyphicon-spin'></i>">
             Afficher les résultats
-            <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>
         </button>
       </form>
       <button type="button" class="btn btn-default navbar-btn hand pull-right" data-toggle="modal" data-target="#modal-help">Besoin d'aide ?</button>
