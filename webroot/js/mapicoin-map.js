@@ -228,6 +228,9 @@ function update_marker_from_circle() {
             markers[i].setVisible(true);
         }
     }
+    // With lazyload, we need to force it (little bug)
+    $(".lazyload").trigger('appear');
+    return panel_update_count();
 }
 /**
  * Trace un cercle autour de la localisation GPS
