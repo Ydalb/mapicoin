@@ -272,7 +272,7 @@ h3 {
 }
 #sidebar {
     overflow-y: scroll;
-    height: calc(100vh - 46px - 51px);
+    height: calc(100vh - 46px - 91px);
 }
 .pwet:hover,
 .pwet.active {
