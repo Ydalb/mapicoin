@@ -238,7 +238,6 @@ function update_marker_from_filters() {
         // Time : /!\ 1 marker = plusieurs annonces avec age différent /!\
         // On cherche donc à ce qu'une annonce au moins respecte la condition, pour afficher le marker
         if (filterTime > 0) {
-            console.log(filterTime);
             var id    = markers[i].id;
             // On parcours chaque annonce pour voir du marker pour voir si 1 match la condition 'day'
             tooOld    = true;
