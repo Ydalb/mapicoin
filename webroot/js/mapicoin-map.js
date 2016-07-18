@@ -253,7 +253,10 @@ function update_marker_from_filters() {
                     $(this).hide();
                 }
             });
+        } else {
+            tooOld = false;
         }
+
         if (tooFar || tooOld) {
             markers[i].setVisible(false);
         } else {
