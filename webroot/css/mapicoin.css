@@ -225,6 +225,12 @@ h3 {
     display:inline-block;
     width:216px;
 }
+.filter-item.disabled {
+    color:#ccc;
+}
+.filter-item.disabled .filter-select-wrapper {
+    background: #eee;
+}
 .filter-select-wrapper {
     height: 20px;
     border: 1px solid #ccc;

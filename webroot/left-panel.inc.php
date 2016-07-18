@@ -24,10 +24,12 @@ $_select_day = [
         <!-- Filtre de recherche -->
         <div id="sidebar-advanced-search">
             <!-- Ancienneté -->
-            <div class="filter-item filter-distance">
-                <span class="filter-text">Dans un rayon de</span>
+            <div
+                class="filter-item filter-distance disabled"
+                title="Vous devez autoriser la localisation GPS du navigateur pour accéder à ce filtre">
+                <label for="filter-distance" class="filter-text">Dans un rayon de</label>
                 <div class="filter-select-wrapper">
-                    <select id="filter-distance" name="radius" id="radius" class="filter-select">
+                    <select id="filter-distance" name="radius" id="radius" class="filter-select" disabled="disabled">
                         <option value="">...</option>
                     <?php foreach ($_select_distance as $k => $v): ?>
                         <option value="<?= $k ?>" <?= $_default_distance == $k ? 'selected' : '' ?>><?= $v ?></option>
@@ -38,7 +40,7 @@ $_select_day = [
             </div>
             <!--  Ancienneté -->
             <div class="filter-item filter-day">
-                <span class="filter-text">Plus récente de</span>
+                <label for="filter-day" class="filter-text">Plus récente de</label>
                 <div class="filter-select-wrapper">
                     <select id="filter-day" name="radius" id="radius" class="filter-select">
                         <option value="">...</option>

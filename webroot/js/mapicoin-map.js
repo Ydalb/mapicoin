@@ -333,6 +333,13 @@ function set_user_day(nb_day) {
  */
 function set_user_location(position) {
     // console.log('function set_user_location(position) {');
+    // enable localization filter
+    $('.filter-item.filter-distance')
+        .removeClass('disabled')
+        .removeAttr('title')
+        .find('select')
+            .removeAttr('disabled');
+
     is_geolocated  = true;
     GeoMarker      = null;
     var markerOpts = {
