@@ -2,6 +2,8 @@
 
 require_once '../inc/config.inc.php';
 
+// Pour la gestion des dates FR
+date_default_timezone_set('Europe/Paris');
 set_time_limit(60);
 libxml_use_internal_errors(true);
 

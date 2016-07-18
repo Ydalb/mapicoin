@@ -1,6 +1,6 @@
 <?php
 $_default_distance = $_GET['distance'] ?? false;
-$_default_age      = $_GET['age'] ?? false;
+$_default_day      = $_GET['day'] ?? false;
 $_select_distance = [
     "10"  =>"10 km",
     "20"  =>"20 km",
@@ -9,7 +9,7 @@ $_select_distance = [
     "100" =>"100 km",
     "200" =>"200 km",
 ];
-$_select_age = [
+$_select_day = [
     "1"  => "1 jour",
     "3"  => "3 jours",
     "5"  => "5 jours",
@@ -36,20 +36,19 @@ $_select_age = [
                     <i class="glyphicon glyphicon-chevron-down" aria-hidden="true"></i>
                 </div>
             </div>
-            <!--  Ancienneté
-            <div class="filter-item filter-age">
+            <!--  Ancienneté -->
+            <div class="filter-item filter-day">
                 <span class="filter-text">Plus récente de</span>
                 <div class="filter-select-wrapper">
-                    <select id="filter-age" name="radius" id="radius" class="filter-select">
+                    <select id="filter-day" name="radius" id="radius" class="filter-select">
                         <option value="">...</option>
-                    <?php foreach ($_select_age as $k => $v): ?>
-                        <option value="<?= $k ?>" <?= $_default_age == $k ? 'selected' : '' ?>><?= $v ?></option>
+                    <?php foreach ($_select_day as $k => $v): ?>
+                        <option value="<?= $k ?>" <?= $_default_day == $k ? 'selected' : '' ?>><?= $v ?></option>
                     <?php endforeach;?>
                     </select>
                     <i class="glyphicon glyphicon-chevron-down" aria-hidden="true"></i>
                 </div>
             </div>
-            -->
         </div>
         <p class="sidebar-details">
         <!--
