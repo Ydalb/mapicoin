@@ -1,5 +1,6 @@
-var map;
-var GeoMarker, GeoCircle, GeoCircleDistance = 0, currentActiveMarker;
+var map, GeoMarker, GeoCircle, currentActiveMarker;
+var filterDistance    = 0
+var filterTime        = 0;
 var markers           = [];
 var is_geolocated     = false;
 var directionsDisplay;
@@ -26,6 +27,7 @@ var iconGps = {
  * Init google map
  */
 function initialize_map() {
+    // console.log('function initialize_map() {');
     // Center of France
     var myLatLng      = {lat: 47.351, lng: 3.392};
     var element       = document.getElementById('map');
@@ -86,6 +88,7 @@ function initialize_map() {
  * Add markers to the map
  */
 function add_ads_markers(map, datas) {
+    // console.log('function add_ads_markers(map, datas) {');
 
     for (var i in datas) {
 
@@ -93,10 +96,11 @@ function add_ads_markers(map, datas) {
         var ads       = data.ads;
 
         var marker   = new google.maps.Marker({
-            id:       i,
-            map:      map,
-            position: new google.maps.LatLng(data.latlng.lat, data.latlng.lng),
-            icon:     iconDefault
+            id:        i,
+            map:       map,
+            position:  new google.maps.LatLng(data.latlng.lat, data.latlng.lng),
+            icon:      iconDefault,
+            timestamp: data.timestamp
         });
 
         // On click event (calculate distance)
@@ -120,13 +124,14 @@ function add_ads_markers(map, datas) {
 
     }
 
-    return update_marker_from_circle();
+    return update_marker_from_filters();
 }
 
 /**
  * Bind une tooltip sur les markeurs
  */
 function bind_info_window(marker, text) {
+    // console.log('function bind_info_window(marker, text) {');
     infowindow.setContent(text);
     infowindow.open(map, marker);
 }
@@ -136,6 +141,7 @@ function bind_info_window(marker, text) {
  * Recalcul le zoom de la map pour que tous les markeurs soient visibles
  */
 function map_fit_bounds(m) {
+    // console.log('function map_fit_bounds(m) {');
     if (!m) {
         var m = markers;
     }
@@ -151,6 +157,7 @@ function map_fit_bounds(m) {
  * Remove all markers from the map
  */
 function remove_markers() {
+    // console.log('function remove_markers() {');
     directionsDisplay.setMap(null);
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
@@ -162,6 +169,7 @@ function remove_markers() {
  * Défini une icône pour tous les markeurs
  */
 function set_icon_markers(icon) {
+    // console.log('function set_icon_markers(icon) {');
     if (!icon) {
         icon = iconDefault;
     }
@@ -174,6 +182,7 @@ function set_icon_markers(icon) {
  * Re-calcul la distance vers le dernier marker actif
  */
 function calc_distance_to_last_active_marker() {
+    // console.log('function calc_distance_to_last_active_marker() {');
     if (!currentActiveMarker) {
         return false;
     }
@@ -184,6 +193,7 @@ function calc_distance_to_last_active_marker() {
  * Calcul la distance de sa géoloc à un marker passé en paramètre
  */
 function calc_distance_to_marker(marker) {
+    // console.log('function calc_distance_to_marker(marker) {');
     if (!is_geolocated) {
         return false;
     }
@@ -210,23 +220,53 @@ function calc_distance_to_marker(marker) {
 /**
  * Mets à jour les markeurs suivant le cercle de distance
  */
-function update_marker_from_circle() {
-    if (!is_geolocated) {
-        return false;
-    }
-    if (!GeoCircle) {
-        return false;
-    }
+function update_marker_from_filters() {
+    // console.log('function update_marker_from_filters() {');
+    var currentTimestamp = Math.floor(Date.now() / 1000);
+    var tooFar = false;
+    var tooOld = true;
     for (var i = 0; i < markers.length; i++) {
-        var d = google.maps.geometry.spherical.computeDistanceBetween(
-            markers[i].getPosition(),
-            GeoMarker.getPosition()
-        );
-        if (GeoCircle.getRadius() > 0 && d > GeoCircle.getRadius()) {
+        // Distance : 1 marker = plusieurs annonces avec même distance
+        if (is_geolocated && GeoCircle && GeoCircle.getRadius() > 0) {
+            var d = google.maps.geometry.spherical.computeDistanceBetween(
+                markers[i].getPosition(),
+                GeoMarker.getPosition()
+            );
+            // true si marker en dehors du cercle
+            var tooFar = (d > GeoCircle.getRadius());
+        }
+        // Time : /!\ 1 marker = plusieurs annonces avec age différent /!\
+        // On cherche donc à ce qu'une annonce au moins respecte la condition, pour afficher le marker
+        if (filterTime > 0) {
+            var id    = markers[i].id;
+            // On parcours chaque annonce pour voir du marker pour voir si 1 match la condition 'day'
+            tooOld    = true;
+            var $pwet = $('#sidebar .pwet[data-index="'+id+'"] > .media').each(function( i ) {
+                var timestamp   = $(this).data('timestamp');
+                // true si annonce assez récente
+                if (timestamp > (currentTimestamp - filterTime)) {
+                    $(this).show();
+                    tooOld = false;
+                    return;
+                } else {
+                    // On cache l'annonce
+                    $(this).hide();
+                }
+            });
+        }
+        if (tooFar || tooOld) {
             markers[i].setVisible(false);
         } else {
             markers[i].setVisible(true);
         }
+    }
+    // Pour le time, on cache les li où il n'y a plus d'annonces
+    if (filterTime > 0) {
+        $('#sidebar .pwet').each(function(i) {
+            if ($(this).find('.media:visible').length == 0) {
+                $(this).hide();
+            }
+        })
     }
     // With lazyload, we need to force it (little bug)
     $(".lazyload").trigger('appear');
@@ -236,6 +276,7 @@ function update_marker_from_circle() {
  * Trace un cercle autour de la localisation GPS
  */
 function draw_circle_around_user_location() {
+    // console.log('function draw_circle_around_user_location() {');
     if (!is_geolocated) {
         return false;
     }
@@ -251,30 +292,44 @@ function draw_circle_around_user_location() {
             strokeWeight: 2
         });
     }
-    GeoCircle.setRadius(GeoCircleDistance);
+    GeoCircle.setRadius(filterDistance);
     GeoCircle.setCenter(GeoMarker.getPosition());
-    if (GeoCircleDistance == 0) {
+    if (filterDistance == 0) {
         GeoCircle.setVisible(false);
     } else {
         GeoCircle.setVisible(true);
     }
-    return update_marker_from_circle();
+    return true;
 }
 /**
  * Défini la distance du cercle de recherche
  */
 function set_user_distance(kilometer) {
+    // console.log('function set_user_distance(kilometer) {');
     if (kilometer > 0) {
-        GeoCircleDistance = kilometer * 1000;
+        filterDistance = kilometer * 1000;
     } else {
-        GeoCircleDistance = 0;
+        filterDistance = 0;
     }
     return draw_circle_around_user_location();
+}
+/**
+ * Défini le temps de recherche
+ */
+function set_user_day(nb_day) {
+    // console.log('function set_user_day(nb_day) {');
+    if (nb_day > 0) {
+        filterTime = nb_day * 86400;
+    } else {
+        filterTime = 0;
+    }
+    return true;
 }
 /**
  * Défini la position de l'utilisateur via un markeur
  */
 function set_user_location(position) {
+    // console.log('function set_user_location(position) {');
     is_geolocated  = true;
     GeoMarker      = null;
     var markerOpts = {
@@ -293,18 +348,24 @@ function set_user_location(position) {
     GeoMarker = new google.maps.Marker(markerOpts);
     GeoMarker.addListener('drag',function(event) {
         draw_circle_around_user_location();
+        // on-the-fly update is too slow !
+        // update_marker_from_filters();
     });
     GeoMarker.addListener('dragend',function(event) {
         calc_distance_to_last_active_marker();
+        update_marker_from_filters();
     });
     // Draw blue circle
     draw_circle_around_user_location();
+    // Update markers
+    update_marker_from_filters();
 }
 
 /**
  * Récupération de la position via le navigateur
  */
 function get_user_location() {
+    // console.log('function get_user_location() {');
     var lat = null,
         lng = null;
     if (navigator.geolocation) {

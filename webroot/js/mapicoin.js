@@ -157,6 +157,10 @@ $(document).ready(function() {
     if (distance) {
         set_user_distance(distance);
     }
+    var day = parse_query_strings('day');
+    if (day) {
+        set_user_day(day);
+    }
 
 });
 
@@ -268,15 +272,16 @@ function panel_toggle_item(index, show = true) {
  * Bind les filtres de recherche
  */
 function init_search_filters() {
-    $('#filter-distance,#filter-age').on('change', function() {
+    $('#filter-distance,#filter-day').on('change', function() {
         var value = $(this).val();
         var id    = $(this).attr('id');
         // Update URL
-        var age      = parse_query_strings('age');
-        var distance = parse_query_strings('distance');
+        // var day      = parse_query_strings('day');
+        // var distance = parse_query_strings('distance');
         switch (id) {
-            case 'filter-age':
-                update_browser_url({'age': value}, false);
+            case 'filter-day':
+                update_browser_url({'day': value}, false);
+                set_user_day(value);
                 break;
             case 'filter-distance':
                 update_browser_url({'distance': value}, false);
@@ -286,6 +291,7 @@ function init_search_filters() {
                 // Invalid choice
                 break;
         }
+        update_marker_from_filters();
     });
 }
 
@@ -306,7 +312,7 @@ function regroup_ads(datas) {
         var ad      = datas[i];
         ad['count'] = 1;
         ad['text']  = '' +
-            '<div class="media">' +
+            '<div class="media" data-timestamp="'+ad.timestamp+'">' +
                 '<div class="media-left media-middle">' +
                     '<img class="media-object lazyload" data-original="'+ad.picture+'" alt="'+ad.title+'">' +
                     '<span class="media-number">'+ad.picture_count+'</span>' +
