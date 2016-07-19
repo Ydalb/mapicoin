@@ -17,6 +17,24 @@ define('SITE_GUMTREE',    'gumtree');
 define('SITE_CRAIGSLIST', 'craigslist');
 define('SITE_KIJIJI',     'kijiji');
 
+$_SITES = [
+    SITE_LEBONCOIN => [
+        'country'          => 'France',
+        // without .mapicoin.[fr|com]
+        // default value anyway...
+        'mapicoin-domains' => [],
+    ],
+    SITE_KIJIJI => [
+        'country'          => 'Canada',
+        // without .mapicoin.[fr|com]
+        'mapicoin-domains' => [
+            'kijiji',
+            'kijiji.dev',
+            'kijiji.dev2',
+        ],
+    ],
+];
+
 
 // Dislay debug ?
 if (DEBUG) {
