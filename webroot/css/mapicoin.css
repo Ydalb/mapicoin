@@ -187,7 +187,7 @@ h3 {
     z-index: 1001;
     position: fixed;
     left:0;
-    width:calc(100%  /3);
+    width:480px;
     height:calc(100vh - 46px);
     background: #FFF;
     display:none;
@@ -351,7 +351,7 @@ h3 {
 }
 /* INFOBOX */
 .trajet {
-    width:170px;
+    /*width:170px;*/
     line-height:15px;
 }
 .trajet p {

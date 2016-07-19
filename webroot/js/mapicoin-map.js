@@ -56,18 +56,18 @@ function initialize_map() {
     // map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
     // This is needed to set the zoom after fitbounds,
-    google.maps.event.addListener(map, 'zoom_changed', function() {
-        zoomChangeBoundsListener =
-            google.maps.event.addListener(map, 'bounds_changed', function(event) {
-                if (this.getZoom() > 11 && this.initialZoom == true) {
-                    // Change max/min zoom here
-                    this.setZoom(11);
-                    this.initialZoom = false;
-                }
-            google.maps.event.removeListener(zoomChangeBoundsListener);
-        });
-    });
-    map.initialZoom = true;
+    // google.maps.event.addListener(map, 'zoom_changed', function() {
+    //     zoomChangeBoundsListener =
+    //         google.maps.event.addListener(map, 'bounds_changed', function(event) {
+    //             if (this.getZoom() > 11 && this.initialZoom == true) {
+    //                 // Change max/min zoom here
+    //                 this.setZoom(11);
+    //                 this.initialZoom = false;
+    //             }
+    //         google.maps.event.removeListener(zoomChangeBoundsListener);
+    //     });
+    // });
+    // map.initialZoom = true;
 
     // Localize client
     // GeoMarker = new GeolocationMarker(map);
@@ -107,9 +107,7 @@ function add_ads_markers(map, datas) {
         marker.addListener('click', function() {
             set_icon_markers(iconDefault);
             if (is_geolocated) {
-                var trajet = calc_distance_to_marker(this);
-                var tmpMarkers = [GeoMarker, this];
-                map_fit_bounds(tmpMarkers);
+                var trajet     = calc_distance_to_marker(this);
             }
             this.setIcon(iconActive);
             currentActiveMarker = this;
@@ -134,6 +132,7 @@ function bind_info_window(marker, text) {
     // console.log('function bind_info_window(marker, text) {');
     infowindow.setContent(text);
     infowindow.open(map, marker);
+    return map_fit_bounds([GeoMarker, marker]);
 }
 
 
@@ -149,7 +148,10 @@ function map_fit_bounds(m) {
     for (var i in m) {
         bounds.extend(m[i].position);
     }
+
+    map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);
+    map.setZoom(map.getZoom()-1);
 }
 
 
