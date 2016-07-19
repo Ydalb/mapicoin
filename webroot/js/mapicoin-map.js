@@ -141,8 +141,14 @@ function bind_info_window(marker, text) {
  */
 function map_fit_bounds(m) {
     // console.log('function map_fit_bounds(m) {');
+    // Si on ne précise pas de marqueurs, on prends l'ensemble des marqueurs visibles
     if (!m) {
-        var m = markers;
+        var m = [];
+        for (var i = 0; i < markers.length; i++) {
+            if (markers[i].getVisible()) {
+                m.push(markers[i]);
+            }
+        }
     }
     var bounds = new google.maps.LatLngBounds();
     for (var i in m) {
