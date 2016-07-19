@@ -18,6 +18,11 @@ $_URL = trim($_URL);
 
 switch ($_SITE) {
 
+    case SITE_KIJIJI:
+        require_once '../inc/crawlers/KijijiCrawler.class.php';
+        $crawler = new KijijiCrawler($_URL);
+        break;
+
     case SITE_CRAIGSLIST:
         require_once '../inc/crawlers/CraigslistCrawler.class.php';
         $crawler = new CraigslistCrawler($_URL);

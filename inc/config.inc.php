@@ -15,6 +15,7 @@ define('VERSION', file_get_contents(__DIR__.'/../VERSION'));
 define('SITE_LEBONCOIN',  'leboncoin');
 define('SITE_GUMTREE',    'gumtree');
 define('SITE_CRAIGSLIST', 'craigslist');
+define('SITE_KIJIJI',     'kijiji');
 
 
 // Dislay debug ?
