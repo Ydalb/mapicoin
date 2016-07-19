@@ -24,8 +24,19 @@ $return = [
 // Check URL
 // ===
 $_URL = $_POST['u'] ?? $_GET['u'] ?? null;
-if (!$_URL || !preg_match('#https://www\.leboncoin\.fr/.+#i', $_URL)) {
-    $return['message'] = "Veuillez renseigner une URL de recherche leboncoin";
+$_URL = trim($_URL);
+if (!preg_match('#^https?://#i', $_URL)) {
+    $_URL = 'https://'.$_URL;
+}
+if (!preg_match('#^https?://www\.leboncoin\.fr/.+#i', $_URL)) {
+    $return['message'] = sprintf(
+        "L'URL %s est incorrecte.
+
+Veuillez renseigner une URL de recherche leboncoin.
+
+Exemple : https://www.leboncoin.fr/voitures/offres/bretagne/bonnes_affaires/",
+        $_URL
+    );
     exit(json_encode($return));
 }
 

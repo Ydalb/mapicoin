@@ -26,7 +26,7 @@
                 name="u"
                 value=""
                 size="45"
-                type="url"
+                type="text"
                 placeholder="Copiez/collez ici votre lien de recherche leboncoin ..."
                 />
         </div>

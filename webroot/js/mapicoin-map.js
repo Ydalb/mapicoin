@@ -377,6 +377,8 @@ function set_user_location(position) {
     draw_circle_around_user_location();
     // Update markers
     update_marker_from_filters();
+    // Fit bounds
+    map_fit_bounds();
 }
 
 /**
