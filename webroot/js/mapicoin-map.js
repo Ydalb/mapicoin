@@ -150,6 +150,9 @@ function map_fit_bounds(m) {
             }
         }
     }
+    if (m.length == 0) {
+        return false;
+    }
     var bounds = new google.maps.LatLngBounds();
     for (var i in m) {
         bounds.extend(m[i].position);
