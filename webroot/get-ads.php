@@ -66,18 +66,9 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
 
     $crawler->fetchURLContent($i);
 
-    // Load DOM
-    // $dom      = new DOMDocument();
-    // $dom->loadHTML($html);
-    // $domXpath = new DomXPath($dom);
-
     // Fetch main title once
     if (!$title) {
-        $title           = $crawler->fetchMainTitle();
-        $title           = explode('-', $title);
-        $title           = trim($title[0]);
-        $return['title'] = $title;
-
+        $return['title'] = $crawler->fetchMainTitle();
     }
 
     $annonces = $crawler->getAds();

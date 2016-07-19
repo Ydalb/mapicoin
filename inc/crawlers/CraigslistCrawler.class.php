@@ -25,7 +25,16 @@ class CraigslistCrawler extends Crawler {
      * @return array
      */
     public function getAdInfo(DOMElement $domElement) {
-        $return = [];
+        $return = [
+            'url'           => null,
+            'title'         => null,
+            'picture'       => null,
+            'picture_count' => null,
+            'location'      => null,
+            'price'         => null,
+            'date'          => null,
+            'pro'           => null,
+        ];
         return $return;
     }
 

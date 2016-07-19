@@ -202,10 +202,10 @@ function convert_places_to_latlng($places = array()) {
                 $json   = $result->results[0];
                 $lat    = $json->geometry->location->lat;
                 $lng    = $json->geometry->location->lng;
-                set_location_in_cache(
-                    $place,
-                    [$lat, $lng]
-                );
+                // set_location_in_cache(
+                //     $place,
+                //     [$lat, $lng]
+                // );
                 error_log("NEW LOCATION: ".$place);
             }
             // Don't overload google !

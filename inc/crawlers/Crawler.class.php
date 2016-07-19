@@ -92,8 +92,6 @@ abstract class Crawler
         $dom->loadHTML($html);
         $this->domXpath = new DomXPath($dom);
 
-        var_dump($this->domXpath);
-
         return true;
     }
 
