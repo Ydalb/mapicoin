@@ -257,7 +257,7 @@ function panel_highlight(index) {
         scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
     });
 }
-function panel_toggle_item(index, show = true) {
+function panel_toggle_item(index, show) {
     var $e = $('#sidebar .pwet[data-index="'+index+'"]');
     if (show) {
         $e.show();
