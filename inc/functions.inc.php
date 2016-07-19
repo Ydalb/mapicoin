@@ -5,6 +5,7 @@
 // ===
 
 function detect_ads_site() {
+    global $_SITES;
     $host = $_SERVER['HTTP_HOST'] ?? '';
     // Removing mapicoin.[fr|com]
     $host = str_replace(
@@ -13,19 +14,15 @@ function detect_ads_site() {
         $host
     );
 
-    switch ($host) {
-        case 'craigslist.dev':
-        case 'craigslist':
-            return SITE_CRAIGSLIST;
-            break;
-        case 'gumtree.dev':
-        case 'gumtree':
-            return SITE_GUMTREE;
-            break;
-        default:
-            return SITE_LEBONCOIN;
-            break;
+    foreach ($_SITES as $site => $config) {
+        $domains = $config['mapicoin-domains'] ?? [];
+        foreach ($config['mapicoin-domains'] as $d) {
+            if ($host == $d) {
+                return $site;
+            }
+        }
     }
+    return SITE_LEBONCOIN;
 }
 
 
@@ -173,7 +170,7 @@ function convert_date_to_timestamp($date) {
  * Get lat & lng from places (bulk /!\) using mapquest
  */
 function convert_places_to_latlng($places = array()) {
-    global $_CONFIG;
+    global $_CONFIG, $_SITES, $_SITE;
     $geocoder = sprintf(
         'https://maps.googleapis.com/maps/api/geocode/json?key=%s&address=%%s',
         $_CONFIG->api->google_server_key
@@ -192,7 +189,7 @@ function convert_places_to_latlng($places = array()) {
             $tmp    = preg_replace("/[^\s\p{L}0-9]+/u", "", $place);
             $tmp    = str_replace(' / ', ', ', $tmp);
             $tmp    = preg_replace('/\s+/', '+', $tmp);
-            $tmp    .= ',+France';
+            $tmp    .= ',+'.$_SITES[$_SITE]['country'];
             $query  = sprintf($geocoder, $tmp);
             $result = json_decode(file_get_contents($query));
             if (count($result->results) == 0) {
