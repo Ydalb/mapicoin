@@ -369,7 +369,7 @@ function regroup_ads(datas) {
  * si reset = true, on repart sur une nouvelle URL
  * sinon, on prends les paramètres actuels et on surchage avec data
  */
-function update_browser_url(data, reset = false) {
+function update_browser_url(data, reset) {
     // Get current GET parameters if reset = false
     var gets = [];
     if (reset == false) {
