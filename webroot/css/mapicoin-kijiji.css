@@ -1,0 +1,10 @@
+#navbar {
+    background:-webkit-linear-gradient(top, #c3e779 0%, #a5d14a 100%);
+    border:solid 1px #84a444;
+}
+h1 a span {
+    color:#696969;
+}
+.media-price {
+    color:#84a444;
+}

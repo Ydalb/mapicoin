@@ -58,6 +58,7 @@ abstract class Crawler
      */
     public function fetchURLContent($page = 1) {
         $url     = $this->getPaginatedUrl($page);
+        error_log("Fetching URL ".$url);
         $headers = array(
           'User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12',
           'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -71,6 +72,7 @@ abstract class Crawler
         $ch  = curl_init();
         curl_setopt($ch, CURLOPT_VERBOSE,        false);
         curl_setopt($ch, CURLOPT_URL,            $url);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER,     $headers);
