@@ -315,7 +315,7 @@ function regroup_ads(datas) {
             '<div class="media" data-timestamp="'+ad.timestamp+'">' +
                 '<div class="media-left media-middle">' +
                     '<img class="media-object lazyload" data-original="'+ad.picture+'" alt="'+ad.title+'">' +
-                    '<span class="media-number">'+ad.picture_count+'</span>' +
+                    '<span class="media-number '+ad.picture_count+'">'+ad.picture_count+'</span>' +
                 '</div>' +
                 '<div class="media-body">' +
                     '<h3 class="media-heading">'+
@@ -323,7 +323,7 @@ function regroup_ads(datas) {
                             ad.title+
                         '</a>'+
                     '</h3>' +
-                    '<p class="media-supp">'+ad.pro+'</p>' +
+                    '<p class="media-supp '+ad.pro+'">'+ad.pro+'</p>' +
                     '<p class="media-supp">'+ad.location+'</p>' +
                     '<p class="media-price">'+ad.price+'</p>' +
                     '<p class="media-date">'+ad.date+'</p>' +

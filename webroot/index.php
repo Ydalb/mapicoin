@@ -1,12 +1,15 @@
 <?php
     require_once '../inc/config.inc.php';
+    $center      = $_SITES[$_SITE]['map-center'] ?? $_SITES[SITE_LEBONCOIN]['map-center'];
+    $title       = $_SITES[$_SITE]['site-title'] ?? $_SITES[SITE_LEBONCOIN]['site-title'];
+    $description = $_SITES[$_SITE]['site-description'] ?? $_SITES[SITE_LEBONCOIN]['site-description'];
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Mapicoin, votre recherche leboncoin.fr sur une carte</title>
+        <title><?= $title ?></title>
 
-        <meta name="description" content="Visualiser les annonces d'une recherche leboncoin sur une carte ? C'est possible ! Grâce à Mapicoin, entrez votre lien de recherche et on s'occupe du reste !" />
+        <meta name="description" content="<?= $description ?>" />
 
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <meta charset=utf-8>
@@ -17,6 +20,7 @@
         <link href="/css/todc-bootstrap.min.css" rel="stylesheet" />
         <!-- <link href="/css/ribbon.min.css" rel="stylesheet" /> -->
         <link href="/css/mapicoin.css?<?= VERSION ?>" rel="stylesheet" />
+        <link href="/css/mapicoin-<?= $_SITE ?>.css?<?= VERSION ?>" rel="stylesheet" />
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="//maps.googleapis.com/maps/api/js?key=<?= $_CONFIG->api->google_browser_key ?>"></script>
@@ -24,6 +28,11 @@
         <script src="/js/bootstrap.min.js"></script>
         <script src="/js/jquery.lazyload.min.js"></script>
         <!-- <script src="/js/geolocation-marker.min.js"></script> -->
+
+        <script>
+            var centerMap = {lat: <?= $center[0]?>, lng: <?= $center[1]?>};
+        </script>
+
         <script src="/js/mapicoin-map.js?<?= VERSION ?>"></script>
         <script src="/js/mapicoin.js?<?= VERSION ?>"></script>
 

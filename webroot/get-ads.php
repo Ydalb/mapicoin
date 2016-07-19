@@ -85,6 +85,8 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
         // Key is very important as we are mixing result pages ($i, $j)
         $key         = ($j + 1) * $i;
         $annonce     = $crawler->getAdInfo($e);
+        var_dump($annonce);
+
         $datas[$key] = $annonce;
         if ($annonce['location']) {
             $places[$key] = $annonce['location'];

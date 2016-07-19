@@ -5,6 +5,7 @@
 // ===
 
 function detect_ads_site() {
+    global $_SITES;
     $host = $_SERVER['HTTP_HOST'] ?? '';
     // Removing mapicoin.[fr|com]
     $host = str_replace(
@@ -13,29 +14,25 @@ function detect_ads_site() {
         $host
     );
 
-    switch ($host) {
-        case 'craigslist.dev':
-        case 'craigslist':
-            return SITE_CRAIGSLIST;
-            break;
-        case 'gumtree.dev':
-        case 'gumtree':
-            return SITE_GUMTREE;
-            break;
-        default:
-            return SITE_LEBONCOIN;
-            break;
+    foreach ($_SITES as $site => $config) {
+        $domains = $config['mapicoin-domains'] ?? [];
+        foreach ($config['mapicoin-domains'] as $d) {
+            if ($host == $d) {
+                return $site;
+            }
+        }
     }
+    return SITE_LEBONCOIN;
 }
 
 
 
 function set_location_in_cache($location = '', $coords = array()) {
-    global $_MYSQLI;
+    global $_MYSQLI, $_SITE;
     /* Crée une requête préparée */
     if (!($stmt = $_MYSQLI->prepare("
-        INSERT INTO geocode (id,location,lat,lng)
-            VALUES (?,?,?,?)
+        INSERT INTO geocode (id,site,location,lat,lng)
+            VALUES (?,?,?,?,?)
         ON DUPLICATE KEY
             UPDATE lat=?, lng=?"
         ))) {
@@ -44,8 +41,9 @@ function set_location_in_cache($location = '', $coords = array()) {
     /* Lecture des marqueurs */
     $id = md5($location);
     $stmt->bind_param(
-        "ssssdd",
+        "sssssdd",
         $id,
+        $_SITE,
         $location,
         $coords[0],
         $coords[1],
@@ -61,14 +59,14 @@ function set_location_in_cache($location = '', $coords = array()) {
 }
 
 function get_location_from_cache($location = '') {
-    global $_MYSQLI;
+    global $_MYSQLI, $_SITE;
     /* Crée une requête préparée */
-    if (!($stmt = $_MYSQLI->prepare("SELECT lat,lng FROM geocode WHERE id=? LIMIT 1"))) {
+    if (!($stmt = $_MYSQLI->prepare("SELECT lat,lng FROM geocode WHERE id=? AND site=? LIMIT 1"))) {
         return false;
     }
     /* Lecture des marqueurs */
     $id = md5($location);
-    $stmt->bind_param("s", $id);
+    $stmt->bind_param("ss", $id, $_SITE);
     /* Exécution de la requête */
     $stmt->execute();
     /* Lecture des variables résultantes */
@@ -132,48 +130,10 @@ function get_location_from_bdd($location = '') {
 
 
 /**
- * Convert a leboncoin date to timestamp
- */
-function convert_date_to_timestamp($date) {
-    $tmp = explode(',', $date);
-    if (!isset($tmp[1])) {
-        return false;
-    }
-    $jour  = trim(strtolower($tmp[0]));
-    $heure = trim($tmp[1]);
-    if ($jour == "aujourd'hui") {
-        $jour = date('d F');
-    } elseif ($jour == 'hier') {
-        $jour = date('d F', strtotime('-1 day'));
-    }
-
-    // On converti les dates leboncoin en EN
-    $replaces = [
-        'janvier'   => 'january',
-        'février'   => 'february',
-        'mars'      => 'march',
-        'avril'     => 'april',
-        'mai'       => 'may',
-        'juin'      => 'june',
-        'juillet'   => 'july',
-        'août'      => 'august',
-        'septembre' => 'september',
-        'octobre'   => 'october',
-        'novembre'  => 'november',
-        'décembre'  => 'december',
-    ];
-
-    $date = sprintf('%s %d %s', $jour, date('Y'), $heure);
-    $date = str_ireplace(array_keys($replaces), array_values($replaces), $date);
-
-    return strtotime($date);
-}
-
-/**
  * Get lat & lng from places (bulk /!\) using mapquest
  */
 function convert_places_to_latlng($places = array()) {
-    global $_CONFIG;
+    global $_CONFIG, $_SITES, $_SITE;
     $geocoder = sprintf(
         'https://maps.googleapis.com/maps/api/geocode/json?key=%s&address=%%s',
         $_CONFIG->api->google_server_key
@@ -192,7 +152,7 @@ function convert_places_to_latlng($places = array()) {
             $tmp    = preg_replace("/[^\s\p{L}0-9]+/u", "", $place);
             $tmp    = str_replace(' / ', ', ', $tmp);
             $tmp    = preg_replace('/\s+/', '+', $tmp);
-            $tmp    .= ',+France';
+            $tmp    .= ',+'.$_SITES[$_SITE]['country'];
             $query  = sprintf($geocoder, $tmp);
             $result = json_decode(file_get_contents($query));
             if (count($result->results) == 0) {
@@ -202,10 +162,10 @@ function convert_places_to_latlng($places = array()) {
                 $json   = $result->results[0];
                 $lat    = $json->geometry->location->lat;
                 $lng    = $json->geometry->location->lng;
-                // set_location_in_cache(
-                //     $place,
-                //     [$lat, $lng]
-                // );
+                set_location_in_cache(
+                    $place,
+                    [$lat, $lng]
+                );
                 error_log("NEW LOCATION: ".$place);
             }
             // Don't overload google !

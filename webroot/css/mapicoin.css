@@ -307,6 +307,8 @@ h3 {
 }
 .media-left .media-object {
     display:inline-block;
+    max-width:120px;
+    max-height:90px;
 }
 .media-number {
     position: absolute;
@@ -321,6 +323,9 @@ h3 {
     color: #f56b2a;
     font-weight: bold;
 }
+.media-number.null{
+    display:none;
+}
 .media-body {
     position: relative;
     height:99px;
@@ -334,6 +339,9 @@ h3 {
     color: #1a1a1a;
     margin:0;
     line-height: 1.2rem;
+}
+.media-supp.null {
+    display:none;
 }
 .media-price {
     margin:0;

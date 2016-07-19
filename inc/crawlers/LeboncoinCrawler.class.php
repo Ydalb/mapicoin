@@ -95,7 +95,7 @@ class LeboncoinCrawler extends Crawler {
             $domElement
         );
         $return['date']      = trim($tmp->item(0)->nodeValue);
-        $return['timestamp'] = convert_date_to_timestamp($return['date']);
+        $return['timestamp'] = $this->convertDateToTimestamp($return['date']);
 
         return $return;
     }
@@ -110,4 +110,43 @@ class LeboncoinCrawler extends Crawler {
         );
     }
 
+
+
+    /**
+     * Convert a leboncoin date to timestamp
+     */
+    private function convertDateToTimestamp($date) {
+        $tmp = explode(',', $date);
+        if (!isset($tmp[1])) {
+            return false;
+        }
+        $jour  = trim(strtolower($tmp[0]));
+        $heure = trim($tmp[1]);
+        if ($jour == "aujourd'hui") {
+            $jour = date('d F');
+        } elseif ($jour == 'hier') {
+            $jour = date('d F', strtotime('-1 day'));
+        }
+
+        // On converti les dates leboncoin en EN
+        $replaces = [
+            'janvier'   => 'january',
+            'février'   => 'february',
+            'mars'      => 'march',
+            'avril'     => 'april',
+            'mai'       => 'may',
+            'juin'      => 'june',
+            'juillet'   => 'july',
+            'août'      => 'august',
+            'septembre' => 'september',
+            'octobre'   => 'october',
+            'novembre'  => 'november',
+            'décembre'  => 'december',
+        ];
+
+        $date = sprintf('%s %d %s', $jour, date('Y'), $heure);
+        $date = str_ireplace(array_keys($replaces), array_values($replaces), $date);
+
+        return strtotime($date);
+    }
 }
