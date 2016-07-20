@@ -2,3 +2,4 @@
 inc/parameters.json
 .env
 .DS_Store
+.idea
