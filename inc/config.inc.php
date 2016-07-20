@@ -4,33 +4,66 @@
 // Configuration
 // ===
 
-define('DEBUG', false);
+define('DEBUG', true);
 
-define('MAX_PAGES_RETRIEVE',  2);
+define('MAX_PAGES_RETRIEVE',  1);
 define('SLEEP_BETWEEN_PAGES', 1);
 define('USLEEP_BETWEEN_API_CALL', 200000); // 200ms
 
 define('VERSION', file_get_contents(__DIR__.'/../VERSION'));
 
 define('SITE_LEBONCOIN',  'leboncoin');
-define('SITE_GUMTREE',    'gumtree');
+define('SITE_GUMTREE_AS',    'gumtree_au');
+define('SITE_GUMTREE_UK',    'gumtree_uk');
 define('SITE_CRAIGSLIST', 'craigslist');
 define('SITE_KIJIJI',     'kijiji');
 
 $_SITES = [
     SITE_LEBONCOIN => [
         'country'          => 'France',
+        'map-center'       => [47.351, 3.392],
+        'site-title'       => "Mapicoin, votre recherche leboncoin.fr sur une carte",
+        'site-description' => "Visualiser les annonces d'une recherche leboncoin sur une carte ? C'est possible ! Grâce à Mapicoin, entrez votre lien de recherche et on s'occupe du reste !",
         // without .mapicoin.[fr|com]
         // default value anyway...
         'mapicoin-domains' => [],
     ],
     SITE_KIJIJI => [
         'country'          => 'Canada',
+        'map-center'       => [62.4, -96.80972222222222],
+        'site-title'       => "Ads of Kijiji on a map | Mapicoin",
+        'site-description' => "View listings of Kijiji search on a map? It's possible ! With Mapicoin enter your search link and we will do the rest!",
         // without .mapicoin.[fr|com]
         'mapicoin-domains' => [
             'kijiji',
             'kijiji.dev',
             'kijiji.dev2',
+        ],
+    ],
+    SITE_GUMTREE_UK => [
+        'country'          => 'United-Kingdom',
+        'map-center'       => [52.294424, -1.178088],
+        'site-title'       => "Ads of Gumtree UK on a map | Mapicoin",
+        'site-description' => "View listings of Gumtree UK search on a map? It's possible ! With Mapicoin enter your search link and we will do the rest!",
+
+        // without .mapicoin.[fr|com]
+        'mapicoin-domains' => [
+            'gumtree',
+            'gumtreeuk.dev',
+            'gumtreeuk.dev2',
+        ],
+    ],
+    SITE_GUMTREE_AS => [
+        'country'          => 'Australia',
+        'map-center'       => [-25.863961, 134.640420],
+        'site-title'       => "Ads of Gumtree Australia on a map | Mapicoin",
+        'site-description' => "View listings of  Gumtree Australia search on a map? It's possible ! With Mapicoin enter your search link and we will do the rest!",
+
+        // without .mapicoin.[fr|com]
+        'mapicoin-domains' => [
+            'gumtreeas',
+            'gumtreeas.dev',
+            'gumtreeas.dev2',
         ],
     ],
 ];

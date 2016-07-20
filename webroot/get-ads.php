@@ -27,12 +27,16 @@ switch ($_SITE) {
         require_once '../inc/crawlers/CraigslistCrawler.class.php';
         $crawler = new CraigslistCrawler($_URL);
         break;
-
-    case SITE_GUMTREE:
-        require_once '../inc/crawlers/GumtreeCrawler.class.php';
-        $crawler = new GumtreeCrawler($_URL);
+    // ENGLAND : GUMTREE.CO.UK
+    case SITE_GUMTREE_UK:
+        require_once '../inc/crawlers/GumtreeUKCrawler.class.php';
+        $crawler = new GumtreeUKCrawler($_URL);
         break;
-
+    // AUSTRALIA : GUMTREE.COM.AU
+    case SITE_GUMTREE_AS:
+        require_once '../inc/crawlers/GumtreeASCrawler.class.php';
+        $crawler = new GumtreeASCrawler($_URL);
+        break;
     // leboncoin
     default:
         require_once '../inc/crawlers/LeboncoinCrawler.class.php';
@@ -89,8 +93,10 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
         if ($annonce['location']) {
             $places[$key] = $annonce['location'];
         }
+
     }
 
+    //var_dump($annonces);
     // ===
     // Fetch lat & lng
     // ===

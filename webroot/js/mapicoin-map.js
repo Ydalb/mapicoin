@@ -9,10 +9,10 @@ var infowindow        = new google.maps.InfoWindow({
     content: ""
 });
 var iconDefault = {
-   url: '//maps.google.com/mapfiles/ms/icons/red-dot.png'
+    url: '//maps.google.com/mapfiles/ms/icons/red-dot.png'
 };
 var iconActive  = {
-   url: '//maps.google.com/mapfiles/ms/icons/green-dot.png'
+    url: '//maps.google.com/mapfiles/ms/icons/green-dot.png'
 };
 var iconGps = {
     'url':        '/img/gpsloc.png',
@@ -29,7 +29,7 @@ var iconGps = {
 function initialize_map() {
     // console.log('function initialize_map() {');
     // Center of France
-    var myLatLng      = {lat: 47.351, lng: 3.392};
+    // var myLatLng      = {lat: 47.351, lng: 3.392};
     var element       = document.getElementById('map');
     // For direction calculation
     opts = {
@@ -39,7 +39,7 @@ function initialize_map() {
     directionsDisplay = new google.maps.DirectionsRenderer(opts);
     $('#map').show();
     var map = new google.maps.Map(element, {
-        center:      myLatLng,
+        center:      centerMap,
         scrollwheel: true,
         zoom:        6
     });
@@ -222,7 +222,7 @@ function calc_distance_to_marker(marker) {
             var trajet   = '<div class="trajet">'+
                 '<p>Distance : <span class="distance">'+distance+'</span></p>'+
                 '<p>Temps : <span class="temps">'+time+'</span></p>'+
-            '</div>';
+                '</div>';
             bind_info_window(marker, trajet);
         }
     });
@@ -349,7 +349,7 @@ function set_user_location(position) {
         .removeClass('disabled')
         .removeAttr('title')
         .find('select')
-            .removeAttr('disabled');
+        .removeAttr('disabled');
 
     is_geolocated  = true;
     GeoMarker      = null;
@@ -394,7 +394,7 @@ function get_user_location() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(set_user_location);
     } else {
-      // Pas de support, proposer une alternative ?
-      alert("Votre navigateur ne supporte pas la géolocalisation. À la place, veuillez utiliser le formulaire prévu à cet effet.");
+        // Pas de support, proposer une alternative ?
+        alert("Votre navigateur ne supporte pas la géolocalisation. À la place, veuillez utiliser le formulaire prévu à cet effet.");
     }
 }
