@@ -120,7 +120,7 @@ h3 {
     height:calc(100vh - 46px);
 }
 #map.toggled {
-    margin-left:33%;
+    margin-left:480px;
 }
 
 /* LEGEND */
