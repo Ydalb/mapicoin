@@ -54,10 +54,10 @@ class GumtreeASCrawler extends Crawler {
 
         // picture
         $tmp = $this->domXpath->query(
-            './/img[@class="ad-gallery-img-current"]/@src',
+            './/img/@src',
             $domElement
         );
-        $return['picture'] = 'https://'.trim(@$tmp->item(0)->nodeValue ?? '//static.leboncoin.fr/img/no-picture.png');
+        $return['picture'] = trim(@$tmp->item(0)->nodeValue ?? '//static.leboncoin.fr/img/no-picture.png');
 
         // picture_count
         $tmp = $this->domXpath->query(
