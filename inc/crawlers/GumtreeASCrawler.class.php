@@ -59,12 +59,12 @@ class GumtreeASCrawler extends Crawler {
         );
         $return['picture'] = trim(@$tmp->item(0)->nodeValue ?? '//static.leboncoin.fr/img/no-picture.png');
 
-        // picture_count
+        // picture_count : Not included on Gumtree AUS
         $tmp = $this->domXpath->query(
             './/span[@class="item_imageNumber"]/span/text()',
             $domElement
         );
-        $return['picture_count'] = trim(@$tmp->item(0)->nodeValue ?? 0);
+        $return['picture_count'] = trim(@$tmp->item(0)->nodeValue ?? 1);
 
         // pro
         $tmp = $this->domXpath->query(
