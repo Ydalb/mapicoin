@@ -1,4 +1,4 @@
-<nav id="navbar" class="navbar navbar-masthead navbar-inverse">
+<nav id="navbar" class="navbar navbar-masthead">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -39,7 +39,8 @@
             Afficher les résultats
         </button>
       </form>
-      <button type="button" class="btn btn-default navbar-btn hand pull-right" data-toggle="modal" data-target="#modal-help">Besoin d'aide ?</button>
+
+      <a class="btn btn-default pull-right hand" href="/comment-ca-marche.php">Comment ça marche ?</a>
 
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
