@@ -1,0 +1,133 @@
+.body {
+    color:#000;
+}
+.page-container {
+    width:800px;
+    margin:0 auto;
+    padding:30px 0;
+}
+.page-container a {
+    color:#3b69c4;
+    text-decoration: none;
+}
+.page-header {
+
+}
+.page-logo {
+    margin:0 0 20px 0;
+    text-align:center;
+}
+.page-logo a {
+    font-size:35px;
+    line-height:45px;
+    text-decoration: none;
+}
+.page-logo a span {
+    font-weight:700;
+    color:#b9afa4;
+}
+.page-logo a span + span,
+.page-logo a i {
+    color:#f56b2a;
+}
+.page-logo .baseline {
+    font-size:11px;
+    line-height: 12px;
+    color:#b9afa4;
+    padding:0 0 0 42px;
+    display:block;
+    font-weight:normal;
+}
+.page-body {
+    padding:20px 40px;
+    background: white;
+    border-top:5px solid #f76a00;
+    border-bottom:5px solid #b9afa4;
+}
+.page-breadcrumb {
+    font-size: 10px;
+    margin-bottom: 20px;
+}
+.page-breadcrumb a, .page-breadcrumb a:visited {
+    color:#b9afa4
+}
+.page-footer {
+    color:#b9afa4;
+    font-size:12px;
+    line-height: 16px;
+    margin:5px 0 0;
+}
+.page-footer .right {
+    float:right;
+}
+h1 {
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: -30px;
+    padding-left: 30px;
+    height: 41px;
+    line-height: 30px;
+    text-transform: uppercase;
+    color: #FFF;
+    background: transparent url(/img/bg-h1.png) no-repeat left top;
+}
+h1 span {
+    display: block;
+    float: left;
+    height: 31px;
+    padding-right: 30px;
+    background-color: #f76a00;
+}
+h2 {
+    margin:30px 0 0 0;
+    font-size:16px;
+    line-height: 24px;
+    font-weight:bold;
+}
+h2:first-child {
+    margin-top:15px;
+}
+h2 .sup {
+    color:#f56b2a;
+    font-size:10px;
+    position:relative;
+    top:-10px;
+    font-weight:normal;
+}
+p {
+    margin-bottom: 20px;
+    font-size:12px;
+    line-height:20px;
+}
+ul {
+    font-size:12px;
+    line-height: 20px;
+    padding:0 0 0 40px;
+    list-style-type: none;
+    margin:0 0 20px 0;
+    font-weight: bold;
+}
+li.img {
+    margin:15px 0 15px -40px;
+    list-style: none;
+    display:block;
+    text-align: center;
+}
+li.img img {
+    max-width: 100%;
+    height:auto;
+    box-shadow: 1px 1px 6px #555;
+}
+.download-plugin {
+    margin:15px 0 0 0;
+    text-align:center;
+    width:340px;
+    display:inline-block;
+}
+.download-plugin span {
+    display:block;
+    font-weight:bold;
+}
+.download-plugin img {
+    line-height:64px;
+}

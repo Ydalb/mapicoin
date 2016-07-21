@@ -17,6 +17,10 @@ define('SITE_GUMTREE',    'gumtree');
 define('SITE_CRAIGSLIST', 'craigslist');
 define('SITE_KIJIJI',     'kijiji');
 
+define('URL_EXTENSION_CHROME',  'https://chrome.google.com/webstore/detail/mapicoin/bboglkbpeaghomeknpdmgbnaldommkda');
+define('URL_EXTENSION_FIREFOX', 'https://addons.mozilla.org/fr/firefox/addon/mapicoin/');
+
+
 $_SITES = [
     SITE_LEBONCOIN => [
         'country'          => 'France',
