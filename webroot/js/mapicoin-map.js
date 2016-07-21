@@ -29,7 +29,7 @@ var iconGps = {
 function initialize_map() {
     // console.log('function initialize_map() {');
     // Center of France
-    var myLatLng      = {lat: 47.351, lng: 3.392};
+    // var myLatLng      = {lat: 47.351, lng: 3.392};
     var element       = document.getElementById('map');
     // For direction calculation
     opts = {
@@ -39,7 +39,7 @@ function initialize_map() {
     directionsDisplay = new google.maps.DirectionsRenderer(opts);
     $('#map').show();
     var map = new google.maps.Map(element, {
-        center:      myLatLng,
+        center:      centerMap,
         scrollwheel: true,
         zoom:        6
     });

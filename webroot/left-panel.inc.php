@@ -8,6 +8,7 @@ $_select_distance = [
     "50"  =>"50 km",
     "100" =>"100 km",
     "200" =>"200 km",
+    "500" =>"500 km",
 ];
 $_select_day = [
     "1"  => "1 jour",
@@ -16,6 +17,7 @@ $_select_day = [
     "7"  => "1 semaine",
     "14" => "2 semaines",
     "30" => "1 mois",
+    "60" => "2 mois",
 ];
 ?>
 <div id="sidebar-wrapper">
