@@ -39,7 +39,7 @@
     <p>Mapicoin permet de visualiser les annonces du site leboncoin.fr sur une carte interactive.</p>
 
     <h2>Mode manuel</h2>
-    <p>Pour fonctionner, mapicoin nécessite l'URL de votre recherche leboincoin.</p>
+    <p>Pour fonctionner, mapicoin nécessite l'URL de votre recherche leboncoin.</p>
     <p>Pour utiliser Mapicoin manuellement, procédez ainsi :</p>
     <ul>
         <li>1. Effectuez votre recherche sur leboncoin</li>
