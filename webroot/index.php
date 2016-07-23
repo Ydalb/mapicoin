@@ -35,9 +35,6 @@
         <!-- Map -->
         <section id="map"></section>
 
-        <!-- Modal -->
-        <?php include 'inc/modal.inc.php' ?>
-
         <?php include 'inc/ga.inc.php' ?>
 
     </body>
