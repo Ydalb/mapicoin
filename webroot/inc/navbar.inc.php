@@ -27,7 +27,7 @@
                 value=""
                 size="45"
                 type="text"
-                placeholder="Copiez/collez ici votre lien de recherche leboncoin ..."
+                placeholder="Copiez/collez ici votre URL de recherche leboncoin ..."
                 />
         </div>
         <button
