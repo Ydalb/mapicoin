@@ -93,7 +93,11 @@ $(document).ready(function() {
                 }
                 if (!data.datas || data.datas.length == 0) {
                     lock_search(false);
-                    alert("Aucune ad trouvée. Veuillez essayer un autre lien de recherche.");
+                    alert(
+                        "Aucune annonce trouvée pour cette recherche." +
+                        "\n"+
+                        "Si besoin, rendez-vous sur la page 'Comment ça marche' pour plus d'explications."
+                    );
                     return false;
                 }
 
@@ -137,7 +141,10 @@ $(document).ready(function() {
             },
             error: function() {
                 lock_search(false);
-                alert("Une erreur est survenue. Veuillez ré-essayer.");
+                alert(
+                    "Une erreur est survenue. Veuillez ré-essayer." +
+                    "\n"+
+                    "Si besoin, rendez-vous sur la page 'Comment ça marche' pour plus d'explications.");
             }
         })
 

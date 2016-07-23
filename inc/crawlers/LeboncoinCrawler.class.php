@@ -4,13 +4,20 @@ require_once __DIR__.'/Crawler.class.php';
 
 class LeboncoinCrawler extends Crawler {
 
+    // To allow basic search (Need {{SEARCH}} pattern)
+    // &it=1 : recherche dans le titre
+    // ?th=1 : aucune idée
+    public static $_basic_search_url = 'https://www.leboncoin.fr/annonces/offres/?th=1&q={{SEARCH}}&it=1';
+
     public function __construct($url) {
-        if (!preg_match('#^https?://#i', $url)) {
+        if (preg_match('#www\.leboncoin\.fr#i', $url) && !preg_match('#^https?://#i', $url)) {
             $url = 'https://'.$url;
         }
+        // Basic search ?
         // Extract page parameter
         if (!$this->validateURL($url)) {
-            return false;
+            // Not a valid URL, try basic search
+            $url = str_replace('{{SEARCH}}', $url, self::$_basic_search_url);
         }
         $url = replace_get_parameter($url, 'o', self::$_PAGE_PATTERN);
         return parent::__construct($url);
@@ -21,6 +28,17 @@ class LeboncoinCrawler extends Crawler {
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * Return DOMElements of all ads based on a xpath
+     * @return array(DOMElement, ...)
+     */
+    public function getAds() {
+        return $this->domXpath->query(
+            '//section[@class="tabsContent block-white dontSwitch"]/ul/li'
+        );
     }
 
     /**
@@ -99,17 +117,6 @@ class LeboncoinCrawler extends Crawler {
 
         return $return;
     }
-
-    /**
-     * Return DOMElements of all ads based on a xpath
-     * @return array(DOMElement, ...)
-     */
-    public function getAds() {
-        return $this->domXpath->query(
-            '//section[@class="tabsContent block-white dontSwitch"]/ul/li'
-        );
-    }
-
 
 
     /**
