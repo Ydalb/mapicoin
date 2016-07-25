@@ -193,7 +193,9 @@ function get_average_price(array $data, $ignore = 10) {
         return 0;
     }
     if ($count == 1) {
-        return $data[0]['price_raw'];
+        $tmp = array_pop($data);
+        // error_log(print_r($tmp, 1));
+        return round($tmp['price_raw'], 0);
     }
     // Moyenne
     $moyenne = $count2 = 0;

@@ -255,11 +255,17 @@ function panel_update(data, datas) {
     $('#sidebar').on({
         mouseenter: function() {
             var i = $(this).data('index');
+            if (typeof markers[i] == 'undefined') {
+                return;
+            }
             markers[i].setAnimation(google.maps.Animation.BOUNCE);
         },
         // mouse out
         mouseleave: function () {
             var i = $(this).data('index');
+            if (typeof markers[i] == 'undefined') {
+                return;
+            }
             markers[i].setAnimation(null);
         }
     }, '.pwet');
@@ -283,8 +289,9 @@ function panel_update_average(data) {
     } else {
         var text = "{0}{1}";
     }
-    text = text.format(
-        (data.average_price).formatMoney(0, ',', '\''),
+    price = data.average_price;
+    text  = text.format(
+        price.formatMoney(0, ',', '\''),
         data.currency.symbol
     );
     $('.sidebar-average-price').text(
