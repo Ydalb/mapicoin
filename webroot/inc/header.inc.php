@@ -10,7 +10,8 @@
     <link href="/css/mapicoin.css?<?= VERSION ?>" rel="stylesheet" />
     <link href="/css/mapicoin-<?= $_SITE ?>.css?<?= VERSION ?>" rel="stylesheet" />
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>-->
+    <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
 
     <script>
