@@ -38,6 +38,30 @@
     <h2>Comment ça marche ?</h2>
     <p>Mapicoin permet de visualiser les annonces du site leboncoin.fr sur une carte interactive.</p>
 
+    <h2>Mode automatique <span class="sup">(recommandé)</span></h2>
+    <p>Nous vous recommandons d'utiliser notre plugin Mapicoin afin de passer rapidement du site d'annonce à mapicoin!</p>
+    <p>Concrètement, une fois le plugin installé, il vous suffit, à partir d'une page de recherche, de cliquer sur ce dernier pour ouvrir automatiquement le site Mapicoin avec votre recherche déjà paramétrée. Ainsi, les résultats s'afficheront directement sur la carte, sans avoir à copier/coller l'URL dans le champ prévu à cet effet.</p>
+    <p>Nous supportons actuellement deux navigateurs :</p>
+    <p>
+        <a class="download-plugin" target="_blank" href="<?= URL_EXTENSION_CHROME ?>">
+            <img src="/img/chrome-64x64.png" width="64" height="64" alt="Plugin Mapicoin Chrome" />
+            <span>Téléchargez l'extension pour Chrome</span>
+        </a>
+        <a class="download-plugin" target="_blank" href="<?= URL_EXTENSION_FIREFOX ?>">
+            <img src="/img/firefox-64x64.png" width="64" height="64" alt="Plugin Mapicoin Firefox" />
+            <span>Téléchargez l'extension pour Firefox</span>
+        </a>
+    </p>
+    <p>Pour utiliser l'extension, c'est très simple :</p>
+    <ul>
+        <li>1. Installez-la ;-)</li>
+        <li>2. Effectuez votre recherche sur leboncoin</li>
+        <li>3. L'icône de l'extension change de couleur (Elle passe du gris à l'orange)</li>
+        <li>4. Cliquez sur l'icône de l'extension et explorez ce fabuleux service!<br />
+        (Vous pouvez aussi cliquer droit sur la page > "Voir sur mapicoin")</li>
+    </ul>
+
+
     <h2>Mode manuel</h2>
     <p>Pour fonctionner, mapicoin nécessite l'URL de votre recherche leboncoin.</p>
     <p>Pour utiliser Mapicoin manuellement, procédez ainsi :</p>
@@ -61,28 +85,6 @@
         <li>5. Profitez du service ;-)</li>
     </ul>
 
-    <h2>Mode automatique <span class="sup">(recommandé)</span></h2>
-    <p>Nous vous recommandons d'utiliser notre plugin Mapicoin afin de passer rapidement du site d'annonce à mapicoin!</p>
-    <p>Concrètement, une fois le plugin installé, il vous suffit, à partir d'une page de recherche, de cliquer sur ce dernier pour ouvrir automatiquement le site Mapicoin avec votre recherche déjà paramétrée. Ainsi, les résultats s'afficheront directement sur la carte, sans avoir à copier/coller l'URL dans le champ prévu à cet effet.</p>
-    <p>Nous supportons actuellement deux navigateurs :</p>
-    <p>
-        <a class="download-plugin" target="_blank" href="<?= URL_EXTENSION_CHROME ?>">
-            <img src="/img/chrome-64x64.png" width="64" height="64" alt="Plugin Mapicoin Chrome" />
-            <span>Téléchargez l'extension pour Chrome</span>
-        </a>
-        <a class="download-plugin" target="_blank" href="<?= URL_EXTENSION_FIREFOX ?>">
-            <img src="/img/firefox-64x64.png" width="64" height="64" alt="Plugin Mapicoin Firefox" />
-            <span>Téléchargez l'extension pour Firefox</span>
-        </a>
-    </p>
-    <p>Pour utiliser l'extension, c'est très simple :</p>
-    <ul>
-        <li>1. Installez-la ;-)</li>
-        <li>2. Effectuez votre recherche sur leboncoin</li>
-        <li>3. L'icône de l'extension change de couleur (Elle passe du gris à l'orange)</li>
-        <li>4. Cliquez sur l'icône de l'extension et explorez ce fabuleux service!<br />
-        (Vous pouvez aussi cliquer droit sur la page > "Voir sur mapicoin")</li>
-    </ul>
     <p>That's all folk's !</p>
 </div><!-- /.page-content -->
 
