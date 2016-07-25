@@ -184,16 +184,31 @@ function convert_places_to_latlng($places = array()) {
     return $return;
 }
 
-
-function get_average_price(array $data) {
-    if (count($data) == 0) {
+/**
+ * Calcul la moyenne en ignorant $ignore pourcent(s) de valeur trop haute et trop basse
+ */
+function get_average_price(array $data, $ignore = 10) {
+    $count = count($data);
+    if ($count == 0) {
         return 0;
     }
-    $price = 0;
-    foreach ($data as $e) {
-        $price += $e['price_raw'];
+    if ($count == 1) {
+        return $data[0]['price_raw'];
     }
-    return round($price / count($data), 0);
+    // Moyenne
+    $moyenne = $count2 = 0;
+    $offset  = round($count * $ignore / 100, 0);
+    foreach ($data as $i => $e) {
+        if (!isset($e['price_raw']) || $e['price_raw'] === '') {
+            continue;
+        }
+        if ($i < $offset || $i > ($count - $offset)) {
+            continue;
+        }
+        $moyenne += $e['price_raw'];
+        ++$count2;
+    }
+    return round($moyenne / $count2, 0);
 }
 
 
