@@ -30,6 +30,10 @@ $_SITES = [
         // without .mapicoin.[fr|com]
         // default value anyway...
         'mapicoin-domains' => [],
+        'currency'         => [
+            'symbol'   => '€',
+            'position' => 'right'
+        ]
     ],
     SITE_KIJIJI => [
         'country'          => 'Canada',
@@ -42,6 +46,10 @@ $_SITES = [
             'kijiji.dev',
             'kijiji.dev2',
         ],
+        'currency'         => [
+            'symbol'   => '$',
+            'position' => 'left'
+        ]
     ],
 ];
 

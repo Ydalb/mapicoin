@@ -53,6 +53,7 @@ class LeboncoinCrawler extends Crawler {
             'picture_count' => null,
             'location'      => null,
             'price'         => null,
+            'price_raw'     => null,
             'date'          => null,
             'pro'           => null,
         ];
@@ -105,7 +106,8 @@ class LeboncoinCrawler extends Crawler {
             './/h3[@class="item_price"]/text()',
             $domElement
         );
-        $return['price'] = trim(@$tmp->item(0)->nodeValue ?? '');
+        $return['price']     = trim(@$tmp->item(0)->nodeValue ?? '');
+        $return['price_raw'] = filter_var($return['price'], FILTER_SANITIZE_NUMBER_FLOAT);
 
         // date
         $tmp = $this->domXpath->query(
