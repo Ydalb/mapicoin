@@ -186,6 +186,9 @@ function convert_places_to_latlng($places = array()) {
 
 
 function get_average_price(array $data) {
+    if (count($data) == 0) {
+        return 0;
+    }
     $price = 0;
     foreach ($data as $e) {
         $price += $e['price_raw'];
