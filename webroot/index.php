@@ -22,10 +22,6 @@
     </head>
     <body>
 
-        <!-- <a class="github-fork-ribbon right-top" href="https://mapicoin.fr/plugins/chrome-mapicoin.crx" title="Plugin Chrome">
-            Plugin Chrome !
-        </a> -->
-
         <?php include 'inc/navbar.inc.php' ?>
 
         <?php include 'inc/left-panel.inc.php' ?>

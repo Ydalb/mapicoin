@@ -305,7 +305,6 @@ function panel_highlight(index) {
     var container = $('#sidebar'),
          scrollTo = $('#sidebar .pwet[data-index="'+index+'"]').first();
     if (scrollTo.size()) {
-        console.log(scrollTo);
         container.animate({
             scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
         });
