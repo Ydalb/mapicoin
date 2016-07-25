@@ -112,6 +112,15 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
 
 
 // ===
+// Get avergage price
+// ===
+$return['average_price'] = get_average_price($datas);
+$return['currency']      = $_SITES[$_SITE]['currency'];
+
+
+
+
+// ===
 // /END of script
 // ===
 $return['status']  = true;

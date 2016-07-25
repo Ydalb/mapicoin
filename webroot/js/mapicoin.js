@@ -1,3 +1,4 @@
+
 var QueryString = function () {
   // This function is anonymous, is executed immediately and
   // the return value is assigned to QueryString!
@@ -22,6 +23,24 @@ var QueryString = function () {
   }
   return query_string;
 }();
+String.prototype.format = function () {
+        var args = [].slice.call(arguments);
+        return this.replace(/(\{\d+\})/g, function (a){
+            return args[+(a.substr(1,a.length-2))||0];
+        });
+};
+Number.prototype.formatMoney = function(c, d, t) {
+    var n = this,
+        c = isNaN(c = Math.abs(c)) ? 2 : c,
+        d = d == undefined ? "." : d,
+        t = t == undefined ? "," : t,
+        s = n < 0 ? "-" : "",
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+        j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
+
+
 
 $(document).ready(function() {
 
@@ -108,9 +127,6 @@ $(document).ready(function() {
                 var tmp = url.replace(/\?/g, '%3F').replace(/&/g, '%26');
                 update_browser_url({u: tmp}, false);
 
-                // count
-                var count = Object.keys(data.datas).length;
-
                 // Group ads by lat/lng
                 var datas = regroup_ads(data.datas);
 
@@ -118,7 +134,7 @@ $(document).ready(function() {
                 panel_toggle(true);
 
                 // Update panel + Bind
-                panel_update(data.title, datas, count);
+                panel_update(data, datas);
 
                 // Create and add markers to the map + bind
                 add_ads_markers(map, datas);
@@ -201,7 +217,8 @@ function panel_toggle(toggle) {
     google.maps.event.trigger(map, "resize");
 }
 
-function panel_update(title, datas) {
+function panel_update(data, datas) {
+    var title = data.title;
     // Title + Content + Edit
     $('.sidebar-title').text(title).attr('title', title);
     $('.sidebar-edit-search').attr('href', $('#input-url').val());
@@ -217,6 +234,8 @@ function panel_update(title, datas) {
 
     // Update count
     panel_update_count();
+    // Update average
+    panel_update_average(data);
 
     // Lazyload
     $(".lazyload").lazyload({
@@ -252,6 +271,23 @@ function panel_update_count() {
     $('.sidebar-count').text(
         'Affichage de '+count+' annonce'+plural
     );
+    $('.sidebar-count').text(
+        'Affichage de '+count+' annonce'+plural
+    );
+}
+function panel_update_average(data) {
+    if (data.currency.position == 'left') {
+        var text = "{1}{0}";
+    } else {
+        var text = "{0}{1}";
+    }
+    text = text.format(
+        (data.average_price).formatMoney(0, ',', '\''),
+        data.currency.symbol
+    );
+    $('.sidebar-average-price').text(
+        "Prix moyen : "+text
+    );
 }
 
 function panel_highlight(index) {
@@ -259,10 +295,12 @@ function panel_highlight(index) {
     $('#sidebar .pwet[data-index="'+index+'"]').addClass('active');
     var container = $('#sidebar'),
          scrollTo = $('#sidebar .pwet[data-index="'+index+'"]').first();
-    // Or you can animate the scrolling:
-    container.animate({
-        scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
-    });
+    if (scrollTo.size()) {
+        console.log(scrollTo);
+        container.animate({
+            scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
+        });
+    }
 }
 function panel_toggle_item(index, show) {
     var $e = $('#sidebar .pwet[data-index="'+index+'"]');
@@ -428,4 +466,5 @@ function parse_query_strings(val) {
     );
     return result;
 }
+
 

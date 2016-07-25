@@ -185,6 +185,15 @@ function convert_places_to_latlng($places = array()) {
 }
 
 
+function get_average_price(array $data) {
+    $price = 0;
+    foreach ($data as $e) {
+        $price += $e['price_raw'];
+    }
+    return round($price / count($data), 0);
+}
+
+
 /**
  * Replace a specific GET parameter from a given URL
  */
