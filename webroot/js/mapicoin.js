@@ -208,13 +208,13 @@ function lock_search(lock) {
 
 function panel_toggle(toggle) {
     if (toggle) {
-        $('#sidebar-wrapper').addClass('toggled');
-        $('#map').addClass('toggled');
-        $('#overlay').fadeOut();
+        $('body').addClass('toggled');
+        //$('#map').addClass('toggled');
+        //$('#overlay').fadeOut();
     } else {
-        $('#sidebar-wrapper').removeClass('toggled');
-        $('#map').removeClass('toggled');
-        $('#overlay').fadeIn();
+        $('body').removeClass('toggled');
+        //$('#map').removeClass('toggled');
+        //$('#overlay').fadeIn();
     }
     google.maps.event.trigger(map, "resize");
 }
