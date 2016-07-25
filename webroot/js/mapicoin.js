@@ -172,8 +172,10 @@ $(document).ready(function() {
     // ===
     var u = parse_query_strings('u');
     if (u) {
-        var tmp = u.replace(/%3F/g, '?').replace(/%26/g, '&');
-        $('#input-url').val(tmp);
+        u = u
+            .replace(/%3F/g, '?')
+            .replace(/%26/g, '&');
+        $('#input-url').val(u);
         $('#form-search').submit();
     }
     var distance = parse_query_strings('distance');
