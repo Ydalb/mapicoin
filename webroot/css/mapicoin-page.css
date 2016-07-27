@@ -1,3 +1,7 @@
+html, body {
+    overflow: scroll;
+    height:auto;
+}
 body.page {
     background:#ffe;
 }

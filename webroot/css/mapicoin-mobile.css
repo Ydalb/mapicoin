@@ -105,10 +105,89 @@ and (max-device-width : 667px) {
 }
 
 @media only screen
-and (max-device-width : 320px) {
+and (max-device-width : 515px) {
+    /* NAVBAR */
+    #navbar h1 a {
+        font-size:20px;
+    }
+    #navbar #form-search {
+        width:calc(100vw - 148px);
+        position:relative;
+    }
+    #navbar #input-url {
+        width:calc(100% - 50px);
+    }
+    #navbar #input-submit {
+        width:50px;
+        position:absolute;
+        right:0px;
+        top:9px;
+    }
+    /* CONTAINER */
     #container {
         padding:60px 10px;
     }
+    /* SIDEBAR */
+    #sidebar-wrapper {
+        width:280px;
+    }
+    #toggle {
+        left:280px;
+    }
+    body.in-search.toggle #toggle {
+        -webkit-transform: translateX(-280px);
+        transform: translateX(-280px) scaleX(-1);
+    }
+    body.in-search.toggle #sidebar-wrapper {
+        /*margin-left:-480px;*/
+        -webkit-transform: translateX(-480px);
+        transform: translateX(-480px);
+    }
+    .sidebar-title {
+        display:none;
+    }
+    #sidebar-advanced-search {
+        line-height:20px;
+    }
+    .sidebar-header {
+        padding:10px;
+    }
+    .filter-item {
+        width:auto;
+        display:block;
+    }
+    .filter-item label {
+        display: inline-block;
+        width: 110px;
+    }
+    .filter-day .filter-select-wrapper,
+    .filter-distance .filter-select-wrapper {
+        width:130px;
+    }
+    .sidebar-details {
+        display:none;
+    }
+    /* MEDIA */
+    .media {
+        padding:10px;
+    }
+    .media-left {
+        width:100px;
+        margin-right:5px;
+    }
+    .media-left .media-object {
+        top:auto;
+        max-width: 100px;
+    }
+    .media-body {
+        width:154px;
+    }
+    .media-heading a {
+        display:block;
+        overflow:hidden;
+        max-height:38px;
+    }
+    /* FOOTER */
     body footer {
         background:none;
         border:none;
@@ -124,6 +203,10 @@ and (max-device-width : 320px) {
     }
     .rightlinks {
         float:none;
+    }
+    /* PAGE */
+    .page-body {
+        padding:15px !important;
     }
     .page-container h1 {
 
