@@ -13,6 +13,9 @@ class LeboncoinCrawler extends Crawler {
         if (preg_match('#www\.leboncoin\.fr#i', $url) && !preg_match('#^https?://#i', $url)) {
             $url = 'https://'.$url;
         }
+        if ($this->isSingleAdPage($url)) {
+            return parent::__construct($url);
+        }
         // Basic search ?
         // Extract page parameter
         if (!$this->validateURL($url)) {
@@ -25,6 +28,13 @@ class LeboncoinCrawler extends Crawler {
 
     protected function validateURL($url) {
         if (preg_match('#^https?://www\.leboncoin\.fr/.+#i', $url)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isSingleAdPage($url) {
+        if (preg_match('#^https?://www\.leboncoin\.fr/[^/]+/\d+\.htm#i', $url)) {
             return true;
         }
         return false;
@@ -120,6 +130,74 @@ class LeboncoinCrawler extends Crawler {
         return $return;
     }
 
+    public function getSingleAdInfo() {
+        $domElement = $this->domXpath->query(
+            '//section[@id="adview"]'
+        )->item(0);
+        $return = [
+            'url'           => null,
+            'title'         => null,
+            'picture'       => null,
+            'picture_count' => null,
+            'location'      => null,
+            'price'         => null,
+            'price_raw'     => null,
+            'date'          => null,
+            'pro'           => null,
+        ];
+        // url
+        $return['url'] = $this->url;
+
+        // title
+        $tmp = $this->domXpath->query(
+            './/h1/text()',
+            $domElement
+        );
+        $return['title'] = trim($tmp->item(0)->nodeValue);
+
+        // picture
+        $tmp = $this->domXpath->query(
+            './/section[@class="adview_main"]/meta/@content',
+            $domElement
+        );
+        $return['picture'] = 'https:'.trim(@$tmp->item(0)->nodeValue ?? '//static.leboncoin.fr/img/no-picture.png');
+
+        // picture_count
+        $tmp = $this->domXpath->query(
+            'count(.//section[@class="carousel"]//ul/li)',
+            $domElement
+        );
+        $return['picture_count'] = trim(@$tmp->item(0)->nodeValue ?? 0);
+
+        // pro
+        $return['pro'] = '';
+
+        // location
+        $tmp = $this->domXpath->query(
+            './/span[@itemprop="address"]/text()',
+            $domElement
+        );
+        $tmp = trim($tmp->item(0)->nodeValue);
+        $return['location'] = preg_replace('#\s+#i', ' ', $tmp);
+
+        // price
+        $tmp = $this->domXpath->query(
+            './/h2[@class="item_price clearfix"]/span[@class="value"]/text()',
+            $domElement
+        );
+        $return['price']     = trim(@$tmp->item(0)->nodeValue ?? '');
+        $return['price_raw'] = filter_var($return['price'], FILTER_SANITIZE_NUMBER_FLOAT);
+
+        // date
+        $tmp = $this->domXpath->query(
+            './/aside[@class="item_absolute"]/p[@class="item_supp"]/text()',
+            $domElement
+        );
+        $return['date']      = '';
+        $return['timestamp'] = '';
+
+        return $return;
+    }
 
     /**
      * Convert a leboncoin date to timestamp
