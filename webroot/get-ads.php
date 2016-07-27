@@ -60,42 +60,29 @@ if (!$crawler) {
     exit(json_encode($return));
 }
 
+
+
 // ===
-// Let's browse pages !
+// Let's single ad !
 // ===
-$datas = [];
-$title = null;
-for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
+if ($crawler->isSingleAdPage($_URL)) {
 
     $places = [];
 
-    $crawler->fetchURLContent($i);
+    $crawler->fetchURLContent(null);
     // Re-try once if fail to fetch
     if (!$crawler) {
         sleep(1);
-        $crawler->fetchURLContent($i);
+        $crawler->fetchURLContent(null);
     }
 
     // Fetch main title once
-    if (!$title) {
-        $return['title'] = $crawler->fetchMainTitle();
-    }
+    $return['title'] = $crawler->fetchMainTitle();
 
-    $annonces = $crawler->getAds();
-
-    if (!$annonces || $annonces->length == 0) {
-        break;
-    }
-    foreach ($annonces as $j => $e) {
-        // Key is very important as we are mixing result pages ($i, $j)
-        $key         = ($j + 1) * $i;
-        $annonce     = $crawler->getAdInfo($e);
-        var_dump($annonce);
-
-        $datas[$key] = $annonce;
-        if ($annonce['location']) {
-            $places[$key] = $annonce['location'];
-        }
+    $annonce  = $crawler->getSingleAdInfo();
+    $datas[1] = $annonce;
+    if ($annonce['location']) {
+        $places[1] = $annonce['location'];
     }
 
     // ===
@@ -111,10 +98,62 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
         $datas[$k]['latlng'] = $ll;
     }
 
-    // sleep(SLEEP_BETWEEN_PAGES);
+} else {
+
+    // ===
+    // Let's browse pages !
+    // ===
+    $datas = [];
+    $title = null;
+    for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
+
+        $places = [];
+
+        $crawler->fetchURLContent($i);
+        // Re-try once if fail to fetch
+        if (!$crawler) {
+            sleep(1);
+            $crawler->fetchURLContent($i);
+        }
+
+        // Fetch main title once
+        if (!$title) {
+            $return['title'] = $crawler->fetchMainTitle();
+        }
+
+        $annonces = $crawler->getAds();
+
+        if (!$annonces || $annonces->length == 0) {
+            break;
+        }
+        foreach ($annonces as $j => $e) {
+            // Key is very important as we are mixing result pages ($i, $j)
+            $key         = ($j + 1) * $i;
+            $annonce     = $crawler->getAdInfo($e);
+            var_dump($annonce);
+
+            $datas[$key] = $annonce;
+            if ($annonce['location']) {
+                $places[$key] = $annonce['location'];
+            }
+        }
+
+        // ===
+        // Fetch lat & lng
+        // ===
+        $latlng = convert_places_to_latlng($places);
+
+        if (!$latlng) {
+            $return['message'] = "Impossible de récupérer les coordonnées GPS des annonces.";
+            exit(json_encode($return));
+        }
+        foreach ($latlng as $k => $ll) {
+            $datas[$k]['latlng'] = $ll;
+        }
+
+    }
 
 }
-
 
 // ===
 // Get avergage price

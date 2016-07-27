@@ -5,7 +5,7 @@
  */
 abstract class Crawler
 {
-    private $url;
+    protected $url;
     public $domXpath;
     public static $_PAGE_PATTERN = 'REPLACE_PAGE';
 
@@ -32,6 +32,18 @@ abstract class Crawler
      * @return array(DOMElement, ...)
      */
     abstract protected function getAds();
+    /**
+     * Return boolean is its a single-ad page
+     * THIS IS FOR SINGLE AD PAGE
+     * @return array(DOMElement, ...)
+     */
+    abstract public function isSingleAdPage($url);
+    /**
+     * Return ad info from DOMElement (using xpath)
+     * THIS IS FOR SINGLE AD PAGE
+     * @return array
+     */
+    abstract protected function getSingleAdInfo();
 
 
     /**
@@ -56,9 +68,12 @@ abstract class Crawler
     /**
      * Return HTML content of a given URL
      */
-    public function fetchURLContent($page = 1) {
-        $url     = $this->getPaginatedUrl($page);
-        error_log("Fetching URL ".$url);
+    public function fetchURLContent($page = null) {
+        if ($page !== null) {
+            $url     = $this->getPaginatedUrl($page);
+        } else {
+            $url = $this->url;
+        }
         $headers = array(
           'User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12',
           'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
