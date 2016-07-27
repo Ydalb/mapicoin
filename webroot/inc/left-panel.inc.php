@@ -60,7 +60,7 @@ $_select_day = [
             <a target="_blank" class="sidebar-edit-search" href="">Changer ma recherche</a>
         -->
             <span class="sidebar-count"></span>
-            |
+            <span class="sep">|</span>
             <span class="sidebar-average-price"></span>
         </p>
     </div>

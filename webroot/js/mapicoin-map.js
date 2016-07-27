@@ -45,7 +45,8 @@ function initialize_map() {
         mapTypeControlOptions: {
             mapTypeIds: [google.maps.MapTypeId.ROADMAP]
         },
-        mapTypeControl: false
+        mapTypeControl: false,
+        streetViewControl: false
     });
     // Create the legend and display on the map
     // var legend  = document.createElement('div');
