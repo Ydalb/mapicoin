@@ -16,8 +16,8 @@
         <meta property="og:title" content="<?= $title ?? 'Mapicoin' ?>" />
         <meta property="og:description" content="<?= $description ?>" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="<?= $_SERVER['REQUEST_URI'] ?>" />
-        <meta property="og:image" content="/img/mapicoin-logo.png" />
+        <meta property="og:url" content="https://<?= $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] ?>" />
+        <meta property="og:image" content="https://<?= $_SERVER['HTTP_HOST']?>/img/mapicoin-logo.png" />
 
 
         <?php include 'inc/header.inc.php'; ?>
