@@ -70,6 +70,11 @@ for ($i = 1; $i <= MAX_PAGES_RETRIEVE; ++$i) {
     $places = [];
 
     $crawler->fetchURLContent($i);
+    // Re-try once if fail to fetch
+    if (!$crawler) {
+        sleep(1);
+        $crawler->fetchURLContent($i);
+    }
 
     // Fetch main title once
     if (!$title) {

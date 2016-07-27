@@ -41,7 +41,11 @@ function initialize_map() {
     var map = new google.maps.Map(element, {
         center:      centerMap,
         scrollwheel: true,
-        zoom:        6
+        zoom:        6,
+        mapTypeControlOptions: {
+            mapTypeIds: [google.maps.MapTypeId.ROADMAP]
+        },
+        mapTypeControl: false
     });
     // Create the legend and display on the map
     // var legend  = document.createElement('div');

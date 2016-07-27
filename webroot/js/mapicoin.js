@@ -49,12 +49,9 @@ $(document).ready(function() {
     // ===
     init_search_filters();
 
-    // ===
-    // Reset slider when modal pop-up
-    // ===
-    $('#modal-help').on('show.bs.modal', function (e) {
-        $('#carousel-mapicoin-howto').carousel(0);
-    });
+    $('body').on('click', '#toggle', function(event) {
+        $('body').toggleClass('toggle');
+    })
 
     // ===
     // Init. google map
@@ -64,37 +61,23 @@ $(document).ready(function() {
     // ===
     // Focus main input on load
     // ===
-    $('#input-url').focus();
-
-
-    // ===
-    // "Back to search" button
-    // ===
-    $('body').on('click', '#new-search', function(event) {
-        event.preventDefault();
-        // Update URL
-        window.history.pushState("", "", "/");
-        // Clean input
-        $('#loader').hide();
-        $('#input-url').val('');
-        $('#header').show();
-        $('#new-search').hide();
-        $('#map').hide();
-    });
-
+    $('.input-url:eq(1)').focus();
 
     // ===
     // Form submit
     // ===
-    $('#form-search').on('submit', function(event) {
+    $('.form-search').each(function() {
+    $(this).on('submit', function(event) {
         event.preventDefault();
         var $form = $(this);
-        var url = $('#input-url').val();
+        var url = $form.find('.input-url').val();
+        // Update all input-url
         if (!url) {
-            $('#input-url').focus();
+            $form.find('.input-url').focus();
             alert("Veuillez renseigner une URL de recherche leboncoin.fr");
             return false;
         }
+        $('.input-url').val(url);
 
         lock_search(true);
 
@@ -149,7 +132,6 @@ $(document).ready(function() {
                     400,
                     function () {
                         $('#header').hide();
-                        $('#new-search').show();
                         $('#map').show();
                         lock_search(false);
                     }
@@ -165,6 +147,7 @@ $(document).ready(function() {
         })
 
     });
+    });
 
 
     // ===
@@ -175,8 +158,8 @@ $(document).ready(function() {
         u = u
             .replace(/%3F/g, '?')
             .replace(/%26/g, '&');
-        $('#input-url').val(u);
-        $('#form-search').submit();
+        $('.input-url').val(u);
+        $('.form-search').first().submit();
     }
     var distance = parse_query_strings('distance');
     if (distance) {
@@ -194,27 +177,25 @@ $(document).ready(function() {
  */
 function lock_search(lock) {
     if (lock) {
-        $('#input-submit').button('loading');
-        $('#input-url').prop('readonly', true);
+        $('.input-submit').button('loading');
+        $('.input-url').prop('readonly', true);
         $("body").css("cursor", "progress");
-        $('#loader').show();
     } else {
-        $('#input-submit').button('reset');
-        $('#input-url').prop('readonly', false);
+        $('.input-submit').button('reset');
+        $('.input-url').prop('readonly', false);
         $("body").css("cursor", "default");
-        $('#loader').hide();
     }
 }
 
 function panel_toggle(toggle) {
     if (toggle) {
-        $('#sidebar-wrapper').addClass('toggled');
-        $('#map').addClass('toggled');
-        $('#overlay').fadeOut();
+        $('body').addClass('in-search');
+        //$('#map').addClass('in-search');
+        //$('#overlay').fadeOut();
     } else {
-        $('#sidebar-wrapper').removeClass('toggled');
-        $('#map').removeClass('toggled');
-        $('#overlay').fadeIn();
+        $('body').removeClass('in-search');
+        //$('#map').removeClass('in-search');
+        //$('#overlay').fadeIn();
     }
     google.maps.event.trigger(map, "resize");
 }
@@ -223,7 +204,7 @@ function panel_update(data, datas) {
     var title = data.title;
     // Title + Content + Edit
     $('.sidebar-title').text(title).attr('title', title);
-    $('.sidebar-edit-search').attr('href', $('#input-url').val());
+    $('.sidebar-edit-search').attr('href', $('.input-url').first().val());
     $('#sidebar').html('');
 
     // Update content
@@ -368,7 +349,7 @@ function regroup_ads(datas) {
             '<div class="media" data-timestamp="'+ad.timestamp+'">' +
                 '<div class="media-left media-middle">' +
                     '<img class="media-object lazyload" data-original="'+ad.picture+'" alt="'+ad.title+'">' +
-                    '<span class="media-number '+ad.picture_count+'">'+ad.picture_count+'</span>' +
+                    // '<span class="media-number '+ad.picture_count+'">'+ad.picture_count+'</span>' +
                 '</div>' +
                 '<div class="media-body">' +
                     '<h3 class="media-heading">'+

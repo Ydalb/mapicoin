@@ -14,17 +14,24 @@
         <link href="/css/mapicoin-page.css?<?= VERSION ?>" rel="stylesheet" />
 
     </head>
-    <body>
+
+    <body class="page">
 
         <div class="page-container">
 
-            <div class="page-logo">
+            <div class="text-center">
+                <a href="/">
+                    <img id="logo" src="/img/mapicoin-logo.png" width="409" height="112" />
+                </a>
+            </div>
+
+            <!-- <div class="page-logo">
                 <a href="/">
                   <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>
                   <span>mapi</span><span>coin</span>
                   <p class="baseline">votre recherche leboncoin.fr sur une carte</p>
                 </a>
-            </div>
+            </div> -->
 
             <div class="page-body">
 
@@ -67,19 +74,19 @@
     <p>Pour utiliser Mapicoin manuellement, procédez ainsi :</p>
     <ul>
         <li>1. Effectuez votre recherche sur leboncoin</li>
-        <li class="img">
+        <li class="img hidden-xs">
             <img src="/img/howto/mapicoin-how-to-1-min.png" alt="Mapicoin howto 1" />
         </li>
         <li>2. Copiez ensuite l'URL du site leboncoin</li>
-        <li class="img">
+        <li class="img hidden-xs">
             <img src="/img/howto/mapicoin-how-to-2-min.png" alt="Mapicoin howto 2" />
         </li>
         <li>3. Rendez-vous ensuite sur <a href="https://mapicoin.fr">mapicoin.fr</a> et collez l'URL dans le champ prévu à cet effet</li>
-        <li class="img">
+        <li class="img hidden-xs">
             <img src="/img/howto/mapicoin-how-to-3-min.png" alt="Mapicoin howto 3" />
         </li>
         <li>4. Lancez la recherche en cliquant sur "Afficher les résutlats"</li>
-        <li class="img">
+        <li class="img hidden-xs">
             <img src="/img/howto/mapicoin-how-to-4-min.png" alt="Mapicoin howto 4" />
         </li>
         <li>5. Profitez du service ;-)</li>
@@ -91,7 +98,7 @@
             </div><!-- /.page-body -->
 
             <div class="page-footer">
-                © 2016 Mapicoin - Mapicoin est un site indépendant du site Leboncoin.fr
+                © 2016 Mapicoin<span class="hidden-xs"> - Mapicoin est un site indépendant du site Leboncoin.fr</span>
                 <div class="right">
                     <a href="https://twitter.com/mapicoin">Suivre Mapicoin sur Twitter</a>
                     |
@@ -100,10 +107,6 @@
             </div>
 
         </div><!-- /.page-container -->
-
-        <!-- <a class="github-fork-ribbon right-top" href="https://mapicoin.fr/plugins/chrome-mapicoin.crx" title="Plugin Chrome">
-            Plugin Chrome !
-        </a> -->
 
         <?php include 'inc/ga.inc.php' ?>
 
