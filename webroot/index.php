@@ -22,7 +22,7 @@
     </head>
     <body>
 
-        <?php /*include 'inc/navbar.inc.php' */?>
+        <?php include 'inc/navbar.inc.php' ?>
 
         <?php include 'inc/left-panel.inc.php' ?>
 
@@ -32,13 +32,13 @@
             <div class="container-center">
                 <div class="text-center">
 
-                    <img id="logo" src="/img/mapicoin-logo.png" width="409" height="112" />
+                    <a href="/"><img id="logo" src="/img/mapicoin-logo.png" width="409" height="112" /></a>
 
-                    <form id="form-search" action="#" role="search">
+                    <form id="form-search" action="#" role="search" class="form-search">
                         <div class="form-group">
                             <input
                                 id="input-url"
-                                class="form-control input-lg"
+                                class="input-url input-lg"
                                 name="u"
                                 value=""
                                 size="45"
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <button
                                 id="input-submit"
-                                class="btn btn-warning btn-lg hand"
+                                class="input-submit btn btn-warning btn-lg hand"
                                 type="submit"
                                 data-text="Afficher les résultats"
                                 data-loading-text="Chargement... <i class='glyphicon glyphicon-refresh glyphicon-spin'></i>">
@@ -67,15 +67,10 @@
 
         <footer>
             <a href="/comment-ca-marche.php"><strong>Comment ça marche ?</strong></a>
-            <a href="mailto:contact@mapicoin.fr">Nous contacter</a>
-            <a href="http://twitter.com/mapicoin">@mapicoin sur Twitter</a>
-            <span class="rightlinks">© 2016 Mapicoin<span class="hidden-xs"> - Mapicoin est un site indépendant du site Leboncoin.fr</span></span>
+            <a class="hide-mobile" href="mailto:contact@mapicoin.fr">Nous contacter</a>
+            <a class="hide-mobile" href="http://twitter.com/mapicoin">@mapicoin sur Twitter</a>
+            <span class="rightlinks">© 2016 Mapicoin<span class="hide-mobile"> - Mapicoin est un site indépendant du site Leboncoin.fr</span></span>
         </footer>
-
-        <!-- Overlay -->
-        <!-- <section id="overlay"></section> -->
-        <!-- Map -->
-        <!-- <section id="map"></section> -->
 
         <?php include 'inc/ga.inc.php' ?>
 

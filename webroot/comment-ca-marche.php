@@ -14,7 +14,8 @@
         <link href="/css/mapicoin-page.css?<?= VERSION ?>" rel="stylesheet" />
 
     </head>
-    <body>
+
+    <body class="page">
 
         <div class="page-container">
 
@@ -106,10 +107,6 @@
             </div>
 
         </div><!-- /.page-container -->
-
-        <!-- <a class="github-fork-ribbon right-top" href="https://mapicoin.fr/plugins/chrome-mapicoin.crx" title="Plugin Chrome">
-            Plugin Chrome !
-        </a> -->
 
         <?php include 'inc/ga.inc.php' ?>
 

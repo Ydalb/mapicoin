@@ -1,3 +1,6 @@
+body.page {
+    background:#ffe;
+}
 .body {
     color:#000;
 }
@@ -47,6 +50,7 @@
 .page-breadcrumb {
     font-size: 10px;
     margin-bottom: 20px;
+    line-height:20px;
 }
 .page-breadcrumb a, .page-breadcrumb a:visited {
     color:#b9afa4

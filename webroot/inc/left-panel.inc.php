@@ -20,6 +20,7 @@ $_select_day = [
     "60" => "2 mois",
 ];
 ?>
+<span id="toggle"></span>
 <div id="sidebar-wrapper">
     <div class="sidebar-header">
         <h2 class="sidebar-title"></h2>

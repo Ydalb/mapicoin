@@ -1,30 +1,69 @@
 @media only screen
+and (max-device-width : 1100px) {
+    .hide-mobile {
+        display:none;
+    }
+    #navbar #form-search {
+        width:calc(100vw - 170px);
+        position:relative;
+    }
+    #navbar #input-url {
+        width:calc(100% - 65px);
+    }
+    #navbar #input-submit {
+        width:60px;
+        position:absolute;
+        right:0px;
+        top:9px;
+    }
+}
+@media only screen
+and (max-device-width : 900px) {
+    #container {
+        width:640px;
+        margin-left:-320px;
+    }
+    #input-submit,
+    #input-url {
+        width:100%;
+    }
+}
+@media only screen
 and (max-device-width : 667px) {
     #container {
-        top:0;
-        left:0;
-        right:0;
-        bottom:0;
-        margin:0;
-        width:100%;
+        position:static;
+        top:auto;
+        left:auto;
+        right:auto;
+        bottom:auto;
+        margin:auto;
+        display:block;
         box-shadow: none;
         border-radius: 0px;
-        padding:30px 10px;
+        padding:30px 10px 10px;
+        width:auto;
     }
+    #map {display:none !important;}
+    body.in-search #map {display:block !important;}
     img {
         max-width: 100%;
         height: auto;
     }
-    #input-submit {
+    footer {
+        position:static;
+        bottom:auto;
+        left:auto;
+        right:auto;
         width:100%;
+        display:block;
     }
     footer a {
         border-right:1px solid #ccc;
     }
-    body.toggled #map {
+    body.in-search #map {
         margin:0px;
     }
-    body.toggled footer {
+    body.in-search footer {
         display:none;
     }
 
@@ -70,17 +109,23 @@ and (max-device-width : 320px) {
     #container {
         padding:60px 10px;
     }
-    footer a, footer span {
+    body footer {
+        background:none;
+        border:none;
+    }
+    body footer a, footer span {
         display:block;
         text-align: center;
         font-size:16px !important;
-        border:0;
-        border-bottom:1px solid #ccc;
+        border:none;
+    }
+    body footer a {
+        text-decoration: underline;
     }
     .rightlinks {
         float:none;
     }
-    .page-container h1 { 
+    .page-container h1 {
 
     }
 }

@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="icon" href="favicon.ico?<?= VERSION ?>" />
     <!-- <link href="/css/ribbon.min.css" rel="stylesheet" /> -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/css/todc-bootstrap.min.css" rel="stylesheet" />
+    <!-- <link href="/css/bootstrap.min.css" rel="stylesheet" /> -->
+    <!-- <link href="/css/todc-bootstrap.min.css" rel="stylesheet" /> -->
 
     <link href="/css/mapicoin.css?<?= VERSION ?>" rel="stylesheet" />
     <link href="/css/mapicoin-<?= $_SITE ?>.css?<?= VERSION ?>" rel="stylesheet" />
