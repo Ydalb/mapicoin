@@ -12,6 +12,14 @@
         <title><?= $title ?? 'Mapicoin' ?></title>
         <meta name="description" content="<?= $description ?>" />
 
+        <!-- Open Graph -->
+        <meta property="og:title" content="<?= $title ?? 'Mapicoin' ?>" />
+        <meta property="og:description" content="<?= $description ?>" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="<?= $_SERVER['REQUEST_URI'] ?>" />
+        <meta property="og:image" content="/img/mapicoin-logo.png" />
+
+
         <?php include 'inc/header.inc.php'; ?>
 
         <script src="//maps.googleapis.com/maps/api/js?key=<?= $_CONFIG->api->google_browser_key ?>"></script>
