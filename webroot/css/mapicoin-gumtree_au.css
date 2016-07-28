@@ -1,0 +1,14 @@
+#navbar{
+    background: #cde671;
+    background: -moz-linear-gradient(top,#cde671 0,#A3C900 100%);
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#cde671),color-stop(100%,#A3C900));
+    background: -webkit-linear-gradient(top,#cde671 0,#A3C900 100%);
+    background: -o-linear-gradient(top,#cde671 0,#A3C900 100%);
+    background: -ms-linear-gradient(top,#cde671 0,#A3C900 100%);
+    background: linear-gradient(to bottom,#cde671 0,#A3C900 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cde671',endColorstr='#A3C900',GradientType=0);
+    border: #A3C900;
+}
+
+.media-price { color : #444 }
+.media-number { display: none }

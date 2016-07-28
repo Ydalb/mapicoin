@@ -12,7 +12,22 @@ class GumtreeASCrawler extends Crawler {
             return false;
         }
         // $url = replace_get_parameter($url, 'o', self::$_PAGE_PATTERN);
+        $url = replace_get_parameter($url, 'page-', 'y');
+        $url = $this->replacePageParameterWithPattern($url);
         return parent::__construct($url);
+    }
+
+    private function replacePageParameterWithPattern($url) {
+        // http://www.gumtree.com.au/s-iphone/iphone/page-2/k0c18597
+        if (preg_match('#/page-\d+/#i', $url)) {
+            return preg_replace('#/page-\d+/#i', '/page-'.self::$_PAGE_PATTERN.'/', $url);
+        }
+        // http://www.kijiji.ca/b-cars-vehicles/fredericton/c27l1700018?gpTopAds=y
+        $pos = strrpos($url, '/');
+        $url = substr($url, 0, $pos)
+            . '/page-'.self::$_PAGE_PATTERN.'/'
+            . substr($url, $pos +1);
+        return $url;
     }
 
     protected function validateURL($url) {

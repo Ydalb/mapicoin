@@ -6,7 +6,7 @@
 
 define('DEBUG', true);
 
-define('MAX_PAGES_RETRIEVE',  1);
+define('MAX_PAGES_RETRIEVE',  2);
 define('SLEEP_BETWEEN_PAGES', 1);
 define('USLEEP_BETWEEN_API_CALL', 200000); // 200ms
 
