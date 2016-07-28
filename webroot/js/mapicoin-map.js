@@ -166,6 +166,8 @@ function map_fit_bounds(m) {
     map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);
     map.setZoom(map.getZoom()-1);
+
+    return offsetCenter(map.getCenter(), 200, 0);
 }
 
 
@@ -402,4 +404,28 @@ function get_user_location() {
       // Pas de support, proposer une alternative ?
       alert("Votre navigateur ne supporte pas la géolocalisation. À la place, veuillez utiliser le formulaire prévu à cet effet.");
     }
+}
+
+function offsetCenter(latlng, offsetx, offsety) {
+
+    // latlng is the apparent centre-point
+    // offsetx is the distance you want that point to move to the right, in pixels
+    // offsety is the distance you want that point to move upwards, in pixels
+    // offset can be negative
+    // offsetx and offsety are both optional
+
+    var scale = Math.pow(2, map.getZoom());
+
+    var worldCoordinateCenter = map.getProjection().fromLatLngToPoint(latlng);
+    var pixelOffset = new google.maps.Point((offsetx/scale) || 0,(offsety/scale) ||0)
+
+    var worldCoordinateNewCenter = new google.maps.Point(
+        worldCoordinateCenter.x - pixelOffset.x,
+        worldCoordinateCenter.y + pixelOffset.y
+    );
+
+    var newCenter = map.getProjection().fromPointToLatLng(worldCoordinateNewCenter);
+
+    map.setCenter(newCenter);
+
 }
