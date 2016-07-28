@@ -180,7 +180,7 @@ and (max-device-width : 515px) {
         max-width: 100px;
     }
     .media-body {
-        width:154px;
+        width:150px;
     }
     .media-heading a {
         display:block;
