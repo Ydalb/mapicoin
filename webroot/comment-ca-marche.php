@@ -107,11 +107,11 @@
             </div><!-- /.page-body -->
 
             <div class="page-footer">
-                © 2016 Mapicoin<span class="hidden-xs"> - Mapicoin est un site indépendant du site Leboncoin.fr</span>
+                © <?php echo date('Y'); ?><span class="hidden-xs"> - Mapicoin est un site indépendant du site Leboncoin.fr</span>
                 <div class="right">
-                    <a href="https://twitter.com/mapicoin">Suivre Mapicoin sur Twitter</a>
+                    <a href="https://www.facebook.com/mapicoin/">Facebook</a>
                     |
-                    <a href="mailto:contact@mapicoin.fr">Contacter mapicoin</a>
+                    <a href="https://twitter.com/mapicoin">@Twitter</a>
                 </div>
             </div>
 
