@@ -53,6 +53,11 @@
 <div class="page-content">
     <h2>Comment ça marche ?</h2>
     <p>Mapicoin permet de visualiser les annonces du site leboncoin.fr sur une carte interactive.</p>
+    <p>À partir d'une recherche LeBonCoin, Mapicoin vous aide à localiser l'ensemble des annonces sur une carte pour que vous puissiez avoir un regard global sur la situation géographique de chaque annonce.</p>
+    <p>Sans plus attendre, voici une vidéo vous expliquant le principe :</p>
+    <div class="text-center">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/twtMFZpPMHc" frameborder="0" allowfullscreen></iframe>
+    </div>
 
     <h2>Mode automatique <span class="sup">(recommandé)</span></h2>
     <p>Nous vous recommandons d'utiliser notre plugin Mapicoin afin de passer rapidement du site d'annonce à mapicoin!</p>
