@@ -73,7 +73,7 @@
             <a href="/comment-ca-marche.php"><strong>Comment ça marche ?</strong></a>
             <a class="hide-mobile" href="mailto:contact@mapicoin.fr">Nous contacter</a>
             <a class="hide-mobile" href="http://twitter.com/mapicoin">@mapicoin sur Twitter</a>
-            <span class="rightlinks">© 2016 Mapicoin<span class="hide-mobile"> - Mapicoin est un site indépendant du site Leboncoin.fr</span></span>
+            <span class="rightlinks">© <?php echo date('Y') ?><span class="hide-mobile"> - Mapicoin est un site indépendant du site Leboncoin.fr</span></span>
         </footer>
 
         <?php include 'inc/ga.inc.php' ?>
