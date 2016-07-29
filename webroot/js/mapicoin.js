@@ -81,6 +81,8 @@ $(document).ready(function() {
 
         lock_search(true);
 
+        map.initialZoom = false;
+
         $.ajax({
             url:      '/get-ads.php',
             type:     'post',

@@ -62,14 +62,15 @@ function initialize_map() {
 
     // This is needed to set the zoom after fitbounds,
     google.maps.event.addListener(map, 'zoom_changed', function() {
+        console.log('zoom_changed='+map.initialZoom);
         zoomChangeBoundsListener =
             google.maps.event.addListener(map, 'bounds_changed', function(event) {
-                if (this.getZoom() > 11 && this.initialZoom == true) {
+                if (this.getZoom() > 11/* && this.initialZoom == true*/) {
                     // Change max/min zoom here
                     this.setZoom(11);
                     this.initialZoom = false;
                 }
-            google.maps.event.removeListener(zoomChangeBoundsListener);
+            // google.maps.event.removeListener(zoomChangeBoundsListener);
         });
     });
     map.initialZoom = true;
