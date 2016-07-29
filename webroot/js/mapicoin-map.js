@@ -61,18 +61,18 @@ function initialize_map() {
     // map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
     // This is needed to set the zoom after fitbounds,
-    // google.maps.event.addListener(map, 'zoom_changed', function() {
-    //     zoomChangeBoundsListener =
-    //         google.maps.event.addListener(map, 'bounds_changed', function(event) {
-    //             if (this.getZoom() > 11 && this.initialZoom == true) {
-    //                 // Change max/min zoom here
-    //                 this.setZoom(11);
-    //                 this.initialZoom = false;
-    //             }
-    //         google.maps.event.removeListener(zoomChangeBoundsListener);
-    //     });
-    // });
-    // map.initialZoom = true;
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+        zoomChangeBoundsListener =
+            google.maps.event.addListener(map, 'bounds_changed', function(event) {
+                if (this.getZoom() > 11 && this.initialZoom == true) {
+                    // Change max/min zoom here
+                    this.setZoom(11);
+                    this.initialZoom = false;
+                }
+            google.maps.event.removeListener(zoomChangeBoundsListener);
+        });
+    });
+    map.initialZoom = true;
 
     // Localize client
     // GeoMarker = new GeolocationMarker(map);
@@ -167,7 +167,9 @@ function map_fit_bounds(m) {
     map.fitBounds(bounds);
     map.setZoom(map.getZoom()-1);
 
-    return offsetCenter(map.getCenter(), 200, 0);
+    // if (!$('body').hasClass('toggle')) {
+    //     return offsetCenter(map.getCenter(), 200, 0);
+    // }
 }
 
 
@@ -406,26 +408,26 @@ function get_user_location() {
     }
 }
 
-function offsetCenter(latlng, offsetx, offsety) {
+// function offsetCenter(latlng, offsetx, offsety) {
 
-    // latlng is the apparent centre-point
-    // offsetx is the distance you want that point to move to the right, in pixels
-    // offsety is the distance you want that point to move upwards, in pixels
-    // offset can be negative
-    // offsetx and offsety are both optional
+//     // latlng is the apparent centre-point
+//     // offsetx is the distance you want that point to move to the right, in pixels
+//     // offsety is the distance you want that point to move upwards, in pixels
+//     // offset can be negative
+//     // offsetx and offsety are both optional
 
-    var scale = Math.pow(2, map.getZoom());
+//     var scale = Math.pow(2, map.getZoom());
 
-    var worldCoordinateCenter = map.getProjection().fromLatLngToPoint(latlng);
-    var pixelOffset = new google.maps.Point((offsetx/scale) || 0,(offsety/scale) ||0)
+//     var worldCoordinateCenter = map.getProjection().fromLatLngToPoint(latlng);
+//     var pixelOffset = new google.maps.Point((offsetx/scale) || 0,(offsety/scale) ||0)
 
-    var worldCoordinateNewCenter = new google.maps.Point(
-        worldCoordinateCenter.x - pixelOffset.x,
-        worldCoordinateCenter.y + pixelOffset.y
-    );
+//     var worldCoordinateNewCenter = new google.maps.Point(
+//         worldCoordinateCenter.x - pixelOffset.x,
+//         worldCoordinateCenter.y + pixelOffset.y
+//     );
 
-    var newCenter = map.getProjection().fromPointToLatLng(worldCoordinateNewCenter);
+//     var newCenter = map.getProjection().fromPointToLatLng(worldCoordinateNewCenter);
 
-    map.setCenter(newCenter);
+//     map.setCenter(newCenter);
 
-}
+// }

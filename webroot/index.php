@@ -69,10 +69,6 @@
             </div>
         </div><!-- /#container -->
 
-        <header>
-
-        </header>
-
         <footer>
             <a href="/comment-ca-marche.php"><strong>Comment ça marche ?</strong></a>
             <a class="hide-mobile" href="mailto:contact@mapicoin.fr">Nous contacter</a>
