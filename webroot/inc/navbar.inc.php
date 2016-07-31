@@ -31,9 +31,13 @@
         id="geolocalize-info"
         data-default="<i>inconnue</i>"
         data-loader="<i class='glyphicon glyphicon-refresh glyphicon-spin'></i>">
-        <i>inconnue</i>
+        inconnue
       </span>
-      <button id="geolocalize-me" class="btn btn-default" onclick="get_user_location()">
+      <button
+        id="geolocalize-me"
+        class="btn btn-default"
+        title="Localisez vous automatiquement (nécessite la permission de votre navigateur)"
+        onclick="get_user_location()">
         <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>
       </button>
     </div>

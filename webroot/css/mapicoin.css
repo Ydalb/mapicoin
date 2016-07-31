@@ -28,15 +28,9 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
-html, body {
-    line-height: 1;
-}
-ol, ul {
-    list-style: none;
-}
-blockquote, q {
-    quotes: none;
-}
+html, body {line-height: 1;}
+ol, ul {list-style: none;}
+blockquote, q {quotes: none;}
 blockquote:before, blockquote:after,
 q:before, q:after {
     content: '';
@@ -46,12 +40,9 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-strong {
-    font-weight:bold;
-}
-input:read-only {
-    opacity:0.7;
-}
+strong {font-weight:bold;}
+i {font-style: italic;}
+input:read-only {opacity:0.7;}
 
 
 /* APP */
@@ -61,7 +52,7 @@ body {
     padding:0;
     color:#333;
     font-size:14px;
-    background:#ffe;
+    background:#e3f0f3;
 }
 .dib {display:inline-block;vertical-align: middle;}
 .hand {cursor:pointer;}
@@ -184,7 +175,7 @@ body.in-search #navbar {
 }
 #navbar h1 span {
     font-weight:700;
-    color:#b9afa4;
+    color:#3472ff;
 }
 #navbar h1 span + span,
 #navbar h1 a i {
@@ -195,8 +186,7 @@ body.in-search #navbar {
 }
 #navbar .navbar-extra {
     font-size:12px;
-    /*color:#888;*/
-    color:#004eff;
+    color:#3472ff;
 }
 #navbar button {
     margin-left:10px;
@@ -246,7 +236,7 @@ footer {
     bottom:0px;
     left:0px;
     right:0px;
-    background:#f3f3f3;
+    background:#ffffe9;
     border-top: 1px solid #d4d4d4;
     line-height: 55px;
     min-height: 55px;
@@ -457,6 +447,7 @@ body.in-search.toggle #sidebar-wrapper {
 }
 .media-heading a {
     text-decoration: underline;
+    color:#3472ff;
 }
 .media-left {
     position:relative;
