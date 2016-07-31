@@ -25,7 +25,16 @@
           <i class="hide-desktop glyphicon glyphicon-search" aria-hidden="true"></i>
       </button>
     </form>
-    <div class="navbar-links dib hide-mobile">
-      <a href="/comment-ca-marche.php">Comment ça marche</a>
+    <div class="navbar-extra pull-right">
+      Ma localisation :
+      <span
+        id="geolocalize-info"
+        data-default="<i>inconnue</i>"
+        data-loader="<i class='glyphicon glyphicon-refresh glyphicon-spin'></i>">
+        <i>inconnue</i>
+      </span>
+      <button id="geolocalize-me" class="btn btn-default" onclick="get_user_location()">
+        <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>
+      </button>
     </div>
 </nav>

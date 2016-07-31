@@ -2,7 +2,7 @@
 
 require_once '../inc/config.inc.php';
 
-set_time_limit(60);
+set_time_limit(30);
 libxml_use_internal_errors(true);
 // Pour la gestion des dates FR
 // TODO : voir pour mettre dans le switch ? ou en fonction de l'utilisateur ?
@@ -45,10 +45,11 @@ switch ($_SITE) {
 // Default return
 // ===
 $return = [
-    'status'  => false,
-    'message' => 'ko',
-    'title'   => "Liste des résultats",
-    'datas'   => null,
+    'status'    => false,
+    'message'   => 'ko',
+    'title'     => "Liste des résultats",
+    'datas'     => null,
+    'is_single' => false,
 ];
 
 if (!$crawler) {
@@ -66,6 +67,8 @@ if (!$crawler) {
 // Let's single ad !
 // ===
 if ($crawler->isSingleAdPage($_URL)) {
+
+    $return['is_single'] = true;
 
     $places = [];
 
