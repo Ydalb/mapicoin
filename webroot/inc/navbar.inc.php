@@ -29,7 +29,7 @@
       </button>
     </form>
     <div class="navbar-extra pull-right">
-      <div class="hide-tablet">
+      <div class="hide-tablet dib">
         Ma localisation :
         <span
           id="geolocalize-info"
