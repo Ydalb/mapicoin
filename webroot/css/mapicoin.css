@@ -43,7 +43,7 @@ table {
 strong {font-weight:bold;}
 i {font-style: italic;}
 input:read-only {opacity:0.7;}
-
+input:-webkit-autofill {-webkit-box-shadow: 0 0 0px 1000px white inset;}
 
 /* APP */
 body {
@@ -177,20 +177,14 @@ body.in-search #navbar {
     font-weight:700;
     color:#3472ff;
 }
-#navbar h1 span + span,
-#navbar h1 a i {
-    color:#f56b2a;
-}
-#navbar .input-url {
-    text-align: left;
-}
+#navbar h1 span + span {color:#f56b2a;}
+#navbar .input-url {text-align: left;}
 #navbar .navbar-extra {
     font-size:12px;
     color:#3472ff;
 }
-#navbar button {
-    margin-left:10px;
-}
+#navbar h1 i {color:#f56b2a;}
+#navbar button {margin-left:10px;}
 h3 {
     font-size:15px;
     margin:0 0 10px;
@@ -523,11 +517,4 @@ body.in-search.toggle #sidebar-wrapper {
 }
 .trajet span {
     font-weight:bold;
-}
-
-@media only screen
-and (min-device-width : 1101px) {
-    .hide-desktop {
-        display:none;
-    }
 }

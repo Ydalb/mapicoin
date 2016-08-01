@@ -1,7 +1,13 @@
 @media only screen
+and (min-device-width : 1100px) {
+    .hide-desktop {
+        display:none;
+    }
+}
+@media only screen
 and (max-device-width : 1100px) {
     #navbar #form-search {
-        width:calc(100vw - 170px);
+        width:calc(100vw - 270px);
         position:relative;
     }
     #navbar #input-url {
@@ -13,6 +19,7 @@ and (max-device-width : 1100px) {
         right:0px;
         top:9px;
     }
+    .hide-tablet{ display:none; }
 }
 @media only screen
 and (max-device-width : 900px) {
@@ -21,6 +28,9 @@ and (max-device-width : 900px) {
     }
     .hide-mobile {
         display:none;
+    }
+    #navbar #form-search {
+        width:calc(100vw - 135px);
     }
     #container {
         width:640px;
@@ -115,7 +125,7 @@ and (max-device-width : 515px) {
         font-size:20px;
     }
     #navbar #form-search {
-        width:calc(100vw - 148px);
+        width:calc(100vw - 117px);
         position:relative;
     }
     #navbar #input-url {

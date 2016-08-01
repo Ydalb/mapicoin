@@ -113,7 +113,10 @@ function add_ads_markers(map, datas) {
             this.setIcon(iconActive);
             currentActiveMarker = this;
             panel_highlight(this.id);
-            $('body').removeClass('toggle');
+            // Open sidebar if mobile
+            if (is_mobile()) {
+                $('body').removeClass('toggle');
+            }
         });
 
         marker.addListener('visible_changed', function() {
@@ -404,12 +407,25 @@ function set_user_location(position) {
  * Récupération de la position via le navigateur
  */
 function get_user_location() {
-    $('#geolocalize-info').html($('#geolocalize-info').data('loader'));
+    loader_user_location(true);
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(set_user_location);
     } else {
       // Pas de support, proposer une alternative ?
       alert("Votre navigateur ne supporte pas la géolocalisation. À la place, veuillez utiliser le formulaire prévu à cet effet.");
+    }
+}
+
+function loader_user_location(status) {
+    if (status) {
+        $('#geolocalize-info').html($('#geolocalize-info').data('loader'));
+        if (is_mobile()) {
+            $('#geolocalize-me').html($('#geolocalize-me').data('loader'));
+        }
+    } else {
+        if (is_mobile()) {
+            $('#geolocalize-me').html($('#geolocalize-me').data('default'));
+        }
     }
 }
 
@@ -441,10 +457,10 @@ function get_address_from_latlng(lat, lng) {
     // console.log(coords);
     var latlng = new google.maps.LatLng(lat, lng);
     $element = $('#geolocalize-info');
-    $element.html($element.data('loader'));
+    loader_user_location(true);
     // AJAX call
     geocoder.geocode({'latLng': latlng}, function(results, status) {
-        console.log(status, results);
+        loader_user_location(false);
         if (status != google.maps.GeocoderStatus.OK) {
             $element.html($element.data('default'));
             return false;
