@@ -369,7 +369,7 @@ function set_user_location(position) {
         "Position déterminée ! :-)",
         "Nous vous avons réussi à détecter votre position.<br />"+
             "<br />" +
-            "Vous pouvez désormais utiliser les fonctionnalités lié à la géolocalisation de Mapicoin",
+            "Vous pouvez désormais utiliser les fonctionnalités liées à la géolocalisation sur <a>Mapicoin</a>",
         "success",
         {html: true, confirmButtonText: "C'est parti !", timer: 4000}
     );
