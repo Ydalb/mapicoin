@@ -113,6 +113,7 @@ function add_ads_markers(map, datas) {
             this.setIcon(iconActive);
             currentActiveMarker = this;
             panel_highlight(this.id);
+            $('body').removeClass('toggle');
         });
 
         marker.addListener('visible_changed', function() {

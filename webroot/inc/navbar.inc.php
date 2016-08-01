@@ -25,7 +25,7 @@
           <i class="hide-desktop glyphicon glyphicon-search" aria-hidden="true"></i>
       </button>
     </form>
-    <div class="navbar-extra pull-right">
+    <div class="navbar-extra pull-right hide-mobile">
       Ma localisation :
       <span
         id="geolocalize-info"
