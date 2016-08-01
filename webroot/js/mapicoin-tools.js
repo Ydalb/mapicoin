@@ -21,6 +21,27 @@ function get_cookie(cname) {
 }
 
 
+/**
+ * Affiche une modal trop stylaÿ
+ */
+function custom_alert(title, message, type, opts, callback) {
+    var basicOpts = {
+        title: title,
+        text: message,
+        type: type,
+        html: false,
+        confirmButtonColor:"#f56b2a",
+        confirmButtonText: "J'ai compris !",
+        cancelButtonText: "Annuler"
+    }
+    opts = $.extend({}, basicOpts, opts);
+    if (callback) {
+        swal(opts, callback);
+    } else {
+        swal(opts);
+    }
+}
+
 
 /**
  * Change l'URL du navigateur

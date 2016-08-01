@@ -1,55 +1,3 @@
-function handle_demo_links() {
-    $('body').on('click', '.demo-link', function(event) {
-        event.preventDefault();
-        // Fill input
-        $('.input-url').val($(this).text());
-        // Close modal (found nothin' better than simulate a click...)
-        $('.sa-confirm-button-container').find('button').click()
-        // Submit
-        $('#form-search').submit();
-    })
-}
-
-function handle_alert_boxes() {
-    $('body').on('click', '.filter-item.filter-distance.disabled', function() {
-        custom_alert(
-            "Fonctionnalité désactivée ! ",
-            "Cette fonctionnalité est désactivée car il semblerait que " +
-                "vous n'avez pas activé la géolocalisation.<br />" +
-                "Nous avons besoin de l'approbation de votre navigateur afin de déterminer votre position. ",
-            "warning",
-            {
-                html:true,
-                showCancelButton: true,
-                closeOnConfirm: false,
-                showLoaderOnConfirm: true,
-                confirmButtonText: "Déterminer ma position"
-            },
-            function () {
-                get_user_location();
-            }
-        );
-    })
-}
-
-function custom_alert(title, message, type, opts, callback) {
-    var basicOpts = {
-        title: title,
-        text: message,
-        type: type,
-        html: false,
-        confirmButtonColor:"#3472ff",
-        confirmButtonText: "J'ai compris !",
-        cancelButtonText: "Annuler"
-    }
-    opts = $.extend({}, basicOpts, opts);
-    if (callback) {
-        swal(opts, callback);
-    } else {
-        swal(opts);
-    }
-}
-
 $(document).ready(function() {
 
     // ===
@@ -370,7 +318,45 @@ function init_search_filters() {
     });
 }
 
+/**
+ * Gère les événements sur les liens de démonstration
+ */
+function handle_demo_links() {
+    $('body').on('click', '.demo-link', function(event) {
+        event.preventDefault();
+        // Fill input
+        $('.input-url').val($(this).text());
+        // Close modal (found nothin' better than simulate a click...)
+        $('.sa-confirm-button-container').find('button').click()
+        // Submit
+        $('#form-search').submit();
+    })
+}
 
+/**
+ * Gère les événements pour pop-up des modals diverses
+ */
+function handle_alert_boxes() {
+    $('body').on('click', '.filter-item.filter-distance.disabled', function() {
+        custom_alert(
+            "Fonctionnalité désactivée ! ",
+            "Cette fonctionnalité est désactivée car il semblerait que " +
+                "vous n'avez pas activé la géolocalisation.<br />" +
+                "Nous avons besoin de l'approbation de votre navigateur afin de déterminer votre position. ",
+            "warning",
+            {
+                html:true,
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+                confirmButtonText: "Déterminer ma position"
+            },
+            function () {
+                get_user_location();
+            }
+        );
+    })
+}
 
 
 
