@@ -10,11 +10,13 @@
     <link href="/css/mapicoin.css?<?= VERSION ?>" rel="stylesheet" />
     <link href="/css/mapicoin-<?= $_SITE ?>.css?<?= VERSION ?>" rel="stylesheet" />
     <link href="/css/mapicoin-mobile.css?<?= VERSION ?>" rel="stylesheet" />
+    <link href="/css/sweetalert.css" rel="stylesheet" />
 
 <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>-->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/cookies-cnil-banner.min.js"></script>
+    <script src="/js/sweetalert.min.js"></script>
 
     <script>
         var centerMap = {lat: <?= $center[0] ?? 0 ?>, lng: <?= $center[1] ?? 0 ?>};

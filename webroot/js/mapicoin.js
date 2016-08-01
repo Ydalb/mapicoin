@@ -1,3 +1,55 @@
+function handle_demo_links() {
+    $('body').on('click', '.demo-link', function(event) {
+        event.preventDefault();
+        // Fill input
+        $('.input-url').val($(this).text());
+        // Close modal (found nothin' better than simulate a click...)
+        $('.sa-confirm-button-container').find('button').click()
+        // Submit
+        $('#form-search').submit();
+    })
+}
+
+function handle_alert_boxes() {
+    $('body').on('click', '.filter-item.filter-distance.disabled', function() {
+        custom_alert(
+            "Fonctionnalité désactivée ! ",
+            "Cette fonctionnalité est désactivée car il semblerait que " +
+                "vous n'avez pas activé la géolocalisation.<br />" +
+                "Nous avons besoin de l'approbation de votre navigateur afin de déterminer votre position. ",
+            "warning",
+            {
+                html:true,
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+                confirmButtonText: "Déterminer ma position"
+            },
+            function () {
+                get_user_location();
+            }
+        );
+    })
+}
+
+function custom_alert(title, message, type, opts, callback) {
+    var basicOpts = {
+        title: title,
+        text: message,
+        type: type,
+        html: false,
+        confirmButtonColor:"#3472ff",
+        confirmButtonText: "J'ai compris !",
+        cancelButtonText: "Annuler"
+    }
+    opts = $.extend({}, basicOpts, opts);
+    if (callback) {
+        swal(opts, callback);
+    } else {
+        swal(opts);
+    }
+}
+
 $(document).ready(function() {
 
     // ===
@@ -20,6 +72,16 @@ $(document).ready(function() {
     $('.input-url:eq(1)').focus();
 
     // ===
+    // Handle demo links
+    // ===
+    handle_demo_links();
+
+    // ===
+    // Handle alert box
+    // ===
+    handle_alert_boxes();
+
+    // ===
     // Form submit
     // ===
     $('.form-search').each(function() {
@@ -31,7 +93,16 @@ $(document).ready(function() {
         // Update all input-url
         if (!url) {
             $form.find('.input-url').focus();
-            alert("Veuillez renseigner une URL de recherche leboncoin.fr");
+            custom_alert(
+                "Oops !",
+                "Veuillez renseigner le champ de recherche :<br /><br />" +
+                    "<ul>" +
+                        "<li>- soit par une adresse de recherche (Ex : <a class='demo-link'>https://www.leboncoin.fr/animaux/offres/pays_de_la_loire/?th=1&q=Cheval&it=1</a>)</li>" +
+                        "<li>- soit par une recherche classique (Ex : <a class='demo-link'>Cheval</a>)</li>" +
+                    "</ul>",
+                "warning",
+                {html: true}
+            );
             return false;
         }
         $input.blur();
@@ -50,18 +121,20 @@ $(document).ready(function() {
             success: function(data) {
                 if (!data.status) {
                     lock_search(false);
-                    alert(data.message);
-                    $input.focus();
+                    custom_alert("Oops !", data.message, "error");
                     return false;
                 }
                 if (!data.datas || data.datas.length == 0) {
                     lock_search(false);
-                    alert(
-                        "Aucune annonce trouvée pour cette recherche." +
-                        "\n"+
-                        "Si besoin, rendez-vous sur la page 'Comment ça marche' pour plus d'explications."
+                    custom_alert(
+                        "Aucune annonce trouvée :-(",
+                        "Votre recherche n'a retourné aucun résultat.<br />" +
+                            "Si besoin, rendez-vous sur la page <a href='/comment-ca-marche.php'>Comment ça marche</a> " +
+                            "pour plus d'explications " +
+                            "sur le fonctionnement de <a>Mapicoin</a>",
+                        "warning",
+                        {html: true}
                     );
-                    $input.focus();
                     return false;
                 }
 
@@ -101,11 +174,16 @@ $(document).ready(function() {
             },
             error: function() {
                 lock_search(false);
-                alert(
-                    "Une erreur est survenue. Veuillez ré-essayer." +
-                    "\n"+
-                    "Si besoin, rendez-vous sur la page 'Comment ça marche' pour plus d'explications.");
-                $input.focus();
+                custom_alert(
+                    "Oops !",
+                    "Une erreur inconnue sur <a>Mapicoin</a> est survenue.<br />" +
+                        "<br />" +
+                        "Si le problème persiste, n'hésitez pas à contacter notre équipe via " +
+                        "<a target='_blank' href='https://www.facebook.com/mapicoin/'>Facebook</a> ou " +
+                        "<a target='_blank' href='https://twitter.com/mapicoin'>Twitter</a>.",
+                    "error",
+                    {html: true}
+                );
             }
         })
 
