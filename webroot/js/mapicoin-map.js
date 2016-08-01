@@ -1,4 +1,4 @@
-var map, GeoMarker, GeoCircle, currentActiveMarker;
+var map, geocoder, GeoMarker, GeoCircle, currentActiveMarker;
 var filterDistance    = 0
 var filterTime        = 0;
 var markers           = [];
@@ -62,7 +62,6 @@ function initialize_map() {
 
     // This is needed to set the zoom after fitbounds,
     google.maps.event.addListener(map, 'zoom_changed', function() {
-        console.log('zoom_changed='+map.initialZoom);
         zoomChangeBoundsListener =
             google.maps.event.addListener(map, 'bounds_changed', function(event) {
                 if (this.getZoom() > 11/* && this.initialZoom == true*/) {
@@ -75,13 +74,9 @@ function initialize_map() {
     });
     map.initialZoom = true;
 
-    // Localize client
-    // GeoMarker = new GeolocationMarker(map);
-    // GeoMarker.setMarkerOptions({draggable: true});
-    // google.maps.event.addListenerOnce(GeoMarker, 'position_changed', function() {
-    //     is_geolocated = true;
-    // });
-    get_user_location();
+    // In order to localize client
+    geocoder = new google.maps.Geocoder();
+    // get_user_location();
 
     // For distance
     directionsDisplay.setMap(map);
@@ -118,6 +113,10 @@ function add_ads_markers(map, datas) {
             this.setIcon(iconActive);
             currentActiveMarker = this;
             panel_highlight(this.id);
+            // Open sidebar if mobile
+            if (is_mobile()) {
+                $('body').removeClass('toggle');
+            }
         });
 
         marker.addListener('visible_changed', function() {
@@ -354,38 +353,48 @@ function set_user_day(nb_day) {
  */
 function set_user_location(position) {
     // console.log('function set_user_location(position) {');
-    // enable localization filter
-    $('.filter-item.filter-distance')
-        .removeClass('disabled')
-        .removeAttr('title')
-        .find('select')
-            .removeAttr('disabled');
+    get_address_from_latlng(position.coords.latitude, position.coords.longitude);
+    // On a déjà été géoloc au moins une fois avant, on update simplement que la position
+    if (GeoMarker) {
+        GeoMarker.setPosition(position.coords);
+    } else {
+        // enable localization filter
+        $('.filter-item.filter-distance')
+            .removeClass('disabled')
+            .removeAttr('title')
+            .find('select')
+                .removeAttr('disabled');
 
-    is_geolocated  = true;
-    GeoMarker      = null;
-    var markerOpts = {
-        'map':       map,
-        'cursor':    'pointer',
-        'draggable': true,
-        'flat':      true,
-        'icon':      iconGps,
-        'position':  new google.maps.LatLng(
-            position.coords.latitude,
-            position.coords.longitude
-        ),
-        'title':  "Votre position actuelle. Déplacez-moi si besoin !",
-        'zIndex': 2
-    };
-    GeoMarker = new google.maps.Marker(markerOpts);
-    GeoMarker.addListener('drag',function(event) {
-        draw_circle_around_user_location();
-        // on-the-fly update is too slow !
-        // update_marker_from_filters();
-    });
-    GeoMarker.addListener('dragend',function(event) {
-        calc_distance_to_last_active_marker();
-        update_marker_from_filters();
-    });
+        is_geolocated  = true;
+        GeoMarker      = null;
+        var markerOpts = {
+            'map':       map,
+            'cursor':    'pointer',
+            'draggable': true,
+            'flat':      true,
+            'icon':      iconGps,
+            'position':  new google.maps.LatLng(
+                position.coords.latitude,
+                position.coords.longitude
+            ),
+            'title':  "Votre position actuelle. Déplacez-moi si besoin !",
+            'zIndex': 2
+        };
+        GeoMarker = new google.maps.Marker(markerOpts);
+        GeoMarker.addListener('drag',function(event) {
+            draw_circle_around_user_location();
+            // on-the-fly update is too slow !
+            // update_marker_from_filters();
+        });
+        GeoMarker.addListener('dragend',function(event) {
+            calc_distance_to_last_active_marker();
+            update_marker_from_filters();
+            get_address_from_latlng(
+                GeoMarker.getPosition().lat(),
+                GeoMarker.getPosition().lng()
+            );
+        });
+    }
     // Draw blue circle
     draw_circle_around_user_location();
     // Update markers
@@ -398,14 +407,25 @@ function set_user_location(position) {
  * Récupération de la position via le navigateur
  */
 function get_user_location() {
-    // console.log('function get_user_location() {');
-    var lat = null,
-        lng = null;
+    loader_user_location(true);
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(set_user_location);
     } else {
       // Pas de support, proposer une alternative ?
       alert("Votre navigateur ne supporte pas la géolocalisation. À la place, veuillez utiliser le formulaire prévu à cet effet.");
+    }
+}
+
+function loader_user_location(status) {
+    if (status) {
+        $('#geolocalize-info').html($('#geolocalize-info').data('loader'));
+        if (is_mobile()) {
+            $('#geolocalize-me').html($('#geolocalize-me').data('loader'));
+        }
+    } else {
+        if (is_mobile()) {
+            $('#geolocalize-me').html($('#geolocalize-me').data('default'));
+        }
     }
 }
 
@@ -432,3 +452,23 @@ function get_user_location() {
 //     map.setCenter(newCenter);
 
 // }
+
+function get_address_from_latlng(lat, lng) {
+    // console.log(coords);
+    var latlng = new google.maps.LatLng(lat, lng);
+    $element = $('#geolocalize-info');
+    loader_user_location(true);
+    // AJAX call
+    geocoder.geocode({'latLng': latlng}, function(results, status) {
+        loader_user_location(false);
+        if (status != google.maps.GeocoderStatus.OK) {
+            $element.html($element.data('default'));
+            return false;
+        }
+        if (!results[1]) {
+            $element.html($element.data('default'));
+            return false;
+        }
+        $element.text(results[1].formatted_address);
+    });
+}

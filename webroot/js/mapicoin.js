@@ -69,14 +69,16 @@ $(document).ready(function() {
     $('.form-search').each(function() {
     $(this).on('submit', function(event) {
         event.preventDefault();
-        var $form = $(this);
-        var url = $form.find('.input-url').val();
+        var $form  = $(this);
+        var $input = $form.find('.input-url');
+        var url    = $input.val();
         // Update all input-url
         if (!url) {
             $form.find('.input-url').focus();
             alert("Veuillez renseigner une URL de recherche leboncoin.fr");
             return false;
         }
+        $input.blur();
         $('.input-url').val(url);
 
         lock_search(true);
@@ -93,6 +95,7 @@ $(document).ready(function() {
                 if (!data.status) {
                     lock_search(false);
                     alert(data.message);
+                    $input.focus();
                     return false;
                 }
                 if (!data.datas || data.datas.length == 0) {
@@ -102,6 +105,7 @@ $(document).ready(function() {
                         "\n"+
                         "Si besoin, rendez-vous sur la page 'Comment ça marche' pour plus d'explications."
                     );
+                    $input.focus();
                     return false;
                 }
 
@@ -145,6 +149,7 @@ $(document).ready(function() {
                     "Une erreur est survenue. Veuillez ré-essayer." +
                     "\n"+
                     "Si besoin, rendez-vous sur la page 'Comment ça marche' pour plus d'explications.");
+                $input.focus();
             }
         })
 
@@ -458,4 +463,23 @@ function parse_query_strings(val) {
     return result;
 }
 
+
+/**
+ * Detect mobile use
+ */
+function is_mobile() {
+ if( navigator.userAgent.match(/Android/i)
+ || navigator.userAgent.match(/webOS/i)
+ || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
+ || navigator.userAgent.match(/iPod/i)
+ || navigator.userAgent.match(/BlackBerry/i)
+ || navigator.userAgent.match(/Windows Phone/i)
+ ){
+    return true;
+  }
+ else {
+    return false;
+  }
+}
 
