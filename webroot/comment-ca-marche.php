@@ -26,6 +26,8 @@
 
     <body class="page">
 
+        <?php include 'inc/cookies-cnil-banner.inc.php' ?>
+
         <div class="page-container">
 
             <div class="text-center">

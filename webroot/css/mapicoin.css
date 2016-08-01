@@ -509,7 +509,6 @@ body.in-search.toggle #sidebar-wrapper {
 }
 /* INFOBOX */
 .trajet {
-    /*width:170px;*/
     line-height:15px;
 }
 .trajet p {
@@ -517,4 +516,11 @@ body.in-search.toggle #sidebar-wrapper {
 }
 .trajet span {
     font-weight:bold;
+}
+#cookies-cnil-banner {
+    background-color: #ffffe9;
+    text-align: center;
+    padding: 5px;
+    border-bottom: 1px solid #d4d4d4;
+    line-height:21px;
 }
