@@ -1,7 +1,7 @@
 @media only screen
 and (min-device-width : 1100px) {
     .hide-desktop {
-        display:none;
+        display:none !important;
     }
 }
 @media only screen
@@ -19,7 +19,7 @@ and (max-device-width : 1100px) {
         right:0px;
         top:9px;
     }
-    .hide-tablet{ display:none; }
+    .hide-tablet{ display:none !important; }
 }
 @media only screen
 and (max-device-width : 900px) {
@@ -27,7 +27,7 @@ and (max-device-width : 900px) {
         background:#ffe;
     }
     .hide-mobile {
-        display:none;
+        display:none !important;
     }
     #navbar #form-search {
         width:calc(100vw - 135px);

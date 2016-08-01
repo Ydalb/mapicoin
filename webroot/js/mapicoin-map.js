@@ -74,9 +74,14 @@ function initialize_map() {
     });
     map.initialZoom = true;
 
+    //map loaded fully ?
+    google.maps.event.addListenerOnce(map, 'idle', function(){
+        // Retrieve user address from cookie ?
+        retrieve_user_address_from_cookies();
+    });
+
     // In order to localize client
     geocoder = new google.maps.Geocoder();
-    // get_user_location();
 
     // For distance
     directionsDisplay.setMap(map);
@@ -352,11 +357,20 @@ function set_user_day(nb_day) {
  * Défini la position de l'utilisateur via un markeur
  */
 function set_user_location(position) {
-    // console.log('function set_user_location(position) {');
-    get_address_from_latlng(position.coords.latitude, position.coords.longitude);
+    var lat = position.coords.latitude;
+    var lng = position.coords.longitude;
+    // Remember position
+    set_cookie('user_lat', lat, 30);
+    set_cookie('user_lng', lng, 30);
+    create_user_marker(lat, lng);
+    return get_address_from_latlng(lat, lng);
+}
+
+function create_user_marker(lat, lng) {
     // On a déjà été géoloc au moins une fois avant, on update simplement que la position
+    var pos = new google.maps.LatLng(lat, lng);
     if (GeoMarker) {
-        GeoMarker.setPosition(position.coords);
+        GeoMarker.setPosition(pos);
     } else {
         // enable localization filter
         $('.filter-item.filter-distance')
@@ -366,17 +380,13 @@ function set_user_location(position) {
                 .removeAttr('disabled');
 
         is_geolocated  = true;
-        GeoMarker      = null;
         var markerOpts = {
             'map':       map,
             'cursor':    'pointer',
             'draggable': true,
             'flat':      true,
             'icon':      iconGps,
-            'position':  new google.maps.LatLng(
-                position.coords.latitude,
-                position.coords.longitude
-            ),
+            'position':  pos,
             'title':  "Votre position actuelle. Déplacez-moi si besoin !",
             'zIndex': 2
         };
@@ -389,6 +399,9 @@ function set_user_location(position) {
         GeoMarker.addListener('dragend',function(event) {
             calc_distance_to_last_active_marker();
             update_marker_from_filters();
+            // Remember position
+            set_cookie('user_lat', GeoMarker.getPosition().lat(), 30);
+            set_cookie('user_lng', GeoMarker.getPosition().lng(), 30);
             get_address_from_latlng(
                 GeoMarker.getPosition().lat(),
                 GeoMarker.getPosition().lng()
@@ -402,6 +415,7 @@ function set_user_location(position) {
     // Fit bounds
     map_fit_bounds();
 }
+
 
 /**
  * Récupération de la position via le navigateur
@@ -453,6 +467,9 @@ function loader_user_location(status) {
 
 // }
 
+/**
+ * Geocode des coordonnées en une adresse à partir de l'API Google
+ */
 function get_address_from_latlng(lat, lng) {
     // console.log(coords);
     var latlng = new google.maps.LatLng(lat, lng);
@@ -469,6 +486,28 @@ function get_address_from_latlng(lat, lng) {
             $element.html($element.data('default'));
             return false;
         }
-        $element.text(results[1].formatted_address);
+        // Remember position
+        set_cookie('user_address', results[1].formatted_address, 30);
+        set_user_address(results[1].formatted_address);
     });
+}
+
+/**
+ * Affiche l'adresse de l'utilisateur
+ * address : Paris, France
+ */
+function set_user_address(address) {
+    var text = address.split(',');
+    $('#geolocalize-info').text(text[0]);
+    $('#geolocalize-info').attr('title', address);
+}
+
+function retrieve_user_address_from_cookies() {
+    if (!get_cookie('user_address') || !get_cookie('user_lat') || !get_cookie('user_lng')) {
+        return false;
+    }
+    // Affichage de l'adresse
+    set_user_address(get_cookie('user_address'));
+    // Création / MAJ du marqueur
+    create_user_marker(get_cookie('user_lat'), get_cookie('user_lng'));
 }

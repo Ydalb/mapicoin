@@ -10,7 +10,6 @@
         <title><?= $title ?> - Mapicoin</title>
         <meta name="description" content="<?= $description ?>" />
 
-
         <!-- Open Graph -->
         <meta property="og:title" content="<?= $title ?? 'Mapicoin' ?>" />
         <meta property="og:description" content="<?= $description ?>" />

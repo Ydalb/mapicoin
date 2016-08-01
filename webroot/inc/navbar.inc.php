@@ -29,15 +29,13 @@
       </button>
     </form>
     <div class="navbar-extra pull-right">
-      <div class="hide-tablet dib">
-        Ma localisation :
-        <span
-          id="geolocalize-info"
-          data-default="<i>inconnue</i>"
-          data-loader="<i class='glyphicon glyphicon-refresh glyphicon-spin'></i>">
-          inconnue
-        </span>
-      </div>
+      <span
+        id="geolocalize-info"
+        class="hide-tablet"
+        data-default="<i>inconnue</i>"
+        data-loader="<i class='glyphicon glyphicon-refresh glyphicon-spin'></i>">
+        Localisation inconnue
+      </span>
       <button
         id="geolocalize-me"
         class="btn btn-default"
