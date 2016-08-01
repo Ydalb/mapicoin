@@ -363,7 +363,16 @@ function set_user_location(position) {
     set_cookie('user_lat', lat, 30);
     set_cookie('user_lng', lng, 30);
     create_user_marker(lat, lng);
-    return get_address_from_latlng(lat, lng);
+    var address = get_address_from_latlng(lat, lng);
+
+    custom_alert(
+        "Position déterminée ! :-)",
+        "Nous vous avons réussi à détecter votre position.<br />"+
+            "<br />" +
+            "Vous pouvez désormais utiliser les fonctionnalités lié à la géolocalisation de Mapicoin",
+        "success",
+        {html: true, confirmButtonText: "C'est parti !", timer: 4000}
+    );
 }
 
 function create_user_marker(lat, lng) {
@@ -425,8 +434,12 @@ function get_user_location() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(set_user_location);
     } else {
-      // Pas de support, proposer une alternative ?
-      alert("Votre navigateur ne supporte pas la géolocalisation. À la place, veuillez utiliser le formulaire prévu à cet effet.");
+        // Pas de support, proposer une alternative ?
+        custom_alert(
+            "Position non déterminée :-(",
+            "Votre navigateur ne semble pas supporter la géolocalisation automatique.",
+            "error"
+        );
     }
 }
 

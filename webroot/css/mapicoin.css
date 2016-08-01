@@ -534,3 +534,11 @@ body.in-search.toggle #sidebar-wrapper {
     border-bottom: 1px solid #d4d4d4;
     line-height:21px;
 }
+/* MODAL SWAL */
+.sweet-alert a {
+    color:#f56b2a;
+    text-decoration: none;
+    cursor: pointer;
+}
+.sweet-alert a:hover {text-decoration: underline;}
+.sweet-alert ul {list-style: none;}
