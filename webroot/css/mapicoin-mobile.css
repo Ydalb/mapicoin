@@ -116,6 +116,10 @@ and (max-device-width : 667px) {
     .page-container li.img {
         display:none;
     }
+    /* MODAL */
+    .sweet-alert .sa-icon {
+        display:none !important;
+    }
 }
 
 @media only screen

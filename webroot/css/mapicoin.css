@@ -87,14 +87,16 @@ body {
 .btn-warning {
     color: #fff;
     text-shadow: 0 1px rgba(0,0,0,.1);
-    background-image: -webkit-linear-gradient(top,#f5a42a 0,#f56b2a 100%);
+    /*background-image: -webkit-linear-gradient(top,#f5a42a 0,#f56b2a 100%);
     background-image: -o-linear-gradient(top,#f5a42a 0,#f56b2a 100%);
     background-image: -webkit-gradient(linear,left top,left bottom,from(#f5a42a),to(#f56b2a));
     background-image: linear-gradient(to bottom,#f5a42a 0,#f56b2a 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffbb450', endColorstr='#fffaa937', GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     background-repeat: repeat-x;
-    border: 1px solid #f5a42a;
+    border: 1px solid #f5a42a;*/
+    background:#f56b2a;
+    border:none;
 }
 .btn-default {
     color: #333;

@@ -64,9 +64,9 @@ function initialize_map() {
     google.maps.event.addListener(map, 'zoom_changed', function() {
         zoomChangeBoundsListener =
             google.maps.event.addListener(map, 'bounds_changed', function(event) {
-                if (this.getZoom() > 11/* && this.initialZoom == true*/) {
+                if (this.getZoom() > 13/* && this.initialZoom == true*/) {
                     // Change max/min zoom here
-                    this.setZoom(11);
+                    this.setZoom(13);
                     this.initialZoom = false;
                 }
             // google.maps.event.removeListener(zoomChangeBoundsListener);
@@ -172,9 +172,9 @@ function map_fit_bounds(m) {
     map.fitBounds(bounds);
     map.setZoom(map.getZoom()-1);
 
-    // if (!$('body').hasClass('toggle')) {
-    //     return offsetCenter(map.getCenter(), 200, 0);
-    // }
+    if (!$('body').hasClass('toggle')) {
+        return offsetCenter(map.getCenter(), 200, 0);
+    }
 }
 
 
@@ -363,7 +363,7 @@ function set_user_location(position) {
     set_cookie('user_lat', lat, 30);
     set_cookie('user_lng', lng, 30);
     create_user_marker(lat, lng);
-    var address = get_address_from_latlng(lat, lng);
+    get_address_from_latlng(lat, lng);
 
     custom_alert(
         "Position déterminée ! :-)",
@@ -373,6 +373,25 @@ function set_user_location(position) {
         "success",
         {html: true, confirmButtonText: "C'est parti !", timer: 4000}
     );
+}
+
+/**
+ * Fonction appelée si l'utilisateur refuse la localisation
+ */
+function user_denied_location() {
+    // Pas de support, proposer une alternative ?
+    custom_alert(
+        "Position non déterminée :-(",
+        "Votre navigateur ne semble pas supporter la géolocalisation automatique " +
+            "ou vous avez refusé que l'on vous géolocalise.<br />" +
+            "<br />" +
+            "Nous avons cependant placé arbitrairement un marqueur de localisation au centre de la France, " +
+            "que vous pouvez déplacer afin de vous localiser manuellement si vous le souhaitez.",
+        "error",
+        {html: true}
+    );
+    create_user_marker(centerMap.lat, centerMap.lng);
+    get_address_from_latlng(centerMap.lat, centerMap.lng);
 }
 
 function create_user_marker(lat, lng) {
@@ -432,14 +451,9 @@ function create_user_marker(lat, lng) {
 function get_user_location() {
     loader_user_location(true);
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(set_user_location);
+        navigator.geolocation.getCurrentPosition(set_user_location, user_denied_location);
     } else {
-        // Pas de support, proposer une alternative ?
-        custom_alert(
-            "Position non déterminée :-(",
-            "Votre navigateur ne semble pas supporter la géolocalisation automatique.",
-            "error"
-        );
+        user_denied_location();
     }
 }
 
@@ -456,29 +470,29 @@ function loader_user_location(status) {
     }
 }
 
-// function offsetCenter(latlng, offsetx, offsety) {
+function offsetCenter(latlng, offsetx, offsety) {
 
-//     // latlng is the apparent centre-point
-//     // offsetx is the distance you want that point to move to the right, in pixels
-//     // offsety is the distance you want that point to move upwards, in pixels
-//     // offset can be negative
-//     // offsetx and offsety are both optional
+    // latlng is the apparent centre-point
+    // offsetx is the distance you want that point to move to the right, in pixels
+    // offsety is the distance you want that point to move upwards, in pixels
+    // offset can be negative
+    // offsetx and offsety are both optional
 
-//     var scale = Math.pow(2, map.getZoom());
+    var scale = Math.pow(2, map.getZoom());
 
-//     var worldCoordinateCenter = map.getProjection().fromLatLngToPoint(latlng);
-//     var pixelOffset = new google.maps.Point((offsetx/scale) || 0,(offsety/scale) ||0)
+    var worldCoordinateCenter = map.getProjection().fromLatLngToPoint(latlng);
+    var pixelOffset = new google.maps.Point((offsetx/scale) || 0,(offsety/scale) ||0)
 
-//     var worldCoordinateNewCenter = new google.maps.Point(
-//         worldCoordinateCenter.x - pixelOffset.x,
-//         worldCoordinateCenter.y + pixelOffset.y
-//     );
+    var worldCoordinateNewCenter = new google.maps.Point(
+        worldCoordinateCenter.x - pixelOffset.x,
+        worldCoordinateCenter.y + pixelOffset.y
+    );
 
-//     var newCenter = map.getProjection().fromPointToLatLng(worldCoordinateNewCenter);
+    var newCenter = map.getProjection().fromPointToLatLng(worldCoordinateNewCenter);
 
-//     map.setCenter(newCenter);
+    map.setCenter(newCenter);
 
-// }
+}
 
 /**
  * Geocode des coordonnées en une adresse à partir de l'API Google
