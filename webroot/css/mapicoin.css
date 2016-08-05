@@ -201,6 +201,12 @@ h3 {
     font-size:15px;
     margin:0 0 10px;
     color:#444;
+    font-weight:bold;
+}
+h4 {
+    font-weight:bold;
+    color:#888;
+    margin:0 0 5px;
 }
 
 /* HOMEPAGE */
