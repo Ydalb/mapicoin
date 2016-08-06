@@ -65,6 +65,12 @@ body {
     font-size: 16px;
     padding:0px 15px;
 }
+.ellipsis {
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
 .pull-right { float:right;}
 .pull-left { float:left;}
 .btn {
@@ -460,6 +466,7 @@ body.in-search.toggle #sidebar-wrapper {
 .media-heading a {
     text-decoration: underline;
     color:#3472ff;
+    font-weight: normal;
 }
 .media-left {
     position:relative;

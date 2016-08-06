@@ -26,6 +26,61 @@ function detect_ads_site() {
 }
 
 
+function stats_add_search($search) {
+    global $_MYSQLI, $_SITE;
+    /* Crée une requête préparée */
+    if (!($stmt = $_MYSQLI->prepare("
+        INSERT INTO `search` (id,site,search,count)
+            VALUES (?,?,?,1)
+        ON DUPLICATE KEY UPDATE
+            count = (count + 1)"
+        ))) {
+        return false;
+    }
+    /* Lecture des marqueurs */
+    $id = md5($search);
+    $stmt->bind_param(
+        "sss",
+        $id,
+        $_SITE,
+        $search
+    );
+    /* Exécution de la requête */
+    $stmt->execute();
+    /* Fermeture du traitement */
+    $stmt->close();
+    return true;
+}
+
+
+function stats_get_searches() {
+    global $_MYSQLI, $_SITE;
+    /* Crée une requête préparée */
+    if (!($stmt = $_MYSQLI->prepare("
+        SELECT search,count,updated
+        FROM search
+        WHERE site = ?
+        ORDER BY count DESC"))) {
+        return false;
+    }
+    $stmt->bind_param("s", $_SITE);
+    $stmt->execute();
+    $return = [];
+    $stmt->bind_result($search,$count,$updated);
+    /* Lecture des valeurs */
+    while ($stmt->fetch()) {
+        $return[] = [
+            'search'  => $search,
+            'count'   => $count,
+            'updated' => $updated,
+        ];
+    }
+    /* Fermeture du traitement */
+    $stmt->close();
+
+    return $return;
+}
+
 
 function set_location_in_cache($location = '', $coords = array()) {
     global $_MYSQLI, $_SITE;
@@ -234,6 +289,38 @@ function replace_get_parameter($url, $parameter, $value) {
         $pathInfo['path'],
         $newQueryStr
     );
+}
+
+function time_elapsed_string($ptime)
+{
+    $etime = time() - $ptime;
+
+    if ($etime < 1) {
+        return "À l'instant";
+    }
+
+    $a = array( 365 * 24 * 60 * 60  =>  'année',
+                 30 * 24 * 60 * 60  =>  'mois',
+                      24 * 60 * 60  =>  'jour',
+                           60 * 60  =>  'heure',
+                                60  =>  'minute',
+                                 1  =>  'seconde'
+                );
+    $a_plural = array( 'année'   => 'années',
+                       'mois'  => 'months',
+                       'jour'    => 'jours',
+                       'heure'   => 'heures',
+                       'minute' => 'minutes',
+                       'seconde' => 'secondes'
+                );
+
+    foreach ($a as $secs => $str) {
+        $d = $etime / $secs;
+        if ($d >= 1) {
+            $r = round($d);
+            return "Il y a ".$r . ' ' . ($r > 1 ? $a_plural[$str] : $str);
+        }
+    }
 }
 
 

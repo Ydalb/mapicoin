@@ -61,6 +61,11 @@ if (!$crawler) {
     exit(json_encode($return));
 }
 
+// ===
+// Records search (for stats)
+// ===
+stats_add_search($_URL);
+
 
 
 // ===

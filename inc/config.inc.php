@@ -24,6 +24,7 @@ define('URL_EXTENSION_FIREFOX', 'https://addons.mozilla.org/fr/firefox/addon/map
 $_SITES = [
     SITE_LEBONCOIN => [
         'country'          => 'France',
+        'timezone'         => 'Europe/Paris',
         'map-center'       => [47.351, 3.392],
         'site-title'       => "Mapicoin, votre recherche leboncoin.fr sur une carte",
         'site-description' => "Visualiser les annonces d'une recherche leboncoin sur une carte ? C'est possible ! Grâce à Mapicoin, entrez votre lien de recherche et on s'occupe du reste !",
@@ -37,6 +38,7 @@ $_SITES = [
     ],
     SITE_KIJIJI => [
         'country'          => 'Canada',
+        'timezone'         => 'Canada/Central',
         'map-center'       => [62.4, -96.80972222222222],
         'site-title'       => "Ads of Kijiji on a map | Mapicoin",
         'site-description' => "View listings of Kijiji search on a map? It's possible ! With Mapicoin enter your search link and we will do the rest!",
@@ -86,3 +88,6 @@ $_MYSQLI->set_charset($_CONFIG->mysql->charset);
 require_once 'functions.inc.php';
 
 $_SITE = detect_ads_site();
+
+// Timezone
+date_default_timezone_set($_SITES[$_SITE]['timezone']);
