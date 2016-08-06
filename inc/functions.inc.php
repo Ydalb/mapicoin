@@ -60,7 +60,7 @@ function stats_get_searches() {
         SELECT search,count,updated
         FROM search
         WHERE site = ?
-        ORDER BY count DESC"))) {
+        ORDER BY updated DESC"))) {
         return false;
     }
     $stmt->bind_param("s", $_SITE);
