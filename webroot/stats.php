@@ -58,7 +58,7 @@
             <?php $link = str_replace(['?','&'], ['%3F','%26'], $search['search']); ?>
             <tr>
                 <td>
-                    <a href="https://mapicoin.fr/?u=<?= $link ?>"><?= $search['search'] ?></a>
+                    <a href="https://mapicoin.fr/?u=<?= htmlentities($link, ENT_QUOTES, "UTF-8"); ?>"><?= htmlentities($search['search'], ENT_QUOTES, "UTF-8") ?></a>
                 </td>
                 <td><?= $search['count'] ?></td>
                 <td><?= time_elapsed_string(strtotime($search['updated'])) ?></td>
