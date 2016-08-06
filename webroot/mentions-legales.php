@@ -141,14 +141,7 @@ Tél : + 33 (0) 899 173 788</p>
 
             </div><!-- /.page-body -->
 
-            <div class="page-footer">
-                © <?php echo date('Y'); ?><span class="hidden-xs"> - Mapicoin est un site indépendant du site Leboncoin.fr</span>
-                <div class="right">
-                    <a href="https://www.facebook.com/mapicoin/">Facebook</a>
-                    |
-                    <a href="https://twitter.com/mapicoin">@Twitter</a>
-                </div>
-            </div>
+        <?php include 'inc/page-footer.inc.php' ?>
 
         </div><!-- /.page-container -->
 
