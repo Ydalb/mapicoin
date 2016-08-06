@@ -61,8 +61,6 @@ Tél : + 33 (0) 899 173 788</p>
 
     <p>Un cookie (ou témoin de connexion) est un fichier texte susceptible d’être enregistré, sous réserve de vos choix, dans un espace dédié du disque dur de votre terminal (ordinateur, tablette …) à l’occasion de la consultation d’un service en ligne grâce à votre logiciel de navigation.</p>
     <p>Il est transmis par le serveur d’un site internet à votre navigateur. A chaque cookie est attribué un identifiant anonyme. Le fichier cookie permet à son émetteur d’identifier le terminal dans lequel il est enregistré pendant la durée de validité ou d’enregistrement du cookie concerné. Un cookie ne permet pas de remonter à une personne physique.</p>
-    <p>Lorsque vous consultez les sites jeanviet.info et blogbuster.fr, nous pouvons être amenés à installer, sous réserve de votre choix, différents cookies et notamment des cookies publicitaires.</p>
-
  
 
     <h3>Quels types de cookies sont déposés par le site Web ?</h3>
@@ -133,7 +131,7 @@ Tél : + 33 (0) 899 173 788</p>
 
     <h4>Les cookies de partage des réseaux sociaux</h4>
 
-    <p>Sur certaines pages de <a href="https://mapicoin.fr">mapicoin.fr</a> figurent des boutons ou modules de réseaux sociaux tiers qui vous permettent d’exploiter les fonctionnalités de ces réseaux et en particulier de partager des contenus présents sur jeanviet.info et blogbuster.fr avec d’autres personnes.</p>
+    <p>Sur certaines pages de <a href="https://mapicoin.fr">mapicoin.fr</a> figurent des boutons ou modules de réseaux sociaux tiers qui vous permettent d’exploiter les fonctionnalités de ces réseaux et en particulier de partager des contenus présents sur <a href="https://mapicoin.fr">mapicoin.fr</a> avec d’autres personnes.</p>
     <p>Lorsque vous vous rendez sur une page internet sur laquelle se trouve un de ces boutons ou modules, votre navigateur peut envoyer des informations au réseau social qui peut alors associer cette visualisation à votre profil.</p>
 
     <p>Des cookies des réseaux sociaux, dont nous n’avons pas la maîtrise, peuvent être alors être déposés dans votre navigateur par ces réseaux. Nous vous invitons à consulter les politiques de confidentialité propres à chacun de ces sites de réseaux sociaux, afin de prendre connaissance des finalités d’utilisation des informations de navigation que peuvent recueillir les réseaux sociaux grâce à ces boutons et modules.</p>
