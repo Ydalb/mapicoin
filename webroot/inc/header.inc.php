@@ -15,7 +15,6 @@
 <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>-->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/cookies-cnil-banner.min.js"></script>
     <script src="/js/sweetalert.min.js"></script>
 
     <script>

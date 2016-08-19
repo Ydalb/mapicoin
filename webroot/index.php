@@ -31,8 +31,6 @@
     </head>
     <body>
 
-        <?php include 'inc/cookies-cnil-banner.inc.php' ?>
-
         <?php include 'inc/navbar.inc.php' ?>
 
         <?php include 'inc/left-panel.inc.php' ?>
