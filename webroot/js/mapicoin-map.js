@@ -383,10 +383,7 @@ function user_denied_location() {
     custom_alert(
         "Position non déterminée :-(",
         "Votre navigateur ne semble pas supporter la géolocalisation automatique " +
-            "ou vous avez refusé que l'on vous géolocalise.<br />" +
-            "<br />" +
-            "Nous avons cependant placé arbitrairement un marqueur de localisation au centre de la France, " +
-            "que vous pouvez déplacer afin de vous localiser manuellement si vous le souhaitez.",
+            "ou vous avez refusé que l'on vous géolocalise.",
         "error",
         {html: true}
     );
