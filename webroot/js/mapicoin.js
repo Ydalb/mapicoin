@@ -86,6 +86,9 @@ $(document).ready(function() {
                     return false;
                 }
 
+                // Display legend
+                $('#legend').show();
+
                 // Remove previous markers
                 remove_markers();
 
@@ -94,16 +97,16 @@ $(document).ready(function() {
                 update_browser_url({u: tmp}, false);
 
                 // Group ads by lat/lng
-                var datas = regroup_ads(data.datas);
+                // var datas = regroup_ads(data.datas);
 
                 // Toggle panel
                 panel_toggle(true);
 
                 // Update panel + Bind
-                panel_update(data, datas);
+                panel_update(data);
 
                 // Create and add markers to the map + bind
-                add_ads_markers(map, datas);
+                add_ads_markers(map, data.datas);
 
                 // Fit bounds
                 map_fit_bounds();
@@ -147,7 +150,6 @@ $(document).ready(function() {
         // u = u
         //     .replace(/%3F/g, '?')
         //     .replace(/%26/g, '&');
-            console.log(u);
         u = decodeURIComponent(u);
         $('.input-url').val(u);
         $('.form-search').first().submit();
@@ -191,19 +193,17 @@ function panel_toggle(toggle) {
     google.maps.event.trigger(map, "resize");
 }
 
-function panel_update(data, datas) {
-    var title = data.title;
+function panel_update(data) {
     // Title + Content + Edit
-    $('.sidebar-title').text(title).attr('title', title);
+    $('.sidebar-title').text(data.title).attr('title', data.title);
     $('.sidebar-edit-search').attr('href', $('.input-url').first().val());
     $('#sidebar').html('');
 
     // Update content
-    for (var i in datas) {
-        var ads = datas[i].ads;
-        for (var j in ads) {
-            $('#sidebar').append(ads[j].text);
-        }
+    for (var i in data.datas) {
+        var ad = data.datas[i];
+        var html = ad_to_html(ad);
+        $('#sidebar').append(html);
     }
 
     // Update count
@@ -219,26 +219,35 @@ function panel_update(data, datas) {
 
     // Bind click
     $('#sidebar').on('click', '.pwet', function(event) {
-        var i = $(this).data('index');
-        google.maps.event.trigger(markers[i], "click");
+        var id = $(this).data('id');
+        var m  = get_marker_by_id(id);
+        if (m) {
+            google.maps.event.trigger(m, "click");
+        }
     });
 
     // Bind hover
     $('#sidebar').on({
         mouseenter: function() {
-            var i = $(this).data('index');
-            if (typeof markers[i] == 'undefined') {
-                return;
+            var id = $(this).data('id');
+            // if (typeof markers[i] == 'undefined') {
+            //     return;
+            // }
+            var m = get_marker_by_id(id);
+            if (m) {
+                m.setAnimation(google.maps.Animation.BOUNCE);
             }
-            markers[i].setAnimation(google.maps.Animation.BOUNCE);
         },
         // mouse out
         mouseleave: function () {
-            var i = $(this).data('index');
-            if (typeof markers[i] == 'undefined') {
-                return;
+            var id = $(this).data('id');
+            // if (typeof markers[i] == 'undefined') {
+            //     return;
+            // }
+            var m = get_marker_by_id(id);
+            if (m) {
+                m.setAnimation(null);
             }
-            markers[i].setAnimation(null);
         }
     }, '.pwet');
 
@@ -262,7 +271,6 @@ function panel_update_average(data) {
         var text = "{0}{1}";
     }
     price = data.average_price;
-    console.log(price);
     text  = text.format(
         price.formatMoney(0, ',', '\''),
         data.currency.symbol
@@ -272,19 +280,19 @@ function panel_update_average(data) {
     );
 }
 
-function panel_highlight(index) {
+function panel_highlight(id) {
     $('#sidebar .pwet').removeClass('active');
-    $('#sidebar .pwet[data-index="'+index+'"]').addClass('active');
+    $('#sidebar .pwet[data-id="'+id+'"]').addClass('active');
     var container = $('#sidebar'),
-         scrollTo = $('#sidebar .pwet[data-index="'+index+'"]').first();
+         scrollTo = $('#sidebar .pwet[data-id="'+id+'"]').first();
     if (scrollTo.size()) {
         container.animate({
             scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
         });
     }
 }
-function panel_toggle_item(index, show) {
-    var $e = $('#sidebar .pwet[data-index="'+index+'"]');
+function panel_toggle_item(id, show) {
+    var $e = $('#sidebar .pwet[data-id="'+id+'"]');
     if (show) {
         $e.show();
     } else {
@@ -362,69 +370,77 @@ function handle_alert_boxes() {
 }
 
 
+function ad_to_html(ad) {
+    if (typeof ad.title == 'undefined') {
+        return false;
+    }
+    return '' +
+'<li class="pwet" data-id="'+ad.id+'">' +
+    '<div class="media" data-timestamp="'+ad.timestamp+'">' +
+        '<div class="media-left media-middle">' +
+            '<img class="media-object lazyload" data-original="'+ad.picture+'" alt="'+ad.title+'">' +
+            // '<span class="media-number '+ad.picture_count+'">'+ad.picture_count+'</span>' +
+        '</div>' +
+        '<div class="media-body">' +
+            '<h3 class="media-heading">'+
+                '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank">' +
+                    ad.title+
+                '</a>'+
+            '</h3>' +
+            '<p class="media-supp '+ad.pro+'">'+ad.pro+'</p>' +
+            '<p class="media-supp">'+ad.location+'</p>' +
+            '<p class="media-price">'+ad.price+'</p>' +
+            '<p class="media-date">'+ad.date+'</p>' +
+        '</div>' +
+    '</div>' +
+'</li>';
+}
 
 /**
  * Used to browse all ads and group them by location (lat/lng) in
  * order to have 1 marker for multiple ads
  */
-function regroup_ads(datas) {
+// function regroup_ads(datas) {
 
-    var result = [];
+//     var result = [];
 
-    for (var i in datas) {
+//     for (var i in datas) {
 
-        var ad      = datas[i];
-        ad['count'] = 1;
-        ad['text']  = '' +
-            '<div class="media" data-timestamp="'+ad.timestamp+'">' +
-                '<div class="media-left media-middle">' +
-                    '<img class="media-object lazyload" data-original="'+ad.picture+'" alt="'+ad.title+'">' +
-                    // '<span class="media-number '+ad.picture_count+'">'+ad.picture_count+'</span>' +
-                '</div>' +
-                '<div class="media-body">' +
-                    '<h3 class="media-heading">'+
-                        '<a href="'+ad.url+'" title="'+ad.title+'" target="_blank">' +
-                            ad.title+
-                        '</a>'+
-                    '</h3>' +
-                    '<p class="media-supp '+ad.pro+'">'+ad.pro+'</p>' +
-                    '<p class="media-supp">'+ad.location+'</p>' +
-                    '<p class="media-price">'+ad.price+'</p>' +
-                    '<p class="media-date">'+ad.date+'</p>' +
-                '</div>' +
-            '</div>';
+//         var ad      = datas[i];
+//         ad['count'] = 1;
+//         ad['text']  = ad_to_html(ad);
 
-        // Test if current ad has the same lat/lng of another ad
-        var found = false;
-        for (var j in result) {
-            var tmp = result[j];
-            // ad matching another one
-            if (tmp.latlng.lat == ad.latlng.lat && tmp.latlng.lng == ad.latlng.lng) {
-                found = true;
-                result[j].ads.push(ad)
-                break;
-            }
-        }
-        // If found, we add the pop-up content next to the current one('s)
-        if (!found) {
-            result.push({
-                'ads'   : [ad],
-                'latlng': ad.latlng
-            });
-        }
-    }
+//         // Test if current ad has the same lat/lng of another ad
+//         var found = false;
+//         for (var j in result) {
+//             var tmp = result[j];
+//             // ad matching another one
+//             if (tmp.latlng.lat == ad.latlng.lat && tmp.latlng.lng == ad.latlng.lng) {
+//                 found = true;
+//                 result[j].ads.push(ad)
+//                 break;
+//             }
+//         }
+//         // If found, we add the pop-up content next to the current one('s)
+//         if (!found) {
+//             result.push({
+//                 'ads'   : [ad],
+//                 'latlng': ad.latlng
+//             });
+//         }
+//     }
 
-    // We set class index for each ads now, based of lat/lng
-    for (var i in result) {
-        var ads = result[i].ads;
-        for (var j in ads) {
-            ads[j].text = ''+
-                '<li class="pwet" data-index="'+i+'">'+ads[j].text+'</li>';
-        }
-    }
+//     // We set class index for each ads now, based of lat/lng
+//     for (var i in result) {
+//         var ads = result[i].ads;
+//         for (var j in ads) {
+//             ads[j].text = ''+
+//                 '<li class="pwet" data-index="'+i+'">'+ads[j].text+'</li>';
+//         }
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
 
 

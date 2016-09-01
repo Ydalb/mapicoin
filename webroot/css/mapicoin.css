@@ -296,6 +296,38 @@ body.in-search #map {
     opacity:1;
     height:calc(100vh - 56px - 56px);
 }
+/* LEGEND */
+#legend {
+    width:220px;
+    display:none;
+    direction: ltr;
+    overflow: hidden;
+    position: relative;
+    color: rgb(0, 0, 0);
+    font-family: Roboto, Arial, sans-serif;
+    -webkit-user-select: none;
+    font-size: 11px;
+    padding: 8px;
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+    -webkit-background-clip: padding-box;
+    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px;
+    min-width: 22px;
+    font-weight: 500;
+    background-color: rgb(255, 255, 255);
+    background-clip: padding-box;
+}
+#legend h3 {
+    font-weight:bold;
+    font-size:11px;
+}
+#legend p {
+    line-height:30px;
+}
+#legend img {
+    display: inline-block;
+    margin: 0px -6px -10px 0;
+}
 /* LOADER */
 .glyphicon-spin {
     -webkit-animation: spin 1000ms infinite linear;

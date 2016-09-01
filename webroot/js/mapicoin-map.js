@@ -11,6 +11,9 @@ var infowindow        = new google.maps.InfoWindow({
 var iconDefault = {
    url: '//maps.google.com/mapfiles/ms/icons/red-dot.png'
 };
+var iconVisited = {
+   url: '//maps.google.com/mapfiles/ms/icons/purple-dot.png'
+};
 var iconActive  = {
    url: '//maps.google.com/mapfiles/ms/icons/green-dot.png'
 };
@@ -49,16 +52,17 @@ function initialize_map() {
         streetViewControl: false
     });
     // Create the legend and display on the map
-    // var legend  = document.createElement('div');
-    // legend.id   = 'legend';
-    // var content = [];
-    // content.push('<h3>Légende</h3>');
-    // content.push('<p><img class="marker" src="'+iconDefault+'" /> : annonce non visitée</p>');
-    // content.push('<p><img class="marker" src="//maps.google.com/mapfiles/ms/icons/green-dot.png" /> : annonces multiples non visitées</p>');
-    // content.push('<p><img class="marker" src="'+iconGps+'" /> : votre position (peut être changée)</p>');
-    // legend.innerHTML = content.join('');
-    // legend.index     = 1;
-    // map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+    var legend   = document.createElement('div');
+    legend.id    = 'legend';
+    var content = [];
+    content.push('<h3>Légende</h3>');
+    content.push('<p><img class="marker" src="'+iconDefault.url+'" /> : annonce non visitée</p>');
+    content.push('<p><img class="marker" src="'+iconVisited.url+'" /> : annonce visitée</p>');
+    content.push('<p><img class="marker" src="'+iconActive.url+'" /> : annonce sélectionnée</p>');
+    content.push('<p><img class="marker" src="'+iconGps.url+'" /> : votre position (peut être changée)</p>');
+    legend.innerHTML = content.join('');
+    legend.index     = 1;
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
     // This is needed to set the zoom after fitbounds,
     google.maps.event.addListener(map, 'zoom_changed', function() {
@@ -90,38 +94,36 @@ function initialize_map() {
 }
 
 
+function get_marker_by_id(id) {
+    for (var i in markers) {
+        if (markers[i].id == id) {
+            return markers[i];
+        }
+    }
+    return false;
+}
+
 /**
  * Add markers to the map
  */
 function add_ads_markers(map, datas) {
     // console.log('function add_ads_markers(map, datas) {');
 
+    // To allow multiple marker on same location
+    var oms = new OverlappingMarkerSpiderfier(map);
+
     for (var i in datas) {
 
-        var data      = datas[i];
-        var ads       = data.ads;
+        // var data      = datas[i];
+        var ad = datas[i];
 
         var marker   = new google.maps.Marker({
-            id:        i,
+            id:        ad.id,
             map:       map,
-            position:  new google.maps.LatLng(data.latlng.lat, data.latlng.lng),
+            position:  new google.maps.LatLng(ad.latlng.lat, ad.latlng.lng),
             icon:      iconDefault,
-            timestamp: data.timestamp
-        });
-
-        // On click event (calculate distance)
-        marker.addListener('click', function() {
-            set_icon_markers(iconDefault);
-            if (is_geolocated) {
-                var trajet     = calc_distance_to_marker(this);
-            }
-            this.setIcon(iconActive);
-            currentActiveMarker = this;
-            panel_highlight(this.id);
-            // Open sidebar if mobile
-            if (is_mobile()) {
-                $('body').removeClass('toggle');
-            }
+            visited:   false,
+            timestamp: ad.timestamp
         });
 
         marker.addListener('visible_changed', function() {
@@ -129,8 +131,33 @@ function add_ads_markers(map, datas) {
         })
 
         markers.push(marker);
-
+        oms.addMarker(marker);
     }
+
+
+    oms.addListener('click', function(marker, event) {
+        console.log('click', marker);
+        refresh_icon_markers();
+        if (is_geolocated) {
+            var trajet = calc_distance_to_marker(marker);
+        }
+        set_cookie(marker.id, 'visited');
+        marker.setIcon(iconActive);
+        currentActiveMarker = marker;
+        panel_highlight(marker.id);
+        // Open sidebar if mobile
+        if (is_mobile()) {
+            $('body').removeClass('toggle');
+        }
+    });
+
+
+    refresh_icon_markers();
+
+    // var options = {
+    //     imagePath: 'img/m'
+    // };
+    // var markerCluster = new MarkerClusterer(map, markers, options);
 
     return update_marker_from_filters();
 }
@@ -193,13 +220,12 @@ function remove_markers() {
 /**
  * Défini une icône pour tous les markeurs
  */
-function set_icon_markers(icon) {
-    // console.log('function set_icon_markers(icon) {');
-    if (!icon) {
-        icon = iconDefault;
-    }
+function refresh_icon_markers() {
+    // console.log('function refresh_icon_markers(icon) {');
     for (var i = 0; i < markers.length; i++) {
-        markers[i].setIcon(icon)
+        var m = markers[i];
+        console.log(get_cookie(m.id));
+        m.setIcon(get_cookie(m.id) == 'visited' ? iconVisited : iconDefault);
     }
 }
 
@@ -266,7 +292,7 @@ function update_marker_from_filters() {
             var id    = markers[i].id;
             // On parcours chaque annonce pour voir du marker pour voir si 1 match la condition 'day'
             tooOld    = true;
-            var $pwet = $('#sidebar .pwet[data-index="'+id+'"] > .media').each(function( i ) {
+            var $pwet = $('#sidebar .pwet[data-id="'+id+'"] > .media').each(function( i ) {
                 var timestamp   = $(this).data('timestamp');
                 // true si annonce assez récente
                 if (timestamp > (currentTimestamp - filterTime)) {

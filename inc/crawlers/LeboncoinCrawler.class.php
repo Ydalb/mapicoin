@@ -58,6 +58,7 @@ class LeboncoinCrawler extends Crawler {
     public function getAdInfo(DOMElement $domElement) {
         $return = [
             'url'           => null,
+            'id'            => null,
             'title'         => null,
             'picture'       => null,
             'picture_count' => null,
@@ -73,6 +74,8 @@ class LeboncoinCrawler extends Crawler {
             $domElement
         );
         $return['url'] = 'https:'.$tmp->item(0)->nodeValue;
+        // id
+        $return['id']  = md5($return['url']);
 
         // title
         $tmp = $this->domXpath->query(

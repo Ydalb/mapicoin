@@ -29,6 +29,9 @@ and (max-device-width : 900px) {
     .hide-mobile {
         display:none !important;
     }
+    #legend {
+        display:none !important;
+    }
     #navbar #form-search {
         width:calc(100vw - 135px);
     }
