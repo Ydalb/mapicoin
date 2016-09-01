@@ -169,7 +169,7 @@ table th {
     padding:21px 25px 22px 25px;
     border-top:1px solid #fafafa;
     border-bottom:1px solid #e0e0e0;
-
+    vertical-align: middle;
     background: #ededed;
     background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
     background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
@@ -198,11 +198,13 @@ table td:first-child {
     border-left: 0;
 }
 table td {
-    padding:18px;
+    padding:10px;
     border-top: 1px solid #ffffff;
     border-bottom:1px solid #e0e0e0;
     border-left: 1px solid #e0e0e0;
-
+    word-wrap: break-word;
+    max-width: 490px;
+    vertical-align: middle;
     background: #fafafa;
     background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
     background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);

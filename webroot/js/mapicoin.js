@@ -144,9 +144,11 @@ $(document).ready(function() {
     // ===
     var u = parse_query_strings('u');
     if (u) {
-        u = u
-            .replace(/%3F/g, '?')
-            .replace(/%26/g, '&');
+        // u = u
+        //     .replace(/%3F/g, '?')
+        //     .replace(/%26/g, '&');
+            console.log(u);
+        u = decodeURIComponent(u);
         $('.input-url').val(u);
         $('.form-search').first().submit();
     }
@@ -260,6 +262,7 @@ function panel_update_average(data) {
         var text = "{0}{1}";
     }
     price = data.average_price;
+    console.log(price);
     text  = text.format(
         price.formatMoney(0, ',', '\''),
         data.currency.symbol
