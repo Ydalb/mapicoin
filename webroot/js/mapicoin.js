@@ -229,6 +229,7 @@ function panel_update(data) {
         var m  = get_marker_by_id(id);
         if (m) {
             google.maps.event.trigger(m, "click");
+            map_fit_bounds([GeoMarker, m]);
         }
     });
 
@@ -446,7 +447,7 @@ function sort_data() {
     for (var i in sortable) {
         _data.datas[i] = sortable[i];
     }
-    console.log('sorted', key, sortable);
+    // console.log('sorted', key, sortable);
 }
 
 /**

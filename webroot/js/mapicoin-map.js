@@ -1,4 +1,4 @@
-var map, geocoder, GeoMarker, GeoCircle, currentActiveMarker;
+var map, geocoder, GeoMarker, GeoCircle, currentActiveMarker, markerCluster;
 var filterDistance    = 0
 var filterTime        = 0;
 var markers           = [];
@@ -113,6 +113,8 @@ function add_ads_markers(map, datas) {
     // To allow multiple marker on same location
     // var oms = new OverlappingMarkerSpiderfier(map);
 
+    markers = [];
+
     for (var i in datas) {
 
         // var data      = datas[i];
@@ -181,11 +183,16 @@ function add_ads_markers(map, datas) {
 
     refresh_icon_markers();
 
+    if (markerCluster) {
+        console.log('reset markerCluster');
+        markerCluster.clearMarkers();
+        console.log(markers.length);
+    }
     var options = {
         imagePath: 'img/m',
         maxZoom:13
     };
-    var markerCluster = new MarkerClusterer(map, markers, options);
+    markerCluster = new MarkerClusterer(map, markers, options);
 
     return update_marker_from_filters();
 }
