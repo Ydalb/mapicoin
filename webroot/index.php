@@ -23,12 +23,12 @@
         <?php include 'inc/header.inc.php'; ?>
 
         <script src="//maps.googleapis.com/maps/api/js?key=<?= $_CONFIG->api->google_browser_key ?>"></script>
-        <script src="/js/oms.min.js"></script>
-        <!-- <script src="/js/markerclusterer.js"></script> -->
+        <!-- <script src="/js/oms.min.js"></script> -->
+        <script src="/js/markerclusterer.min.js"></script>
         <script src="/js/mapicoin-map.js?<?= VERSION ?>"></script>
         <script src="/js/mapicoin-tools.js?<?= VERSION ?>"></script>
         <script src="/js/mapicoin.js?<?= VERSION ?>"></script>
-        <script src="/js/jquery.lazyload.min.js"></script>
+        <!-- <script src="/js/jquery.lazyload.min.js"></script> -->
 
     </head>
     <body>

@@ -1,6 +1,7 @@
 <?php
 $_default_distance = $_GET['distance'] ?? false;
 $_default_day      = $_GET['day'] ?? false;
+$_default_sort     = $_GET['sort'] ?? false;
 $_select_distance = [
     "10"  =>"10 km",
     "20"  =>"20 km",
@@ -19,6 +20,10 @@ $_select_day = [
     "30" => "1 mois",
     "60" => "2 mois",
 ];
+$_select_sort = [
+    "price" => 'Prix &#8599;',
+    "date"  => 'Date &#8600;',
+];
 ?>
 <span id="toggle"></span>
 <div id="sidebar-wrapper">
@@ -26,14 +31,14 @@ $_select_day = [
         <h2 class="sidebar-title"></h2>
         <!-- Filtre de recherche -->
         <div id="sidebar-advanced-search">
-            <!-- Ancienneté -->
+            <!-- Distance -->
             <div
                 class="filter-item filter-distance disabled"
                 title="Vous devez autoriser la localisation GPS du navigateur pour accéder à ce filtre">
-                <label for="filter-distance" class="filter-text">Dans un rayon de</label>
+                <!-- <label for="filter-distance" class="filter-text">Dans un rayon de</label> -->
                 <div class="filter-select-wrapper">
                     <select id="filter-distance" name="radius" id="radius" class="filter-select" disabled="disabled">
-                        <option value="">...</option>
+                        <option value="">Dans un rayon de...</option>
                     <?php foreach ($_select_distance as $k => $v): ?>
                         <option value="<?= $k ?>" <?= $_default_distance == $k ? 'selected' : '' ?>><?= $v ?></option>
                     <?php endforeach;?>
@@ -43,12 +48,25 @@ $_select_day = [
             </div>
             <!--  Ancienneté -->
             <div class="filter-item filter-day">
-                <label for="filter-day" class="filter-text">Plus récente de</label>
+                <!-- <label for="filter-day" class="filter-text"></label> -->
                 <div class="filter-select-wrapper">
                     <select id="filter-day" name="radius" id="radius" class="filter-select">
-                        <option value="">...</option>
+                        <option value="">Plus récente de...</option>
                     <?php foreach ($_select_day as $k => $v): ?>
                         <option value="<?= $k ?>" <?= $_default_day == $k ? 'selected' : '' ?>><?= $v ?></option>
+                    <?php endforeach;?>
+                    </select>
+                    <i class="glyphicon glyphicon-chevron-down" aria-hidden="true"></i>
+                </div>
+            </div>
+            <!--  Tri -->
+            <div class="filter-item filter-sort">
+                <!-- <label for="filter-sort" class="filter-text">Trier par</label> -->
+                <div class="filter-select-wrapper">
+                    <select id="filter-sort" name="sort" id="sort" class="filter-select">
+                        <option value="">Trier par...</option>
+                    <?php foreach ($_select_sort as $k => $v): ?>
+                        <option value="<?= $k ?>" <?= $_default_sort == $k ? 'selected' : '' ?>><?= $v ?></option>
                     <?php endforeach;?>
                     </select>
                     <i class="glyphicon glyphicon-chevron-down" aria-hidden="true"></i>

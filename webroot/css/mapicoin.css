@@ -153,6 +153,7 @@ body {
 .glyphicon-refresh:before {content: "\e031";}
 .glyphicon-chevron-down:before {content: "\e114";}
 .glyphicon-search:before {content: "\e003";}
+.glyphicon-sort-by-attributes:before {content: "\e155";}
 /* NAVBAR */
 #navbar {
     display:none;
@@ -314,19 +315,31 @@ body.in-search #map {
     box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px;
     min-width: 22px;
     font-weight: 500;
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.9);
     background-clip: padding-box;
+    top:5px !important;
+    right:5px !important;
 }
 #legend h3 {
     font-weight:bold;
-    font-size:11px;
+    font-size:13px;
+    text-align: center;
 }
 #legend p {
     line-height:30px;
 }
 #legend img {
+    max-width:25px;
+    height:auto;
     display: inline-block;
     margin: 0px -6px -10px 0;
+}
+#legend img.gps {
+    position: relative;
+    max-width: 16px;
+    margin-right: 4px;
+    left: 5px;
+    top: -5px;
 }
 /* LOADER */
 .glyphicon-spin {
@@ -421,7 +434,7 @@ body.in-search.toggle #sidebar-wrapper {
 .filter-item {
     font-size:12px;
     display:inline-block;
-    width:216px;
+    width:32%;
 }
 .filter-item.disabled {
     color:#ccc;
@@ -433,12 +446,8 @@ body.in-search.toggle #sidebar-wrapper {
     height: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    display: inline-block;
-    width: 100px;
+    display: block;
     position:relative;
-}
-.filter-day .filter-select-wrapper {
-    width: 110px;
 }
 .filter-select-wrapper i {
     position:absolute;

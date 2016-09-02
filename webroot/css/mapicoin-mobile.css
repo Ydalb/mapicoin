@@ -177,13 +177,8 @@ and (max-device-width : 515px) {
         width:auto;
         display:block;
     }
-    .filter-item label {
-        display: inline-block;
-        width: 110px;
-    }
-    .filter-day .filter-select-wrapper,
-    .filter-distance .filter-select-wrapper {
-        width:130px;
+    .filter-select-wrapper {
+        width:100%;
     }
     .sidebar-details {
         display:none;

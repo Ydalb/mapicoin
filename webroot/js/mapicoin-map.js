@@ -6,7 +6,8 @@ var is_geolocated     = false;
 var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
 var infowindow        = new google.maps.InfoWindow({
-    content: ""
+    content: "",
+    disableAutoPan: true
 });
 var iconDefault = {
    url: '//maps.google.com/mapfiles/ms/icons/red-dot.png'
@@ -59,24 +60,24 @@ function initialize_map() {
     content.push('<p><img class="marker" src="'+iconDefault.url+'" /> : annonce non visitée</p>');
     content.push('<p><img class="marker" src="'+iconVisited.url+'" /> : annonce visitée</p>');
     content.push('<p><img class="marker" src="'+iconActive.url+'" /> : annonce sélectionnée</p>');
-    content.push('<p><img class="marker" src="'+iconGps.url+'" /> : votre position (peut être changée)</p>');
+    content.push('<p><img class="marker gps" src="'+iconGps.url+'" /> : votre position (peut être changée)</p>');
     legend.innerHTML = content.join('');
     legend.index     = 1;
     map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
     // This is needed to set the zoom after fitbounds,
-    google.maps.event.addListener(map, 'zoom_changed', function() {
-        zoomChangeBoundsListener =
-            google.maps.event.addListener(map, 'bounds_changed', function(event) {
-                if (this.getZoom() > 13/* && this.initialZoom == true*/) {
-                    // Change max/min zoom here
-                    this.setZoom(13);
-                    this.initialZoom = false;
-                }
-            // google.maps.event.removeListener(zoomChangeBoundsListener);
-        });
-    });
-    map.initialZoom = true;
+    // google.maps.event.addListener(map, 'zoom_changed', function() {
+    //     zoomChangeBoundsListener =
+    //         google.maps.event.addListener(map, 'bounds_changed', function(event) {
+    //             if (this.getZoom() > 13/* && this.initialZoom == true*/) {
+    //                 // Change max/min zoom here
+    //                 this.setZoom(13);
+    //                 this.initialZoom = false;
+    //             }
+    //         // google.maps.event.removeListener(zoomChangeBoundsListener);
+    //     });
+    // });
+    // map.initialZoom = true;
 
     //map loaded fully ?
     google.maps.event.addListenerOnce(map, 'idle', function(){
@@ -110,54 +111,81 @@ function add_ads_markers(map, datas) {
     // console.log('function add_ads_markers(map, datas) {');
 
     // To allow multiple marker on same location
-    var oms = new OverlappingMarkerSpiderfier(map);
+    // var oms = new OverlappingMarkerSpiderfier(map);
 
     for (var i in datas) {
 
         // var data      = datas[i];
-        var ad = datas[i];
-
-        var marker   = new google.maps.Marker({
+        var ad     = datas[i];
+        var latLng = new google.maps.LatLng(ad.latlng.lat, ad.latlng.lng);
+        var marker = new google.maps.Marker({
             id:        ad.id,
-            map:       map,
-            position:  new google.maps.LatLng(ad.latlng.lat, ad.latlng.lng),
+            // map:       map,
+            position:  latLng,
             icon:      iconDefault,
             visited:   false,
+            realPosition: latLng,
             timestamp: ad.timestamp
         });
 
-        marker.addListener('visible_changed', function() {
-            panel_toggle_item(this.id, this.getVisible());
-        })
-
         markers.push(marker);
-        oms.addMarker(marker);
     }
 
 
-    oms.addListener('click', function(marker, event) {
-        console.log('click', marker);
-        refresh_icon_markers();
-        if (is_geolocated) {
-            var trajet = calc_distance_to_marker(marker);
+    // Offset markers (in case of multiple markers with same positions)
+    for (var i in markers) {
+        var latLng = markers[i].getPosition();
+        // Offset marker (in case they have the same position)
+        for (var j in markers) {
+            var existingMarker = markers[j];
+            var pos            = existingMarker.getPosition();
+            if (latLng.equals(pos)) {
+                var a = 360.0 / markers.length;
+                var r = -.0008 -.0008*(j % 4);
+                var newLat = pos.lat() + r * Math.cos((+a*j) / 180 * Math.PI);  //x
+                var newLng = pos.lng() + r * Math.sin((+a*j) / 180 * Math.PI);  //y
+                markers[i].setPosition(new google.maps.LatLng(newLat,newLng));
+                break;
+            }
         }
-        set_cookie(marker.id, 'visited');
-        marker.setIcon(iconActive);
-        currentActiveMarker = marker;
-        panel_highlight(marker.id);
-        // Open sidebar if mobile
-        if (is_mobile()) {
-            $('body').removeClass('toggle');
-        }
-    });
+    }
+
+
+
+
+    // Listener events
+    for (var i in markers) {
+
+        markers[i].addListener('visible_changed', function() {
+            panel_toggle_item(this.id, this.getVisible());
+        })
+
+        markers[i].addListener('click', function() {
+            refresh_icon_markers();
+            if (is_geolocated) {
+                var trajet = calc_distance_to_marker(this);
+            }
+            // @TODO uncomment
+            set_cookie(marker.id, 'visited');
+            this.setIcon(iconActive);
+            this.visited        = 'visited';
+            currentActiveMarker = this;
+            panel_highlight(this.id);
+            // Open sidebar if mobile
+            if (is_mobile()) {
+                $('body').removeClass('toggle');
+            }
+        });
+    }
 
 
     refresh_icon_markers();
 
-    // var options = {
-    //     imagePath: 'img/m'
-    // };
-    // var markerCluster = new MarkerClusterer(map, markers, options);
+    var options = {
+        imagePath: 'img/m',
+        maxZoom:13
+    };
+    var markerCluster = new MarkerClusterer(map, markers, options);
 
     return update_marker_from_filters();
 }
@@ -169,7 +197,7 @@ function bind_info_window(marker, text) {
     // console.log('function bind_info_window(marker, text) {');
     infowindow.setContent(text);
     infowindow.open(map, marker);
-    return map_fit_bounds([GeoMarker, marker]);
+    // return map_fit_bounds([GeoMarker, marker]);
 }
 
 
@@ -224,8 +252,10 @@ function refresh_icon_markers() {
     // console.log('function refresh_icon_markers(icon) {');
     for (var i = 0; i < markers.length; i++) {
         var m = markers[i];
-        console.log(get_cookie(m.id));
-        m.setIcon(get_cookie(m.id) == 'visited' ? iconVisited : iconDefault);
+        m.setIcon(
+            (get_cookie(m.id) == 'visited' || m.visited == 'visited') ?
+                iconVisited : iconDefault
+        );
     }
 }
 
@@ -250,7 +280,8 @@ function calc_distance_to_marker(marker) {
     }
     var request = {
         origin:      GeoMarker.getPosition(),
-        destination: marker.getPosition(),
+        // destination: marker.getPosition(),
+        destination: marker.realPosition,
         travelMode:  google.maps.TravelMode.DRIVING
     };
     directionsDisplay.setMap(map);
@@ -274,8 +305,8 @@ function calc_distance_to_marker(marker) {
 function update_marker_from_filters() {
     // console.log('function update_marker_from_filters() {');
     var currentTimestamp = Math.floor(Date.now() / 1000);
-    var tooFar = false;
-    var tooOld = true;
+    var tooFar           = false;
+    var tooOld           = true;
     for (var i = 0; i < markers.length; i++) {
         // Distance : 1 marker = plusieurs annonces avec même distance
         if (is_geolocated && GeoCircle && GeoCircle.getRadius() > 0) {
@@ -323,7 +354,7 @@ function update_marker_from_filters() {
         })
     }
     // With lazyload, we need to force it (little bug)
-    $(".lazyload").trigger('appear');
+    // $(".lazyload").trigger('appear');
     return panel_update_count();
 }
 /**

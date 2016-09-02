@@ -1,3 +1,6 @@
+var _data       = null;
+var defaultSort = null;
+
 $(document).ready(function() {
 
     // ===
@@ -86,6 +89,11 @@ $(document).ready(function() {
                     return false;
                 }
 
+                _data = data;
+
+                // Sort data (price/date)
+                sort_data();
+
                 // Display legend
                 $('#legend').show();
 
@@ -103,10 +111,10 @@ $(document).ready(function() {
                 panel_toggle(true);
 
                 // Update panel + Bind
-                panel_update(data);
+                panel_update(_data);
 
                 // Create and add markers to the map + bind
-                add_ads_markers(map, data.datas);
+                add_ads_markers(map, _data.datas);
 
                 // Fit bounds
                 map_fit_bounds();
@@ -162,6 +170,10 @@ $(document).ready(function() {
     if (day) {
         set_user_day(day);
     }
+    var sort = parse_query_strings('sort');
+    if (sort) {
+        defaultSort = sort;
+    }
 
 });
 
@@ -197,25 +209,19 @@ function panel_update(data) {
     // Title + Content + Edit
     $('.sidebar-title').text(data.title).attr('title', data.title);
     $('.sidebar-edit-search').attr('href', $('.input-url').first().val());
-    $('#sidebar').html('');
 
-    // Update content
-    for (var i in data.datas) {
-        var ad = data.datas[i];
-        var html = ad_to_html(ad);
-        $('#sidebar').append(html);
-    }
-
+    // Update content (ads list)
+    panel_update_content();
     // Update count
     panel_update_count();
     // Update average
     panel_update_average(data);
 
-    // Lazyload
-    $(".lazyload").lazyload({
-        effect : "fadeIn",
-        container: $("#sidebar")
-    });
+    // // Lazyload
+    // $(".lazyload").lazyload({
+    //     effect : "fadeIn",
+    //     container: $("#sidebar")
+    // });
 
     // Bind click
     $('#sidebar').on('click', '.pwet', function(event) {
@@ -253,6 +259,14 @@ function panel_update(data) {
 
     // HL first
     panel_highlight(0);
+}
+function panel_update_content() {
+    $('#sidebar').html('');
+    for (var i in _data.datas) {
+        var ad   = _data.datas[i];
+        var html = ad_to_html(ad);
+        $('#sidebar').append(html);
+    }
 }
 function panel_update_count() {
     var count = $('#sidebar').find('.pwet:visible').length;
@@ -306,7 +320,7 @@ function panel_toggle_item(id, show) {
  * Bind les filtres de recherche
  */
 function init_search_filters() {
-    $('#filter-distance,#filter-day').on('change', function() {
+    $('#filter-distance,#filter-day,#filter-sort').on('change', function() {
         var value = $(this).val();
         var id    = $(this).attr('id');
         // Update URL
@@ -320,6 +334,14 @@ function init_search_filters() {
             case 'filter-distance':
                 update_browser_url({'distance': value}, false);
                 set_user_distance(value);
+                break;
+            case 'filter-sort':
+                update_browser_url({'sort': value}, false);
+                defaultSort = value;
+                sort_data();
+                panel_update_content();
+                // Little bug with lazyload, need to trigger
+                // $(".lazyload").trigger('appear');
                 break;
             default:
                 // Invalid choice
@@ -378,7 +400,7 @@ function ad_to_html(ad) {
 '<li class="pwet" data-id="'+ad.id+'">' +
     '<div class="media" data-timestamp="'+ad.timestamp+'">' +
         '<div class="media-left media-middle">' +
-            '<img class="media-object lazyload" data-original="'+ad.picture+'" alt="'+ad.title+'">' +
+            '<img class="media-object" src="'+ad.picture+'" alt="'+ad.title+'">' +
             // '<span class="media-number '+ad.picture_count+'">'+ad.picture_count+'</span>' +
         '</div>' +
         '<div class="media-body">' +
@@ -394,6 +416,37 @@ function ad_to_html(ad) {
         '</div>' +
     '</div>' +
 '</li>';
+}
+
+function sort_data() {
+    var key = null;
+    switch (defaultSort) {
+        case 'price': key = 'price_raw'; break;
+        case 'date':  key = 'timestamp'; break;
+        default:      return false;      break;
+    }
+    // We need to transform object into array to sort it
+    var sortable = [];
+    for (var i in _data.datas) {
+        sortable.push(_data.datas[i]);
+    }
+    // console.log(sortable);
+    sortable.sort(
+        function(a, b) {
+            var x = a[key]; var y = b[key];
+            if (key == 'price_raw') {
+                return x - y;
+            } else {
+                return y - x;
+            }
+            // return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        }
+    )
+    _data.datas = {};
+    for (var i in sortable) {
+        _data.datas[i] = sortable[i];
+    }
+    console.log('sorted', key, sortable);
 }
 
 /**
