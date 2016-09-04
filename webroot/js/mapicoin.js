@@ -229,31 +229,27 @@ function panel_update(data) {
         var m  = get_marker_by_id(id);
         if (m) {
             google.maps.event.trigger(m, "click");
-            map_fit_bounds([GeoMarker, m]);
+            var tmp = [m];
+            if (GeoMarker) {
+                tmp = [GeoMarker, m];
+            }
+            map_fit_bounds(tmp);
         }
     });
 
     // Bind hover
     $('#sidebar').on({
         mouseenter: function() {
-            var id = $(this).data('id');
-            // if (typeof markers[i] == 'undefined') {
-            //     return;
-            // }
-            var m = get_marker_by_id(id);
+            var m = get_marker_by_id($(this).data('id'));
             if (m) {
-                m.setAnimation(google.maps.Animation.BOUNCE);
+                m.isHovered(true);
             }
         },
         // mouse out
         mouseleave: function () {
-            var id = $(this).data('id');
-            // if (typeof markers[i] == 'undefined') {
-            //     return;
-            // }
-            var m = get_marker_by_id(id);
+            var m = get_marker_by_id($(this).data('id'));
             if (m) {
-                m.setAnimation(null);
+                m.isHovered(false);
             }
         }
     }, '.pwet');

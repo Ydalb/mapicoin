@@ -1,4 +1,4 @@
-var map, geocoder, GeoMarker, GeoCircle, currentActiveMarker, markerCluster;
+var map, geocoder, GeoMarker, GeoCircle, currentActiveMarkerId, markerCluster;
 var filterDistance    = 0
 var filterTime        = 0;
 var markers           = [];
@@ -53,17 +53,17 @@ function initialize_map() {
         streetViewControl: false
     });
     // Create the legend and display on the map
-    var legend   = document.createElement('div');
-    legend.id    = 'legend';
-    var content = [];
-    content.push('<h3>Légende</h3>');
-    content.push('<p><img class="marker" src="'+iconDefault.url+'" /> : annonce non visitée</p>');
-    content.push('<p><img class="marker" src="'+iconVisited.url+'" /> : annonce visitée</p>');
-    content.push('<p><img class="marker" src="'+iconActive.url+'" /> : annonce sélectionnée</p>');
-    content.push('<p><img class="marker gps" src="'+iconGps.url+'" /> : votre position (peut être changée)</p>');
-    legend.innerHTML = content.join('');
-    legend.index     = 1;
-    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+    // var legend   = document.createElement('div');
+    // legend.id    = 'legend';
+    // var content = [];
+    // content.push('<h3>Légende</h3>');
+    // content.push('<p><img class="legend-marker" src="'+iconDefault.url+'" /> : annonce non visitée</p>');
+    // content.push('<p><img class="legend-marker" src="'+iconVisited.url+'" /> : annonce visitée</p>');
+    // content.push('<p><img class="legend-marker" src="'+iconActive.url+'" /> : annonce sélectionnée</p>');
+    // content.push('<p><img class="legend-marker gps" src="'+iconGps.url+'" /> : votre position (peut être changée)</p>');
+    // legend.innerHTML = content.join('');
+    // legend.index     = 1;
+    // map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
     // This is needed to set the zoom after fitbounds,
     // google.maps.event.addListener(map, 'zoom_changed', function() {
@@ -84,20 +84,17 @@ function initialize_map() {
         // Retrieve user address from cookie ?
         retrieve_user_address_from_cookies();
     });
-
     // In order to localize client
     geocoder = new google.maps.Geocoder();
-
     // For distance
     directionsDisplay.setMap(map);
-
     return map;
 }
 
 
 function get_marker_by_id(id) {
     for (var i in markers) {
-        if (markers[i].id == id) {
+        if (markers[i].args.id == id) {
             return markers[i];
         }
     }
@@ -120,15 +117,26 @@ function add_ads_markers(map, datas) {
         // var data      = datas[i];
         var ad     = datas[i];
         var latLng = new google.maps.LatLng(ad.latlng.lat, ad.latlng.lng);
-        var marker = new google.maps.Marker({
-            id:        ad.id,
-            // map:       map,
-            position:  latLng,
-            icon:      iconDefault,
-            visited:   false,
-            realPosition: latLng,
-            timestamp: ad.timestamp
-        });
+        var marker = new CustomMarker(
+            latLng,
+            map,
+            {
+                id:           ad.id,
+                visited:      (get_cookie(ad.id) == 'visited'),
+                realPosition: latLng,
+                timestamp:    ad.timestamp,
+                price:        (ad.price != '' ? ad.price : 'n/c')
+            }
+        );
+        // var marker = new google.maps.Marker({
+        //     id:           ad.id,
+        //     map:          map,
+        //     position:     latLng,
+        //     icon:         iconDefault,
+        //     visited:      false,
+        //     realPosition: latLng,
+        //     timestamp:    ad.timestamp
+        // });
 
         markers.push(marker);
     }
@@ -156,57 +164,45 @@ function add_ads_markers(map, datas) {
 
 
     // Listener events
-    for (var i in markers) {
+    // for (var i in markers) {
 
-        markers[i].addListener('visible_changed', function() {
-            panel_toggle_item(this.id, this.getVisible());
-        })
+    //     markers[i].addListener('visible_changed', function() {
+    //         panel_toggle_item(this.id, this.getVisible());
+    //     })
 
-        markers[i].addListener('click', function() {
-            refresh_icon_markers();
-            if (is_geolocated) {
-                var trajet = calc_distance_to_marker(this);
-            }
-            // @TODO uncomment
-            set_cookie(marker.id, 'visited');
-            this.setIcon(iconActive);
-            this.visited        = 'visited';
-            currentActiveMarker = this;
-            panel_highlight(this.id);
-            // Open sidebar if mobile
-            if (is_mobile()) {
-                $('body').removeClass('toggle');
-            }
-        });
-    }
+        // markers[i].addListener('click', function() {
+        //     refresh_icon_markers();
+        //     if (is_geolocated) {
+        //         var trajet = calc_distance_to_marker(this);
+        //     }
+        //     set_cookie(marker.id, 'visited');
+        //     // this.setIcon(iconActive);
+        //     this.setVisited(true);
+        //     currentActiveMarkerId = this;
+        //     panel_highlight(this.id);
+        //     // Open sidebar if mobile
+        //     if (is_mobile()) {
+        //         $('body').removeClass('toggle');
+        //     }
+        // });
+    // }
 
 
     refresh_icon_markers();
 
-    if (markerCluster) {
-        console.log('reset markerCluster');
-        markerCluster.clearMarkers();
-        console.log(markers.length);
-    }
-    var options = {
-        imagePath: 'img/m',
-        maxZoom:13
-    };
-    markerCluster = new MarkerClusterer(map, markers, options);
+    // if (markerCluster) {
+    //     console.log('reset markerCluster');
+    //     markerCluster.clearMarkers();
+    //     console.log(markers.length);
+    // }
+    // var options = {
+    //     imagePath: 'img/m',
+    //     maxZoom:13
+    // };
+    // markerCluster = new MarkerClusterer(map, markers, options);
 
     return update_marker_from_filters();
 }
-
-/**
- * Bind une tooltip sur les markeurs
- */
-function bind_info_window(marker, text) {
-    // console.log('function bind_info_window(marker, text) {');
-    infowindow.setContent(text);
-    infowindow.open(map, marker);
-    // return map_fit_bounds([GeoMarker, marker]);
-}
-
 
 /**
  * Recalcul le zoom de la map pour que tous les markeurs soient visibles
@@ -227,12 +223,16 @@ function map_fit_bounds(m) {
     }
     var bounds = new google.maps.LatLngBounds();
     for (var i in m) {
-        bounds.extend(m[i].position);
+        bounds.extend(m[i].args.realPosition);
     }
 
     map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);
-    map.setZoom(map.getZoom()-1);
+    var zoom = map.getZoom() - 1;
+    if (m.length == 1) {
+        zoom = 12;
+    }
+    map.setZoom(zoom);
 
     if (!$('body').hasClass('toggle')) {
         return offsetCenter(map.getCenter(), 200, 0);
@@ -259,10 +259,10 @@ function refresh_icon_markers() {
     // console.log('function refresh_icon_markers(icon) {');
     for (var i = 0; i < markers.length; i++) {
         var m = markers[i];
-        m.setIcon(
-            (get_cookie(m.id) == 'visited' || m.visited == 'visited') ?
-                iconVisited : iconDefault
-        );
+        // m.setIcon(
+        //     (get_cookie(m.id) == 'visited' || m.visited == 'visited') ?
+        //         iconVisited : iconDefault
+        // );
     }
 }
 
@@ -271,37 +271,43 @@ function refresh_icon_markers() {
  */
 function calc_distance_to_last_active_marker() {
     // console.log('function calc_distance_to_last_active_marker() {');
-    if (!currentActiveMarker) {
+    if (!currentActiveMarkerId) {
         return false;
     }
-    return calc_distance_to_marker(currentActiveMarker);
+    return calc_distance_to_marker(currentActiveMarkerId);
 }
 
 /**
  * Calcul la distance de sa géoloc à un marker passé en paramètre
  */
-function calc_distance_to_marker(marker) {
-    // console.log('function calc_distance_to_marker(marker) {');
+function calc_distance_to_marker(markerId) {
+    // console.log('function calc_distance_to_marker(markerId) {');
     if (!is_geolocated) {
         return false;
     }
+    var marker  = get_marker_by_id(markerId);
     var request = {
         origin:      GeoMarker.getPosition(),
-        // destination: marker.getPosition(),
-        destination: marker.realPosition,
+        destination: marker.args.realPosition,
         travelMode:  google.maps.TravelMode.DRIVING
     };
     directionsDisplay.setMap(map);
-    directionsService.route(request, function(result, status) {
+    directionsService.route(request, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(result);
-            var distance = result.routes[0].legs[0].distance.text;
-            var time     = result.routes[0].legs[0].duration.text;
-            var trajet   = '<div class="trajet">'+
+            directionsDisplay.setDirections(response);
+            var distance   = response.routes[0].legs[0].distance.text;
+            var time       = response.routes[0].legs[0].duration.text;
+            var nbSteps    = response.routes[0].legs[0].steps.length;
+            var middleStep = Math.floor(nbSteps / 2);
+            var trajet     = '<div class="trajet">'+
                 '<p>Distance : <span class="distance">'+distance+'</span></p>'+
                 '<p>Temps : <span class="temps">'+time+'</span></p>'+
             '</div>';
-            bind_info_window(marker, trajet);
+            console.log(nbSteps,middleStep,response.routes[0].legs[0].steps);
+            infowindow.setPosition(response.routes[0].legs[0].steps[middleStep].end_location);
+            infowindow.setContent(trajet);
+            infowindow.open(map, marker);
+            console.log();
         }
     });
 }
@@ -327,7 +333,7 @@ function update_marker_from_filters() {
         // Time : /!\ 1 marker = plusieurs annonces avec age différent /!\
         // On cherche donc à ce qu'une annonce au moins respecte la condition, pour afficher le marker
         if (filterTime > 0) {
-            var id    = markers[i].id;
+            var id    = markers[i].args.id;
             // On parcours chaque annonce pour voir du marker pour voir si 1 match la condition 'day'
             tooOld    = true;
             var $pwet = $('#sidebar .pwet[data-id="'+id+'"] > .media').each(function( i ) {
