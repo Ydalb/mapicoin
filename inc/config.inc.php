@@ -6,9 +6,9 @@
 
 define('DEBUG', false);
 
-define('MAX_PAGES_RETRIEVE',  7);
+define('MAX_PAGES_RETRIEVE',  5);
 // define('SLEEP_BETWEEN_PAGES', 1);
-define('USLEEP_BETWEEN_API_CALL', 200000); // 200ms
+define('USLEEP_BETWEEN_API_CALL', 150000); // 200ms
 
 define('VERSION', file_get_contents(__DIR__.'/../VERSION'));
 

@@ -19,7 +19,7 @@
 
         <?php include 'inc/header.inc.php'; ?>
 
-        <link href="/css/mapicoin-page.css?<?= VERSION ?>" rel="stylesheet" />
+        <link href="./css/mapicoin-page.css?<?= VERSION ?>" rel="stylesheet" />
 
     </head>
 
@@ -29,21 +29,21 @@
 
             <div class="text-center">
                 <a href="/">
-                    <img id="logo" src="/img/mapicoin-logo.png" width="409" height="112" />
+                    <img id="logo" src="./img/mapicoin-logo.png" width="409" height="112" />
                 </a>
             </div>
 
             <div class="page-body">
 
                 <div class="page-breadcrumb">
-                    <a href="/">Accueil</a> &raquo; Mapicoin : Mentions légales
+                    <a href="./">Accueil</a> &raquo; Mapicoin : Mentions légales
                 </div>
 
                 <h1><span>Mapicoin : <?= $title ?></span></h1>
 
 <div class="page-content">
-    <p>Directeur de la technique : Quentin - contact@mapicoin.fr</p>
-    <p>Directeur de la publication : Vincent - contact@mapicoin.fr</p>
+    <p>Directeur de la technique : Quentin - quentin@mapicoin.fr</p>
+    <p>Directeur de la publication : Vincent - vincent@mapicoin.fr</p>
 
     <h2>Hébergeur</h2>
 

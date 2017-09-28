@@ -2,7 +2,7 @@
 
 require_once '../inc/config.inc.php';
 
-set_time_limit(30);
+set_time_limit(300);
 libxml_use_internal_errors(true);
 // Pour la gestion des dates FR
 // TODO : voir pour mettre dans le switch ? ou en fonction de l'utilisateur ?

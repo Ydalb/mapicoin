@@ -20,7 +20,7 @@
 
         <?php include 'inc/header.inc.php'; ?>
 
-        <link href="/css/mapicoin-page.css?<?= VERSION ?>" rel="stylesheet" />
+        <link href="./css/mapicoin-page.css?<?= VERSION ?>" rel="stylesheet" />
 
     </head>
 
@@ -32,14 +32,14 @@
 
             <div class="text-center">
                 <a href="/">
-                    <img id="logo" src="/img/mapicoin-logo.png" width="409" height="112" />
+                    <img id="logo" src="./img/mapicoin-logo.png" width="409" height="112" />
                 </a>
             </div>
 
             <div class="page-body">
 
                 <div class="page-breadcrumb">
-                    <a href="/">Accueil</a> &raquo; Mapicoin : Statistiques de recherche
+                    <a href="./">Accueil</a> &raquo; Mapicoin : Statistiques de recherche
                 </div>
 
                 <h1><span>Mapicoin : <?= $title ?></span></h1>

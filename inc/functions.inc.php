@@ -91,6 +91,7 @@ function set_location_in_cache($location = '', $coords = array()) {
         ON DUPLICATE KEY
             UPDATE lat=?, lng=?"
         ))) {
+        error_log('set_location_in_cache() : MySQL ERROR : ' . $_MYSQLI->error);
         return false;
     }
     /* Lecture des marqueurs */

@@ -37269,6 +37269,7 @@ INSERT INTO `departement` (`departement_code`, `region_code`, `chef_lieu`, `name
 
 CREATE TABLE `geocode` (
   `id` varchar(32) NOT NULL,
+  `geocode` VARCHAR(32) CHARACTER SET utf8 NOT NULL,
   `location` varchar(255) CHARACTER SET utf8 NOT NULL,
   `lat` decimal(10,8) NOT NULL,
   `lng` decimal(11,8) NOT NULL,

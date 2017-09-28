@@ -23,10 +23,10 @@
         <?php include 'inc/header.inc.php'; ?>
 
         <script src="//maps.googleapis.com/maps/api/js?key=<?= $_CONFIG->api->google_browser_key ?>"></script>
-        <script src="/js/mapicoin-map.js?<?= VERSION ?>"></script>
-        <script src="/js/mapicoin-tools.js?<?= VERSION ?>"></script>
-        <script src="/js/mapicoin.js?<?= VERSION ?>"></script>
-        <script src="/js/jquery.lazyload.min.js"></script>
+        <script src="./js/mapicoin-map.js?<?= VERSION ?>"></script>
+        <script src="./js/mapicoin-tools.js?<?= VERSION ?>"></script>
+        <script src="./js/mapicoin.js?<?= VERSION ?>"></script>
+        <script src="./js/jquery.lazyload.min.js"></script>
 
     </head>
     <body>
@@ -41,7 +41,7 @@
             <div class="container-center">
                 <div class="text-center">
 
-                    <a href="/"><img id="logo" src="/img/mapicoin-logo.png" width="409" height="112" /></a>
+                    <a href="./"><img id="logo" src="./img/mapicoin-logo.png" width="409" height="112" /></a>
 
                     <form id="form-search" action="#" role="search" class="form-search">
                         <div class="form-group">
@@ -71,7 +71,7 @@
         </div><!-- /#container -->
 
         <footer>
-            <a href="/comment-ca-marche.php"><strong>Comment ça marche ?</strong></a>
+            <a href="./comment-ca-marche.php"><strong>Comment ça marche ?</strong></a>
             <a class="hide-mobile" href="https://www.facebook.com/mapicoin/">Facebook</a>
             <a class="hide-mobile" href="http://twitter.com/mapicoin">@Twitter</a>
             <span class="rightlinks">© <?php echo date('Y');?><span class="hide-mobile"> - Mapicoin est un site indépendant du site Leboncoin.fr</span></span>

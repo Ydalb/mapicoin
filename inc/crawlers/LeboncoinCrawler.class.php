@@ -86,7 +86,7 @@ class LeboncoinCrawler extends Crawler {
             './/span[@class="lazyload"]/@data-imgsrc',
             $domElement
         );
-        $return['picture'] = 'https:'.trim(@$tmp->item(0)->nodeValue ?? '//static.leboncoin.fr/img/no-picture.png');
+        $return['picture'] = trim(@$tmp->item(0)->nodeValue ?? 'https://static.leboncoin.fr/img/no-picture.png');
 
         // picture_count
         $tmp = $this->domXpath->query(
@@ -105,7 +105,7 @@ class LeboncoinCrawler extends Crawler {
 
         // location
         $tmp = $this->domXpath->query(
-            '(.//p[@class="item_supp"])[2]/text()',
+            '(.//meta[@itemprop="address"])[1]/@content',
             $domElement
         );
         $tmp = trim($tmp->item(0)->nodeValue);
@@ -126,7 +126,7 @@ class LeboncoinCrawler extends Crawler {
         );
         $return['date']      = trim($tmp->item(0)->nodeValue);
         $return['timestamp'] = $this->convertDateToTimestamp($return['date']);
-
+        
         return $return;
     }
 

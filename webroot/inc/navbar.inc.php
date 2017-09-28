@@ -1,6 +1,6 @@
 <nav id="navbar" class="navbar">
   <h1 class="dib">
-    <a class="logo" href="/">
+    <a class="logo" href="./">
       <div class="hide-desktop dib">
         <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>
       </div>

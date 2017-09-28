@@ -61,7 +61,7 @@ $(document).ready(function() {
         map.initialZoom = false;
 
         $.ajax({
-            url:      '/get-ads.php',
+            url:      './get-ads.php',
             type:     'post',
             data:     $form.serialize(),
             dataType: 'json',
@@ -77,7 +77,7 @@ $(document).ready(function() {
                     custom_alert(
                         "Aucune annonce trouvée :-(",
                         "Votre recherche n'a retourné aucun résultat.<br />" +
-                            "Si besoin, rendez-vous sur la page <a href='/comment-ca-marche.php'>Comment ça marche</a> " +
+                            "Si besoin, rendez-vous sur la page <a href='./comment-ca-marche.php'>Comment ça marche</a> " +
                             "pour plus d'explications " +
                             "sur le fonctionnement de <a>Mapicoin</a>",
                         "warning",

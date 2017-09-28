@@ -78,7 +78,7 @@ function update_browser_url(data, reset) {
         }
     }
     // On met à jour le navigateur
-    window.history.pushState("", "", "/?"+url);
+    window.history.pushState("", "", "./?"+url);
 }
 
 
